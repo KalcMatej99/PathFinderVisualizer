@@ -6,59 +6,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Home - PathFindingVisualizer</title>
     <meta name="description" content="Our Path Finding Visualizer">
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./Public/Stylesheet/Card-Deck.css">
+    <link rel="stylesheet" href="./Public/Stylesheet/Multi-Select-Dropdown-by-Jigar-Mistry.css">
+    <link rel="stylesheet" href="./Public/Stylesheet/select.css">
+    <link rel="stylesheet" href="./Public/Stylesheet/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic">
-    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/css/Studious-selectbox.css">
+    <link rel="stylesheet" href="./Public/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="./Public/Stylesheet/Studious-selectbox.css">
+    <link rel="stylesheet" href="./Public/Stylesheet/4-Columns-Info-Icons.css">
+    <style type="text/css">
+        td {
+            border: 1px solid #000;
+        }
+
+        .startNode {
+            background-color: green;
+        }
+
+        .endNode {
+            background-color: red;
+        }
+    </style>
 </head>
 
 <body id="page-top">
     <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-secondary text-uppercase" id="mainNav">
-        <div class="container"><a class="navbar-brand js-scroll-trigger" href="#page-top">Path Finding Visualizer</a><button data-toggle="collapse" data-target="#navbarResponsive" class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" aria-controls="navbarResponsive"
-                aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+        <div class="container"><a class="navbar-brand text-primary js-scroll-trigger" href="#page-top">Path Finding
+                Visualizer</a><button data-toggle="collapse" data-target="#navbarResponsive"
+                class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><i
+                    class="fa fa-bars"></i></button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item mx-0 mx-lg-1" role="presentation"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Start</a></li>
-                    <li class="nav-item mx-0 mx-lg-1" role="presentation"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Clear</a></li>
+                    <li class="nav-item mx-0 mx-lg-1" role="presentation"><a
+                            class="nav-link text-primary py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                            onclick="executePathFindingAlgorithm()">Start</a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1" role="presentation"><a
+                            class="nav-link text-primary py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                            onclick="clearCanvas()">Clear</a></li>
                     <li class="nav-item mx-0 mx-lg-1" role="presentation">
-                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">
-                            <div class="selectbox">
-                                <div role="tablist" id="accordion-2" class="accordion accordion-select">
-                                    <div class="card">
-                                        <div class="card-header" role="tab">
-                                            <h5 class="mb-0"><a data-toggle="collapse" aria-expanded="true" aria-controls="accordion-2 .item-1" href="#accordion-2 .item-1" class="selectbox-title">Selecteer deadline<i class="fa fa-star fa-angle-down"></i></a></h5>
-                                        </div>
-                                        <div class="collapse show item-1" role="tabpanel" data-parent="#accordion-2">
-                                            <div class="card-body">
-                                                <ul>
-                                                    <li><a class="selectbox-link" href="#">Scriptie<span>Reflection &amp; portfolio - PPA4</span></a></li>
-                                                    <li><a class="selectbox-link" href="#">Reflectieverslag<span>Gamedesign - PPA2</span></a></li>
-                                                    <li><a class="selectbox-link" href="#">Screenshot Trello<span>Agile scrum - PPA1</span></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="selectbox-results">
-                                    <div class="selectbox-result"><h3>Omschrijving</h3>
-<p>Lorum ipsum dolor sit amet, consecteteur adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis</p>
-<br/>
-<p>1. Lorum ipsum dolor sit<br/>
-2. Aenean massa</p></div>
-                                    <div class="selectbox-result"><h3>Omschrijving</h3>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam suscipit risus nisl, ut ullamcorper purus dignissim et.</p>
-<br/>
-<p>1. Lorum ipsum dolor sit<br/>
-2. Nam suscipit</p></div>
-                                    <div class="selectbox-result"><h3>Omschrijving</h3>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lorem ipsum, laoreet non tortor sed, ornare elementum neque.</p>
-<br/>
-<p>1. Lorum ipsum dolor sit<br/>
-2. Consectetur adipiscing</p></div>
-                                </div>
+                        <form class="form-inline">
+                            <div class="field"><select class="form-control">
+                                    <option value="1" selected="">Dijkstra</option>
+                                    <option value="2">A*</option>
+                                </select><label class="text-primary mb-0" for="float-input">Choose Algortihm</label>
                             </div>
-                        </a>
+                        </form>
                     </li>
                 </ul>
             </div>
@@ -66,11 +61,32 @@
     </nav>
     <header class="masthead bg-primary text-white text-center">
         <div class="container">
-            <h2 class="font-weight-light mb-0">X Start&nbsp; &nbsp; &nbsp; &nbsp;Y Cilj&nbsp; &nbsp; &nbsp;...</h2>
+            <div class="row" style="column-gap: 40px;">
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3"
+                    style="background-color: #ffffff; border-radius: 25px;column-gap: 40px;">
+                    <h4 class="text-center" style="padding-top: 10px;">Start Vertex</h4>
+                    <div class="login-card"><img class="profile-img-card" src="./Public/Images/goSign.png">
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3"
+                    style="background-color: #ffffff; border-radius: 25px;column-gap: 40px;">
+                    <h4 class="text-center" style="padding-top: 10px;">End Vertex </h4>
+                    <div class="login-card"><img class="profile-img-card" src="./Public/Images/finishFlag.png">
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
-    <section id="portfolio" class="portfolio"></section>
-    <section id="contact"></section>
+    <section>
+        <div class="container">
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody id="tableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
     <footer class="footer text-center">
         <div class="container">
             <div class="row">
@@ -78,12 +94,22 @@
                     <p class="lead mb-0"></p>
                 </div>
                 <div class="col-md-4 mb-5 mb-lg-0">
-                    <h4 class="text-uppercase">Foloow us</h4>
+                    <h4 class="text-uppercase">Follow us</h4>
                     <ul class="list-inline">
-                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-facebook fa-fw"></i></a></li>
-                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-google-plus fa-fw"></i></a></li>
-                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-twitter fa-fw"></i></a></li>
-                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-dribbble fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a
+                                class="btn btn-outline-light btn-social text-center rounded-circle" role="button"
+                                href="https://www.facebook.com/matej.kalc.58"><i class="fa fa-facebook fa-fw"></i></a>
+                        </li>
+                        <li class="list-inline-item"><a
+                                class="btn btn-outline-light btn-social text-center rounded-circle" role="button"
+                                href="https://www.facebook.com/matej.kalc.58"><i class="fa fa-facebook fa-fw"></i></a>
+                        </li>
+                        <li class="list-inline-item"><a
+                                class="btn btn-outline-light btn-social text-center rounded-circle" role="button"
+                                href="https://matejkalc.me/"><i class="fa fa-dribbble fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a
+                                class="btn btn-outline-light btn-social text-center rounded-circle" role="button"
+                                href="https://ninobrezac.me/"><i class="fa fa-dribbble fa-fw"></i></a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
@@ -93,134 +119,97 @@
         </div>
     </footer>
     <div class="copyright py-4 text-center text-white">
-        <div class="container"><small>Copyright ©&nbsp;PathFindingVisualizer 2020</small></div>
+        <div class="container"><small>Copyright ©&nbsp;Nino Brezac &amp; Matej Kalc 2020</small></div>
     </div>
-    <div class="d-lg-none scroll-to-top position-fixed rounded"><a class="d-block js-scroll-trigger text-center text-white rounded" href="#page-top"><i class="fa fa-chevron-up"></i></a></div>
-    <div class="modal text-center" role="dialog" tabindex="-1" id="portfolio-modal-1">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
-                <div class="modal-body">
-                    <div class="container text-center">
-                        <div class="row">
-                            <div class="col-lg-8 mx-auto">
-                                <h2 class="text-uppercase text-secondary mb-0">Project Name</h2>
-                                <hr class="star-dark mb-5"><img class="img-fluid mb-5" src="assets/img/portfolio/cabin.png">
-                                <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur
-                                    itaque. Nam.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer pb-5"><a class="btn btn-primary btn-lg mx-auto rounded-pill portfolio-modal-dismiss" role="button" href="#"><i class="fa fa-close"></i>&nbsp;Close Project</a></div>
-            </div>
-        </div>
-    </div>
-    <div class="modal text-center" role="dialog" tabindex="-1" id="portfolio-modal-2">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
-                <div class="modal-body">
-                    <div class="container text-center">
-                        <div class="row">
-                            <div class="col-lg-8 mx-auto">
-                                <h2 class="text-uppercase text-secondary mb-0">Project Name</h2>
-                                <hr class="star-dark mb-5"><img class="img-fluid mb-5" src="assets/img/portfolio/cake.png">
-                                <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur
-                                    itaque. Nam.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer pb-5"><a class="btn btn-primary btn-lg mx-auto rounded-pill portfolio-modal-dismiss" role="button" href="#"><i class="fa fa-close"></i>&nbsp;Close Project</a></div>
-            </div>
-        </div>
-    </div>
-    <div class="modal text-center" role="dialog" tabindex="-1" id="portfolio-modal-3">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
-                <div class="modal-body">
-                    <div class="container text-center">
-                        <div class="row">
-                            <div class="col-lg-8 mx-auto">
-                                <h2 class="text-uppercase text-secondary mb-0">Project Name</h2>
-                                <hr class="star-dark mb-5"><img class="img-fluid mb-5" src="assets/img/portfolio/circus.png">
-                                <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur
-                                    itaque. Nam.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer pb-5"><a class="btn btn-primary btn-lg mx-auto rounded-pill portfolio-modal-dismiss" role="button" href="#"><i class="fa fa-close"></i>&nbsp;Close Project</a></div>
-            </div>
-        </div>
-    </div>
-    <div class="modal text-center" role="dialog" tabindex="-1" id="portfolio-modal-4">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
-                <div class="modal-body">
-                    <div class="container text-center">
-                        <div class="row">
-                            <div class="col-lg-8 mx-auto">
-                                <h2 class="text-uppercase text-secondary mb-0">Project Name</h2>
-                                <hr class="star-dark mb-5"><img class="img-fluid mb-5" src="assets/img/portfolio/game.png">
-                                <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur
-                                    itaque. Nam.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer pb-5"><a class="btn btn-primary btn-lg mx-auto rounded-pill portfolio-modal-dismiss" role="button" href="#"><i class="fa fa-close"></i>&nbsp;Close Project</a></div>
-            </div>
-        </div>
-    </div>
-    <div class="modal text-center" role="dialog" tabindex="-1" id="portfolio-modal-5">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
-                <div class="modal-body">
-                    <div class="container text-center">
-                        <div class="row">
-                            <div class="col-lg-8 mx-auto">
-                                <h2 class="text-uppercase text-secondary mb-0">Project Name</h2>
-                                <hr class="star-dark mb-5"><img class="img-fluid mb-5" src="assets/img/portfolio/safe.png">
-                                <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur
-                                    itaque. Nam.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer pb-5"><a class="btn btn-primary btn-lg mx-auto rounded-pill portfolio-modal-dismiss" role="button" href="#"><i class="fa fa-close"></i>&nbsp;Close Project</a></div>
-            </div>
-        </div>
-    </div>
-    <div class="modal text-center" role="dialog" tabindex="-1" id="portfolio-modal-6">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
-                <div class="modal-body">
-                    <div class="container text-center">
-                        <div class="row">
-                            <div class="col-lg-8 mx-auto">
-                                <h2 class="text-uppercase text-secondary mb-0">Project Name</h2>
-                                <hr class="star-dark mb-5"><img class="img-fluid mb-5" src="assets/img/portfolio/submarine.png">
-                                <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur
-                                    itaque. Nam.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer pb-5"><a class="btn btn-primary btn-lg mx-auto rounded-pill portfolio-modal-dismiss" role="button" href="#"><i class="fa fa-close"></i>&nbsp;Close Project</a></div>
-            </div>
-        </div>
-    </div>
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="./Public/Javascript/Multi-Select-Dropdown-by-Jigar-Mistry.js"></script>
+    <script src="./Public/Javascript/jquery.min.js"></script>
+    <script src="./Public/Javascript/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-    <script src="assets/js/freelancer.js"></script>
-    <script src="assets/js/Studious-selectbox.js"></script>
+    <script src="./Public/Javascript/freelancer.js"></script>
+    <script src="./Public/Javascript/Studious-selectbox.js"></script>
 </body>
+
+<script>
+
+    const tableBody = document.getElementById("tableBody");
+    const widthOfNode = 30;
+    const heightOfNode = 30;
+
+    var nodes = [[]];
+
+    $(document).ready(function () {
+        prepareTable();
+    });
+
+    function prepareTable() {
+
+        for (var i = 0; i < tableBody.offsetWidth / (4 * heightOfNode); i += 1) {
+            var newRow = '<tr id="row-' + i + '" height="' + heightOfNode + '"></tr>';
+            tableBody.insertAdjacentHTML('beforeend', newRow);
+            var tableRow = document.getElementById("row-" + i);
+            nodes[i] = [];
+
+            for (var j = 0; j < tableBody.offsetWidth / widthOfNode; j += 1) {
+                var newNode = '<td id="node-' + i + '-' + j + '" height="' + heightOfNode + '" width="' + widthOfNode + '" ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)"></td>';
+                tableRow.insertAdjacentHTML('beforeend', newNode);
+
+                nodes[i][j] = 0;
+            }
+        }
+
+        nodes[3][3] = 1;
+        nodes[4][4] = 2;
+
+        document.getElementById("node-3-3").className = "startNode";
+        document.getElementById("node-3-3").draggable = true
+        document.getElementById("node-4-4").className = "endNode";
+        document.getElementById("node-4-4").draggable = true
+    }
+
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("position", ev.target.id);
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        
+        var draggedFrom = document.getElementById(ev.dataTransfer.getData("position"));
+        if(draggedFrom.classList.contains("startNode")) {
+            ev.target.className = "startNode";
+            ev.target.draggable = true
+            draggedFrom.classList.remove("startNode");
+            draggedFrom.draggable = false;
+        }
+
+        if(draggedFrom.classList.contains("endNode")) {
+            ev.target.className = "endNode";
+            ev.target.draggable = true
+            draggedFrom.classList.remove("endNode");
+            draggedFrom.draggable = false;
+        }
+    }
+    
+    function drawTables(tables, speed) {
+        var indexTable = 0;
+        for (var count = 0; count < tables.length; count++) {
+
+            setTimeout(() => {
+                if (tables != null && indexTable < tables.length) {
+                    drawTable(tables[indexTable])
+                    indexTable++;
+                    if (indexTable >= tables.length) {
+                        clearAllTimeouts();
+                        tables = null;
+                    }
+                }
+            }, speed * count);
+        }
+    }
+</script>
 
 </html>
