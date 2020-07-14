@@ -118,14 +118,18 @@
     <div class="copyright py-4 text-center text-white">
         <div class="container"><small>Copyright ©&nbsp;Matej Kalc, Nino Brezac 2020</small></div>
     </div>
-    <div class="d-lg-none scroll-to-top position-fixed rounded"><a class="d-block js-scroll-trigger text-center text-white rounded" href="#page-top"><i class="fa fa-chevron-up"></i></a></div>
-    
+    <div class="d-lg-none scroll-to-top position-fixed rounded"><a
+            class="d-block js-scroll-trigger text-center text-white rounded" href="#page-top"><i
+                class="fa fa-chevron-up"></i></a></div>
+
     <script src="./Public/Javascript/Multi-Select-Dropdown-by-Jigar-Mistry.js"></script>
     <script src="./Public/Javascript/jquery.min.js"></script>
     <script src="./Public/Javascript/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <script src="./Public/Javascript/freelancer.js"></script>
     <script src="./Public/Javascript/Studious-selectbox.js"></script>
+    <script src="./Public/algorithms/node.js"></script>
+    <script src="./Public/algorithms/graph.js"></script>
 </body>
 
 <script>
@@ -133,38 +137,56 @@
     const tableBody = document.getElementById("tableBody");
     const widthOfNode = 30;
     const heightOfNode = 30;
-    const numberOfNodesPerRow =  tableBody.offsetWidth / widthOfNode;
-    const numberOfNodesPerColumn =  tableBody.offsetWidth / (4 * heightOfNode);
+    const numberOfColumns = tableBody.offsetWidth / widthOfNode;
+    const numberOfRows = tableBody.offsetWidth / (4 * heightOfNode);
 
-    var nodes = [[]];
+    const graph = new GridGraph(numberOfRows, numberOfColumns);
 
     $(document).ready(function () {
-        prepareTable();
+        createInitialeGraph();
+        drawGraph(graph);
     });
 
-    function prepareTable() {
-
-        for (var i = 0; i < numberOfNodesPerColumn; i += 1) {
-            var newRow = '<tr id="row-' + i + '" height="' + heightOfNode + '"></tr>';
-            tableBody.insertAdjacentHTML('beforeend', newRow);
-            var tableRow = document.getElementById("row-" + i);
-            nodes[i] = [];
-
-            for (var j = 0; j < numberOfNodesPerRow; j += 1) {
-                var newNode = '<td id="node-' + i + '-' + j + '" height="' + heightOfNode + '" width="' + widthOfNode + '" ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)"></td>';
-                tableRow.insertAdjacentHTML('beforeend', newNode);
-
-                nodes[i][j] = 0;
+    function createInitialeGraph() {
+        for (var i = 0; i < numberOfRows; i += 1) {
+            for (var j = 0; j < numberOfColumns; j += 1) {
+                graph.setNode(i, j, new GridNode(i, j));
             }
         }
 
-        nodes[3][3] = 1;
-        nodes[4][4] = 2;
+        
+        graph.setStartNode(3,3);
+        graph.setEndNode(3,5);
+    }
 
-        document.getElementById("node-3-3").className = "startNode";
-        document.getElementById("node-3-3").draggable = true
-        document.getElementById("node-4-4").className = "endNode";
-        document.getElementById("node-4-4").draggable = true
+    function drawGraph(graph) {
+
+        for (var i = 0; i < numberOfRows; i += 1) {
+            var newRow = '<tr row="' + i + '" id="row-' + i + '" height="' + heightOfNode + '"></tr>';
+            tableBody.insertAdjacentHTML('beforeend', newRow);
+            var tableRow = document.getElementById("row-" + i);
+
+            for (var j = 0; j < numberOfColumns; j += 1) {
+                var newNode = '<td row="' + i + '" column="' + j + '" id="node-' + i + '-' + j + '" height="' + heightOfNode + '" width="' + widthOfNode + '" ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)"></td>';
+                tableRow.insertAdjacentHTML('beforeend', newNode);
+
+            }
+        }
+
+        var startNode = graph.getStartNode();
+        displayStartNode(startNode.row, startNode.column)
+
+        var endNode = graph.getEndNode();
+        displayEndNode(endNode.row, endNode.column)
+    }
+
+    function displayStartNode(r,c) {
+        document.getElementById(getIdFor(r, c)).className = "startNode";
+        document.getElementById(getIdFor(r, c)).draggable = true
+    }
+    function displayEndNode(r,c) {
+        document.getElementById(getIdFor(r, c)).className = "endNode";
+        document.getElementById(getIdFor(r, c)).draggable = true
     }
 
     function allowDrop(ev) {
@@ -177,19 +199,24 @@
 
     function drop(ev) {
         ev.preventDefault();
-        
         var draggedFrom = document.getElementById(ev.dataTransfer.getData("position"));
         var draggedTo = ev.target;
-        if(draggedFrom.classList.contains("startNode") && !draggedTo.classList.contains("endNode")) {
-            draggedTo.className = "startNode";
-            draggedTo.draggable = true
+        var rowAndColumn = getRowAndColumnFromId(draggedTo.id);
+        var rowOfDraggegTo = rowAndColumn[0];
+        var columnOfDraggedTo = rowAndColumn[1];
+
+        if (draggedFrom.classList.contains("startNode") && !draggedTo.classList.contains("endNode")) {
             draggedFrom.classList.remove("startNode");
             draggedFrom.draggable = false;
-        } else if(draggedFrom.classList.contains("endNode") && !draggedTo.classList.contains("startNode")) {
-            draggedTo.className = "endNode";
+            draggedTo.className = "startNode";
             draggedTo.draggable = true
+            graph.setStartNode(rowOfDraggegTo, columnOfDraggedTo);
+        } else if (draggedFrom.classList.contains("endNode") && !draggedTo.classList.contains("startNode")) {
             draggedFrom.classList.remove("endNode");
             draggedFrom.draggable = false;
+            draggedTo.className = "endNode";
+            draggedTo.draggable = true
+            graph.setEndNode(rowOfDraggegTo, columnOfDraggedTo);
         }
     }
 
@@ -198,9 +225,9 @@
 
         var statesToDisplay = [];
 
-        switch(idPathFindingAlgorithm) {
-            case 1: statesToDisplay = dijkstra(nodes);break;
-            case 2: statesToDisplay = astar(nodes);break;
+        switch (idPathFindingAlgorithm) {
+            case 1: statesToDisplay = dijkstra(nodes); break;
+            case 2: statesToDisplay = astar(nodes); break;
             default: break;
         }
 
@@ -209,14 +236,14 @@
 
     function displayState(state) {
         tableBody.innerHTML = '';
-        
-        for (var i = 0; i < numberOfNodesPerColumn; i += 1) {
+
+        for (var i = 0; i < numberOfRows; i += 1) {
             var newRow = '<tr id="row-' + i + '" height="' + heightOfNode + '"></tr>';
             tableBody.insertAdjacentHTML('beforeend', newRow);
             var tableRow = document.getElementById("row-" + i);
             nodes[i] = [];
 
-            for (var j = 0; j < numberOfNodesPerRow; j += 1) {
+            for (var j = 0; j < numberOfColumns; j += 1) {
                 var newNode = '<td id="node-' + i + '-' + j + '" height="' + heightOfNode + '" width="' + widthOfNode + '" ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)"></td>';
                 tableRow.insertAdjacentHTML('beforeend', newNode);
 
@@ -247,6 +274,14 @@
         for (var i = 0; i < highestTimeoutId; i++) {
             clearTimeout(i);
         }
+    }
+
+    function getIdFor(r, c) {
+        return 'node-' + r + '-' + c;
+    }
+
+    function getRowAndColumnFromId(id) {
+        return [parseInt(id.substring(5, 6), 10), parseInt(id.substring(7, 8), 10)];
     }
 </script>
 
