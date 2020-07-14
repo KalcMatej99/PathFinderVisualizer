@@ -161,6 +161,8 @@
 
     function drawGraph(graph) {
 
+        tableBody.innerHTML = '';
+
         for (var i = 0; i < numberOfRows; i += 1) {
             var newRow = '<tr row="' + i + '" id="row-' + i + '" height="' + heightOfNode + '"></tr>';
             tableBody.insertAdjacentHTML('beforeend', newRow);
@@ -226,30 +228,12 @@
         var statesToDisplay = [];
 
         switch (idPathFindingAlgorithm) {
-            case 1: statesToDisplay = dijkstra(nodes); break;
-            case 2: statesToDisplay = astar(nodes); break;
+            case 1: statesToDisplay = dijkstra(graph); break;
+            case 2: statesToDisplay = astar(graph); break;
             default: break;
         }
 
         displayStates(statesToDisplay, 100);
-    }
-
-    function displayState(state) {
-        tableBody.innerHTML = '';
-
-        for (var i = 0; i < numberOfRows; i += 1) {
-            var newRow = '<tr id="row-' + i + '" height="' + heightOfNode + '"></tr>';
-            tableBody.insertAdjacentHTML('beforeend', newRow);
-            var tableRow = document.getElementById("row-" + i);
-            nodes[i] = [];
-
-            for (var j = 0; j < numberOfColumns; j += 1) {
-                var newNode = '<td id="node-' + i + '-' + j + '" height="' + heightOfNode + '" width="' + widthOfNode + '" ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)"></td>';
-                tableRow.insertAdjacentHTML('beforeend', newNode);
-
-                nodes[i][j] = 0;
-            }
-        }
     }
 
     function displayStates(states, speed) {
@@ -258,7 +242,7 @@
 
             setTimeout(() => {
                 if (states != null && indexState < states.length) {
-                    displayState(states[indexState])
+                    drawGraph(states[indexState])
                     indexState++;
                     if (indexTable >= states.length) {
                         clearAllTimeouts();
