@@ -19,13 +19,9 @@
         td {
             border: 1px solid #000;
         }
-
-        .startNode {
-            background-color: green;
-        }
-
-        .endNode {
-            background-color: red;
+        .node {
+            padding: 0rem;
+            vertical-align: top;
         }
     </style>
 
@@ -140,6 +136,8 @@
     const heightOfNode = 30;
     const numberOfColumns = tableBody.offsetWidth / widthOfNode;
     const numberOfRows = tableBody.offsetWidth / (4 * heightOfNode);
+    const pathToGoSign = "./Public/Images/goSign.png"
+    const pathToFinishFlag = "./Public/Images/finishFlag.png"
 
     const graph = new GridGraph(numberOfRows, numberOfColumns);
 
@@ -170,8 +168,10 @@
             var tableRow = document.getElementById("row-" + i);
 
             for (var j = 0; j < numberOfColumns; j += 1) {
-                var newNode = '<td row="' + i + '" column="' + j + '" id="node-' + i + '-' + j + '" height="' + heightOfNode + '" width="' + widthOfNode + '" ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)"></td>';
+                var newNode = '<td class="node" row="' + i + '" column="' + j + '" id="node-' + i + '-' + j + '" height="' + heightOfNode + '" width="' + widthOfNode + '" ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)"></td>';
                 tableRow.insertAdjacentHTML('beforeend', newNode);
+
+                document.getElementById('node-' + i + '-' + j).style.padding = 0;
 
             }
         }
@@ -184,12 +184,14 @@
     }
 
     function displayStartNode(r,c) {
-        document.getElementById(getIdFor(r, c)).className = "startNode";
+        document.getElementById(getIdFor(r, c)).classList.add("startNode");
         document.getElementById(getIdFor(r, c)).draggable = true
+        document.getElementById(getIdFor(r, c)).insertAdjacentHTML('beforeend', '<img style="object-fit: cover;" width="28px" height="28px" src="' + pathToGoSign + '"></img>');
     }
     function displayEndNode(r,c) {
-        document.getElementById(getIdFor(r, c)).className = "endNode";
+        document.getElementById(getIdFor(r, c)).classList.add("endNode");
         document.getElementById(getIdFor(r, c)).draggable = true
+        document.getElementById(getIdFor(r, c)).insertAdjacentHTML('beforeend', '<img style="object-fit: cover;" width="28px" height="28px" src="' + pathToFinishFlag + '"></img>');
     }
 
     function allowDrop(ev) {
@@ -197,29 +199,33 @@
     }
 
     function drag(ev) {
-        ev.dataTransfer.setData("position", ev.target.id);
+        
+        var id = ev.target.id;
+        if(id == null || id == '')
+            id = ev.target.parentElement.id;
+        ev.dataTransfer.setData("position", id);
     }
 
     function drop(ev) {
         ev.preventDefault();
-        var draggedFrom = document.getElementById(ev.dataTransfer.getData("position"));
-        var draggedTo = ev.target;
-        var rowAndColumn = getRowAndColumnFromId(draggedTo.id);
-        var rowOfDraggegTo = rowAndColumn[0];
-        var columnOfDraggedTo = rowAndColumn[1];
+        var rowAndColumnOfNodeTo = getRowAndColumnFromId(ev.target.id == '' ? ev.target.parentElement.id : ev.target.id);
+        var nodeTo = graph.getNode(rowAndColumnOfNodeTo[0], rowAndColumnOfNodeTo[1]);
 
-        if (draggedFrom.classList.contains("startNode") && !draggedTo.classList.contains("endNode")) {
-            draggedFrom.classList.remove("startNode");
-            draggedFrom.draggable = false;
-            draggedTo.className = "startNode";
-            draggedTo.draggable = true
-            graph.setStartNode(rowOfDraggegTo, columnOfDraggedTo);
-        } else if (draggedFrom.classList.contains("endNode") && !draggedTo.classList.contains("startNode")) {
-            draggedFrom.classList.remove("endNode");
-            draggedFrom.draggable = false;
-            draggedTo.className = "endNode";
-            draggedTo.draggable = true
-            graph.setEndNode(rowOfDraggegTo, columnOfDraggedTo);
+        
+        var rowAndColumnOfNodeFrom = getRowAndColumnFromId(ev.dataTransfer.getData("position"));
+        var nodeFrom = graph.getNode(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
+
+
+        if (nodeFrom.isStartNode && !nodeTo.isEndNode) {
+            
+            graph.setStartNode(nodeTo.row, nodeTo.column);
+            drawGraph(graph);
+            
+        } else if (nodeFrom.isEndNode && !nodeTo.isStartNode) {
+
+            graph.setEndNode(nodeTo.row, nodeTo.column);
+            drawGraph(graph);
+            
         }
     }
 
@@ -270,7 +276,7 @@
     }
 
     function getRowAndColumnFromId(id) {
-        return [parseInt(id.substring(5, 6), 10), parseInt(id.substring(7, 8), 10)];
+        return [id.split("-")[1], id.split("-")[2]];
     }
 </script>
 
