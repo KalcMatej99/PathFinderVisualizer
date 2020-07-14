@@ -130,6 +130,7 @@
     <script src="./Public/Javascript/Studious-selectbox.js"></script>
     <script src="./Public/algorithms/node.js"></script>
     <script src="./Public/algorithms/graph.js"></script>
+    <script src="./Public/algorithms/dijkstra.js"></script>
 </body>
 
 <script>
@@ -224,11 +225,15 @@
 
     function executePathFindingAlgorithm() {
         var idPathFindingAlgorithm = document.getElementById("selectAlgorithm").options[document.getElementById("selectAlgorithm").selectedIndex].value;
-
+        idPathFindingAlgorithm = parseInt(idPathFindingAlgorithm, 10);
+        console.log(typeof idPathFindingAlgorithm);
         var statesToDisplay = [];
 
         switch (idPathFindingAlgorithm) {
-            case 1: statesToDisplay = dijkstra(graph); break;
+            case 1: 
+            console.log("DIJKSTRASTART");
+            statesToDisplay = dijkstra(graph); break;
+            console.log("DIJKSTRAEND");
             case 2: statesToDisplay = astar(graph); break;
             default: break;
         }
@@ -244,7 +249,7 @@
                 if (states != null && indexState < states.length) {
                     drawGraph(states[indexState])
                     indexState++;
-                    if (indexTable >= states.length) {
+                    if (indexState >= states.length) {
                         clearAllTimeouts();
                         states = null;
                     }

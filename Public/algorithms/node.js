@@ -40,7 +40,7 @@ class GridNode extends Node {
     }
 }
 
-class DijskstraNode extends GridNode {
+class DijkstraNode extends GridNode {
     constructor(id, row, column) {
         super(id);
         this.row = row;
