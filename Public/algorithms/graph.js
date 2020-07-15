@@ -99,13 +99,27 @@ class GridGraph {
         return [this.getTopNeighborOfNode(r, c), this.getRightNeighborOfNode(r, c), this.getBottomNeighborOfNode(r, c), this.getLeftNeighborOfNode(r, c)];
     }
 
+    clean() {
+        this.nodes = Array.from({ length: numberOfRows });
+        for (var row = 0; row < numberOfRows; row++) {
+            this.nodes[row] = Array.from({ length: numberOfColumns });
+        }
+    }
+}
+
+class DijkstraGraph extends GridGraph {
     clone (){
-        var tmp = new GridGraph(this.numberOfRows,this.numberOfColumns)
+        var tmp = new DijkstraGraph(this.numberOfRows,this.numberOfColumns)
         for (var i = 0; i < this.numberOfRows; i++) {
             for (var j = 0; j < this.numberOfColumns; j++) {
                 var visited = this.nodes[i][j].visited;
+                var previous = this.nodes[i][j].previousNode;
+                var dist = this.nodes[i][j].dist;
 
                 var newDNode = new DijkstraNode(i, j,visited);
+                newDNode.setPreviousNode(previous);
+                newDNode.setDist(dist);
+
                 if(this.nodes[i][j].isStartNode)
                     newDNode.makeStartNode();
                 if(this.nodes[i][j].isEndNode)
@@ -115,12 +129,18 @@ class GridGraph {
             }
         }
         return tmp;
-    } 
-
-    clean() {
-        this.nodes = Array.from({ length: numberOfRows });
-        for (var row = 0; row < numberOfRows; row++) {
-            this.nodes[row] = Array.from({ length: numberOfColumns });
+    }
+    
+    path() {
+        var endNode = this.getEndNode();
+        var pathArray = [];
+        if (endNode == null)  return null; 
+        else {
+            while (endNode != null){
+                pathArray.push(endNode);
+                endNode = endNode.previousNode;
+            }
+            return pathArray;
         }
     }
 }

@@ -6,7 +6,7 @@ function dijkstra(graph) {
 
     // initialize nodes
 
-    var dgraph = new GridGraph(graph.numberOfRows, graph.numberOfColumns);
+    var dgraph = new DijkstraGraph(graph.numberOfRows, graph.numberOfColumns);
 
     for (var i = 0; i < rows.length; i++) {                  // Node of bool visited, bool isStartNode, bool isEndNode, int dist, ArrayList neighbors
         for (var j = 0; j < rows[i].length; j++) {
@@ -14,16 +14,13 @@ function dijkstra(graph) {
 
             var newDNode = new DijkstraNode(i, j, false);
             if (rows[i][j].isStartNode) {
-                newDNode.dist = 0;
+                newDNode.setDist(0);
                 newDNode.visited = true;
                 newDNode.makeStartNode();
                 queue.push(newDNode);
             } else if (rows[i][j].isEndNode) {
                 newDNode.makeEndNode();
-                newDNode.dist = Number.MAX_VALUE;
-            } else {
-                newDNode.dist = Number.MAX_VALUE;
-            }
+            } 
             dgraph.setNode(i, j, newDNode);
         }
     }
@@ -40,10 +37,8 @@ function dijkstra(graph) {
         for (var i in neighbors) {
             if (neighbors[i] != null && !neighbors[i].visited && currNode.dist + 1 < neighbors[i].dist) { // +1 because we have a grid, each block is one currency of movement
                 neighbors[i].dist = currNode.dist + 1;
+                neighbors[i].previousNode = currNode;
                 queue.push(neighbors[i]);
-                /*if (currNode.dist == Number.MAX_VALUE) neighbor.dist = 1;
-                else neighbor.dist = currNode.dist + 1;*/
-
 
             }
         }
@@ -51,8 +46,11 @@ function dijkstra(graph) {
         //console.log(neighbors);
     }
 
-    var cloneState = dgraph.clone();
+    cloneState = dgraph.clone();
     stateList.push(cloneState);
+
     console.log(stateList);
+    console.log(dgraph.path());   // array of used nodes from start <-> finish (in reverse)
+
     return stateList;
 };
