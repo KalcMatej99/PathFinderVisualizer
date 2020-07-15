@@ -98,4 +98,15 @@ class GridGraph {
     getNeighborsForNode(r, c) {
         return [this.getTopNeighborOfNode(r, c), this.getRightNeighborOfNode(r, c), this.getBottomNeighborOfNode(r, c), this.getLeftNeighborOfNode(r, c)];
     }
+
+    clone (){
+        var tmp = new GridGraph(this.numberOfRows,this.numbeOfColumns)
+        for (var i = 0; i < this.numberOfRows; i++) {
+            for (var j = 0; j < this.numbeOfColumns; j++) {
+                isVisited = this.nodes[i][j].isVisited;
+                graph.setNode(i, j, new DijkstraNode(i, j,isVisited));
+            }
+        }
+        return tmp;
+    } 
 }
