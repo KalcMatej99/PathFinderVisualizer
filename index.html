@@ -16,13 +16,17 @@
     <link rel="stylesheet" href="./Public/Stylesheet/Studious-selectbox.css">
     <link rel="stylesheet" href="./Public/Stylesheet/4-Columns-Info-Icons.css">
     <style type="text/css">
-        td {
+        td,
+        tbody,
+        table {
             border: 1px solid #000;
         }
+
         .node {
             padding: 0rem;
             vertical-align: top;
         }
+
         .node-visited {
             background-color: yellow;
         }
@@ -59,40 +63,61 @@
             </div>
         </div>
     </nav>
-    <header class="masthead bg-primary text-white text-center">
-        <div class="container">
-            <div class="row" style="column-gap: 40px;">
-                <div class="col-12 col-sm-6 col-md-3 col-lg-3"
-                    style="background-color: #ffffff; border-radius: 25px;column-gap: 40px;">
-                    <h4 class="text-center" style="padding-top: 10px;">Start Vertex</h4>
-                    <div class="login-card"><img class="profile-img-card" src="./Public/Images/goSign.png">
+    <main>
+        <br>
+        <section>
+            <div class="container">
+                <div class="card-group">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <img width="30px" heigh="30px" src="./Public/Images/goSign.png"></div>
+                                <div class="col">
+                                    <h4 class="card-title">Start Node</h4>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3 col-lg-3"
-                    style="background-color: #ffffff; border-radius: 25px;column-gap: 40px;">
-                    <h4 class="text-center" style="padding-top: 10px;">End Vertex </h4>
-                    <div class="login-card"><img class="profile-img-card" src="./Public/Images/finishFlag.png">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <img width="30px" heigh="30px" src="./Public/Images/finishFlag.png"></div>
+                                <div class="col">
+                                    <h4 class="card-title">End Node</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <img width="30px" heigh="30px" src="./Public/Images/yellowBlock.png">
+                                </div>
+                                <div class="col">
+                                    <h4 class="card-title">Visited Node</h4>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
-    <section>
-        <div class="container">
-            <div class="table-responsive">
-                <table class="table">
-                    <tbody id="tableBody">
-                    </tbody>
-                </table>
+            <br>
+            <div class="container">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody id="tableBody">
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
     <footer class="footer text-center">
         <div class="container">
             <div class="row">
-                <div class="col-md-4 mb-5 mb-lg-0">
-                    <p class="lead mb-0"></p>
-                </div>
                 <div class="col-md-4 mb-5 mb-lg-0">
                     <h4 class="text-uppercase">Follow us</h4>
                     <ul class="list-inline">
@@ -107,9 +132,6 @@
                                 class="btn btn-outline-light btn-social text-center rounded-circle" role="button"
                                 href="https://ninobrezac.me/"><i class="fa fa-dribbble fa-fw"></i></a></li>
                     </ul>
-                </div>
-                <div class="col-md-4">
-                    <p class="lead mb-0"></p>
                 </div>
             </div>
         </div>
@@ -155,9 +177,9 @@
                 graph.setNode(i, j, new GridNode(i, j));
             }
         }
-        
-        graph.setStartNode(3,3);
-        graph.setEndNode(3,5);
+
+        graph.setStartNode(3, 3);
+        graph.setEndNode(3, 5);
     }
 
     function drawGraph(graph) {
@@ -175,7 +197,7 @@
 
                 document.getElementById('node-' + i + '-' + j).style.padding = 0;
 
-                if(graph.getNode(i, j).visited) {
+                if (graph.getNode(i, j).visited) {
                     document.getElementById('node-' + i + '-' + j).classList.add("node-visited");
                 } else {
                     document.getElementById('node-' + i + '-' + j).classList.remove("node-visited");
@@ -197,12 +219,12 @@
         drawGraph(graph);
     }
 
-    function displayStartNode(r,c) {
+    function displayStartNode(r, c) {
         document.getElementById(getIdFor(r, c)).classList.add("startNode");
         document.getElementById(getIdFor(r, c)).draggable = true
         document.getElementById(getIdFor(r, c)).insertAdjacentHTML('beforeend', '<img style="object-fit: cover;" width="28px" height="28px" src="' + pathToGoSign + '"></img>');
     }
-    function displayEndNode(r,c) {
+    function displayEndNode(r, c) {
         document.getElementById(getIdFor(r, c)).classList.add("endNode");
         document.getElementById(getIdFor(r, c)).draggable = true
         document.getElementById(getIdFor(r, c)).insertAdjacentHTML('beforeend', '<img style="object-fit: cover;" width="28px" height="28px" src="' + pathToFinishFlag + '"></img>');
@@ -213,9 +235,9 @@
     }
 
     function drag(ev) {
-        
+
         var id = ev.target.id;
-        if(id == null || id == '')
+        if (id == null || id == '')
             id = ev.target.parentElement.id;
         ev.dataTransfer.setData("position", id);
     }
@@ -225,21 +247,21 @@
         var rowAndColumnOfNodeTo = getRowAndColumnFromId(ev.target.id == '' ? ev.target.parentElement.id : ev.target.id);
         var nodeTo = graph.getNode(rowAndColumnOfNodeTo[0], rowAndColumnOfNodeTo[1]);
 
-        
+
         var rowAndColumnOfNodeFrom = getRowAndColumnFromId(ev.dataTransfer.getData("position"));
         var nodeFrom = graph.getNode(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
 
 
         if (nodeFrom.isStartNode && !nodeTo.isEndNode) {
-            
+
             graph.setStartNode(nodeTo.row, nodeTo.column);
             drawGraph(graph);
-            
+
         } else if (nodeFrom.isEndNode && !nodeTo.isStartNode) {
 
             graph.setEndNode(nodeTo.row, nodeTo.column);
             drawGraph(graph);
-            
+
         }
     }
 
@@ -249,13 +271,13 @@
         var statesToDisplay = [];
 
         switch (idPathFindingAlgorithm) {
-            case 1: 
-            statesToDisplay = dijkstra(graph); break;
-            case 2: statesToDisplay = astar(graph); break;
+            case 1:
+                statesToDisplay = dijkstra(graph); break;
+            case 2: alert("Sorry this algorithm is not yet implemented"); break;//statesToDisplay = astar(graph); break;
             default: break;
         }
 
-        displayStates(statesToDisplay, 100);
+        displayStates(statesToDisplay, 50);
     }
 
     function displayStates(states, speed) {
@@ -292,3 +314,19 @@
 </script>
 
 </html>
+
+
+
+<!--
+<header class="masthead bg-primary text-white text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div><p>Halooo</p></div>
+            </div>
+            <div class="col">
+                <div><p>Banaaaana</p></div>
+            </div>
+        </div>
+    </div>
+</header> -->
