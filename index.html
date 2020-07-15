@@ -23,6 +23,9 @@
             padding: 0rem;
             vertical-align: top;
         }
+        .node-visited {
+            background-color: yellow;
+        }
     </style>
 
 </head>
@@ -172,6 +175,12 @@
                 tableRow.insertAdjacentHTML('beforeend', newNode);
 
                 document.getElementById('node-' + i + '-' + j).style.padding = 0;
+
+                if(graph.getNode(i, j).visited) {
+                    document.getElementById('node-' + i + '-' + j).classList.add("node-visited");
+                } else {
+                    document.getElementById('node-' + i + '-' + j).classList.remove("node-visited");
+                }
 
             }
         }

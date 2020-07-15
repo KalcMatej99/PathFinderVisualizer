@@ -48,10 +48,8 @@ class DijkstraNode extends GridNode {
         this.visited = false; // Add other variables - NINO
     }*/
 
-    constructor(id, row, column, visited) {
-        super(id);
-        this.row = row;
-        this.column = column;
+    constructor(row, column, visited) {
+        super(row, column);
         this.visited = visited; 
     }
     

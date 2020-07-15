@@ -1,20 +1,20 @@
 class GridGraph {
 
     //Construct empty grid graph of size rows * columns
-    constructor(numberOfRows, numbeOfColumns) {
+    constructor(numberOfRows, numberOfColumns) {
         this.nodes = Array.from({ length: numberOfRows });
         for (var row = 0; row < numberOfRows; row++) {
-            this.nodes[row] = Array.from({ length: numbeOfColumns });
+            this.nodes[row] = Array.from({ length: numberOfColumns });
         }
         this.numberOfRows = numberOfRows;
-        this.numbeOfColumns = numbeOfColumns;
+        this.numberOfColumns = numberOfColumns;
     }
 
     //Construct grid graph from nodes: [[]]
     /*constructor(nodes) {
         this.nodes = nodes;
         this.numberOfRows = nodes.length;
-        this.numbeOfColumns = nodes[0].length;
+        this.numberOfColumns = nodes[0].length;
     }*/
 
     //Get node at position (r, c)
@@ -30,7 +30,7 @@ class GridGraph {
     //Get starting node in grid graph
     getStartNode() {
         for (var row = 0; row < this.numberOfRows; row++) {
-            for (var column = 0; column < this.numbeOfColumns; column++) {
+            for (var column = 0; column < this.numberOfColumns; column++) {
                 if (this.nodes[row][column] != null && this.nodes[row][column].isStartNode) {
                     return this.nodes[row][column];
                 }
@@ -50,7 +50,7 @@ class GridGraph {
     //get end node in grid graph
     getEndNode() {
         for (var row = 0; row < this.numberOfRows; row++) {
-            for (var column = 0; column < this.numbeOfColumns; column++) {
+            for (var column = 0; column < this.numberOfColumns; column++) {
                 if (this.nodes[row][column] != null && this.nodes[row][column].isEndNode) {
                     return this.nodes[row][column];
                 }
@@ -82,7 +82,7 @@ class GridGraph {
 
     // Get right neighbor for node at position (r, c)
     getRightNeighborOfNode(r, c) {
-        if (c < this.numbeOfColumns - 1)
+        if (c < this.numberOfColumns - 1)
             return this.getNode(r, c + 1);
         return null;
     }
@@ -100,11 +100,18 @@ class GridGraph {
     }
 
     clone (){
-        var tmp = new GridGraph(this.numberOfRows,this.numbeOfColumns)
+        var tmp = new GridGraph(this.numberOfRows,this.numberOfColumns)
         for (var i = 0; i < this.numberOfRows; i++) {
-            for (var j = 0; j < this.numbeOfColumns; j++) {
-                isVisited = this.nodes[i][j].isVisited;
-                graph.setNode(i, j, new DijkstraNode(i, j,isVisited));
+            for (var j = 0; j < this.numberOfColumns; j++) {
+                var visited = this.nodes[i][j].visited;
+
+                var newDNode = new DijkstraNode(i, j,visited);
+                if(this.nodes[i][j].isStartNode)
+                    newDNode.makeStartNode();
+                if(this.nodes[i][j].isEndNode)
+                    newDNode.makeEndNode();
+                tmp.setNode(i, j, newDNode);
+
             }
         }
         return tmp;
