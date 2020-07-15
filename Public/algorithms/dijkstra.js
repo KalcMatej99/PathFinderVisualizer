@@ -11,30 +11,20 @@ function dijkstra(graph) {
     for (var i = 0; i < rows.length; i++) {                  // Node of bool visited, bool isStartNode, bool isEndNode, int dist, ArrayList neighbors
         for (var j = 0; j < rows[i].length; j++) {
             //Nov node: DijkstraNode ki ima lastnosti node: GridNode 
-            
-                var newDNode = new DijkstraNode(i, j, false);
-                if (rows[i][j].isStartNode) {
-                    newDNode.dist = 0;
-                    newDNode.visited = true;
-                    newDNode.makeStartNode();
-                    queue.push(newDNode);
-                } else if (rows[i][j].isEndNode) {
-                    newDNode.makeEndNode();
-                    newDNode.dist = Number.MAX_VALUE;
-                } else {
-                    newDNode.dist = Number.MAX_VALUE;
-                }
-                dgraph.setNode(i, j, newDNode);
-            
-            /*if (rows[i][j].isStartNode) {
-                rows[i][j].dist = 0;
-                rows[i][j].visited = true;
-                queue.push(rows[i][j]);
+
+            var newDNode = new DijkstraNode(i, j, false);
+            if (rows[i][j].isStartNode) {
+                newDNode.dist = 0;
+                newDNode.visited = true;
+                newDNode.makeStartNode();
+                queue.push(newDNode);
+            } else if (rows[i][j].isEndNode) {
+                newDNode.makeEndNode();
+                newDNode.dist = Number.MAX_VALUE;
+            } else {
+                newDNode.dist = Number.MAX_VALUE;
             }
-            else {
-                rows[i][j].visited = false;
-                rows[i][j].dist = Number.MAX_VALUE;
-            }*/
+            dgraph.setNode(i, j, newDNode);
         }
     }
 
@@ -53,7 +43,7 @@ function dijkstra(graph) {
                 queue.push(neighbors[i]);
                 /*if (currNode.dist == Number.MAX_VALUE) neighbor.dist = 1;
                 else neighbor.dist = currNode.dist + 1;*/
-                
+
 
             }
         }

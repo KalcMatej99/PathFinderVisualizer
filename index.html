@@ -45,7 +45,7 @@
                     </li>
                     <li class="nav-item mx-0 mx-lg-1" role="presentation"><a
                             class="nav-link text-primary py-3 px-0 px-lg-3 rounded js-scroll-trigger"
-                            onclick="clearCanvas()">Clear</a></li>
+                            onclick="clearGraph()">Clear</a></li>
                     <li class="nav-item mx-0 mx-lg-1" role="presentation">
                         <form class="form-inline">
                             <div class="field"><select class="form-control" id="selectAlgorithm">
@@ -155,7 +155,6 @@
                 graph.setNode(i, j, new GridNode(i, j));
             }
         }
-
         
         graph.setStartNode(3,3);
         graph.setEndNode(3,5);
@@ -190,6 +189,12 @@
 
         var endNode = graph.getEndNode();
         displayEndNode(endNode.row, endNode.column)
+    }
+
+    function clearGraph() {
+        graph.clean();
+        createInitialeGraph();
+        drawGraph(graph);
     }
 
     function displayStartNode(r,c) {
@@ -241,14 +246,11 @@
     function executePathFindingAlgorithm() {
         var idPathFindingAlgorithm = document.getElementById("selectAlgorithm").options[document.getElementById("selectAlgorithm").selectedIndex].value;
         idPathFindingAlgorithm = parseInt(idPathFindingAlgorithm, 10);
-        console.log(typeof idPathFindingAlgorithm);
         var statesToDisplay = [];
 
         switch (idPathFindingAlgorithm) {
             case 1: 
-            console.log("DIJKSTRASTART");
             statesToDisplay = dijkstra(graph); break;
-            console.log("DIJKSTRAEND");
             case 2: statesToDisplay = astar(graph); break;
             default: break;
         }

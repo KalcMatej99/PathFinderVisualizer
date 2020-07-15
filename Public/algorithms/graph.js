@@ -116,4 +116,11 @@ class GridGraph {
         }
         return tmp;
     } 
+
+    clean() {
+        this.nodes = Array.from({ length: numberOfRows });
+        for (var row = 0; row < numberOfRows; row++) {
+            this.nodes[row] = Array.from({ length: numberOfColumns });
+        }
+    }
 }
