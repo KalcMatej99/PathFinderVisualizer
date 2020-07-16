@@ -45,7 +45,7 @@
                 <ul class="nav navbar-nav ml-auto">
                     <li class="nav-item mx-0 mx-lg-1" role="presentation"><a
                             class="nav-link text-primary py-3 px-0 px-lg-3 rounded js-scroll-trigger"
-                            onclick="executePathFindingAlgorithm()">Start</a>
+                            onclick="executePathFindingAlgorithm(true)">Start</a>
                     </li>
                     <li class="nav-item mx-0 mx-lg-1" role="presentation"><a
                             class="nav-link text-primary py-3 px-0 px-lg-3 rounded js-scroll-trigger"
@@ -161,8 +161,10 @@
     const heightOfNode = 30;
     const numberOfColumns = tableBody.offsetWidth / widthOfNode;
     const numberOfRows = tableBody.offsetWidth / (4 * heightOfNode);
-    const pathToGoSign = "./Public/Images/goSign.png"
-    const pathToFinishFlag = "./Public/Images/finishFlag.png"
+    const pathToGoSign = "./Public/Images/goSign.png";
+    const pathToFinishFlag = "./Public/Images/finishFlag.png";
+    var animationIsExecuting = false;
+    var isShownPath = false;
 
     const graph = new GridGraph(numberOfRows, numberOfColumns);
 
@@ -172,6 +174,7 @@
     });
 
     function createInitialeGraph() {
+        isShownPath = false;
         for (var i = 0; i < numberOfRows; i += 1) {
             for (var j = 0; j < numberOfColumns; j += 1) {
                 graph.setNode(i, j, new GridNode(i, j));
@@ -214,6 +217,8 @@
     }
 
     function clearGraph() {
+        isShownPath = false;
+        clearAllTimeouts();
         graph.clean();
         createInitialeGraph();
         drawGraph(graph);
@@ -232,6 +237,39 @@
 
     function allowDrop(ev) {
         ev.preventDefault();
+
+        var rowAndColumnOfNodeTo = getRowAndColumnFromId(ev.target.id == '' ? ev.target.parentElement.id : ev.target.id);
+        var nodeTo = graph.getNode(rowAndColumnOfNodeTo[0], rowAndColumnOfNodeTo[1]);
+
+
+        console.log(ev.dataTransfer.getData("position"));
+        var rowAndColumnOfNodeFrom = getRowAndColumnFromId(ev.dataTransfer.getData("position"));
+        console.log(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
+        var nodeFrom = graph.getNode(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
+
+
+        if (nodeFrom.isStartNode && !nodeTo.isEndNode) {
+
+            graph.setStartNode(nodeTo.row, nodeTo.column);
+            if(isShownPath)
+                executePathFindingAlgorithm(false);
+            else
+                drawGraph(graph);
+
+        } else if (nodeFrom.isEndNode && !nodeTo.isStartNode) {
+            console.log("hello");
+
+            graph.setEndNode(nodeTo.row, nodeTo.column);
+            console.log(isShownPath);
+            if(isShownPath)
+                executePathFindingAlgorithm(false);
+            else
+                drawGraph(graph);
+
+            console.log("hello3");
+            console.log(graph);
+
+        }
     }
 
     function drag(ev) {
@@ -239,33 +277,18 @@
         var id = ev.target.id;
         if (id == null || id == '')
             id = ev.target.parentElement.id;
+        console.log(id);
         ev.dataTransfer.setData("position", id);
     }
 
     function drop(ev) {
         ev.preventDefault();
-        var rowAndColumnOfNodeTo = getRowAndColumnFromId(ev.target.id == '' ? ev.target.parentElement.id : ev.target.id);
-        var nodeTo = graph.getNode(rowAndColumnOfNodeTo[0], rowAndColumnOfNodeTo[1]);
-
-
-        var rowAndColumnOfNodeFrom = getRowAndColumnFromId(ev.dataTransfer.getData("position"));
-        var nodeFrom = graph.getNode(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
-
-
-        if (nodeFrom.isStartNode && !nodeTo.isEndNode) {
-
-            graph.setStartNode(nodeTo.row, nodeTo.column);
-            drawGraph(graph);
-
-        } else if (nodeFrom.isEndNode && !nodeTo.isStartNode) {
-
-            graph.setEndNode(nodeTo.row, nodeTo.column);
-            drawGraph(graph);
-
-        }
+        
     }
 
-    function executePathFindingAlgorithm() {
+    function executePathFindingAlgorithm(animate) {
+        if(animationIsExecuting) return;
+        animationIsExecuting = true;
         var idPathFindingAlgorithm = document.getElementById("selectAlgorithm").options[document.getElementById("selectAlgorithm").selectedIndex].value;
         idPathFindingAlgorithm = parseInt(idPathFindingAlgorithm, 10);
         var statesToDisplay = [];
@@ -277,7 +300,10 @@
             default: break;
         }
 
-        displayStates(statesToDisplay, 50);
+        if(animate)
+            displayStates(statesToDisplay, 50);
+        else
+            drawGraph(statesToDisplay[statesToDisplay.length - 1]);
     }
 
     function displayStates(states, speed) {
@@ -292,6 +318,7 @@
                         clearAllTimeouts();
                         states = null;
                     }
+                    isShownPath = true;
                 }
             }, speed * count);
         }
@@ -302,6 +329,7 @@
         for (var i = 0; i < highestTimeoutId; i++) {
             clearTimeout(i);
         }
+        animationIsExecuting = false;
     }
 
     function getIdFor(r, c) {

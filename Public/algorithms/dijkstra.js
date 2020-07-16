@@ -51,6 +51,7 @@ function dijkstra(graph) {
         //console.log(neighbors);
     }
 
+    dgraph.pathIsFound = true;
     var cloneState = dgraph.clone();
     stateList.push(cloneState);
     console.log(stateList);

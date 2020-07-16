@@ -8,6 +8,7 @@ class GridGraph {
         }
         this.numberOfRows = numberOfRows;
         this.numberOfColumns = numberOfColumns;
+        this.pathIsFound = false;
     }
 
     //Construct grid graph from nodes: [[]]
