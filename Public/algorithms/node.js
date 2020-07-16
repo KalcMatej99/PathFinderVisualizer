@@ -50,9 +50,19 @@ class DijkstraNode extends GridNode {
 
     constructor(row, column, visited) {
         super(row, column);
-        this.visited = visited; 
+        this.visited = visited;
+        this.previousNode = null;
+        this.dist = Number.MAX_VALUE; 
     }
     
+    setDist(dist){
+        this.dist = dist;
+    }
+
+    setPreviousNode(previousNode){
+        this.previousNode = previousNode;
+    }
+
     isVisited(){
         return this.visited;
     }
