@@ -159,3 +159,38 @@ class DijkstraGraph extends GridGraph {
         return endNode != null && endNode.isStartNode;
     }
 }
+
+class DFSGraph extends DijkstraGraph {  
+    pathAtt = [];               // pathAtt because we can't have an attribute and function with identical names
+    setPath (path){
+        this.pathAtt = path;
+    }
+
+    path (){
+        return this.pathAtt;
+    }
+
+    isPathFound (){
+        if (this.path()!=[]) return true;
+        else return false;
+    }
+
+    clone() {
+        var tmp = new DFSGraph(this.numberOfRows, this.numberOfColumns)
+        tmp.pathIsFound = this.pathIsFound;
+        for (var i = 0; i < this.numberOfRows; i++) {
+            for (var j = 0; j < this.numberOfColumns; j++) {
+                var visited = this.nodes[i][j].visited;
+                var newDNode = new DijkstraNode(i, j, visited);
+
+                if (this.nodes[i][j].isStartNode)
+                    newDNode.makeStartNode();
+                if (this.nodes[i][j].isEndNode)
+                    newDNode.makeEndNode();
+                tmp.setNode(i, j, newDNode);
+
+            }
+        }
+        return tmp;
+    }
+}

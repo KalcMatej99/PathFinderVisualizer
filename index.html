@@ -59,6 +59,7 @@
                             <div class="field"><select class="form-control" id="selectAlgorithm">
                                     <option value="1" selected="">Dijkstra</option>
                                     <option value="2">A*</option>
+                                    <option value="3">DFS</option>
                                 </select><label class="text-primary mb-0" for="float-input">Choose Algortihm</label>
                             </div>
                         </form>
@@ -76,7 +77,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <img width="30px" heigh="30px" src="./Public/Images/goSign.png"></div>
+                                    <img width="60px" height="60px" src="./Public/Images/goSign.png"></div>
                                 <div class="col">
                                     <h4 class="card-title">Start Node</h4>
                                 </div>
@@ -87,7 +88,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <img width="30px" heigh="30px" src="./Public/Images/finishFlag.png"></div>
+                                    <img width="60px" height="60px" src="./Public/Images/finishFlag.png"></div>
                                 <div class="col">
                                     <h4 class="card-title">End Node</h4>
                                 </div>
@@ -98,7 +99,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <img width="30px" heigh="30px" src="./Public/Images/yellowBlock.png">
+                                    <img width="60px" height="60px" src="./Public/Images/yellowBlock.png">
                                 </div>
                                 <div class="col">
                                     <h4 class="card-title">Visited Node</h4>
@@ -156,6 +157,7 @@
     <script src="./Public/algorithms/node.js"></script>
     <script src="./Public/algorithms/graph.js"></script>
     <script src="./Public/algorithms/dijkstra.js"></script>
+    <script src="./Public/algorithms/DFS.js"></script>
 </body>
 
 <script>
@@ -334,6 +336,7 @@
             case 1:
                 statesToDisplay = dijkstra(graph); break;
             case 2: alert("Sorry this algorithm is not yet implemented"); break;//statesToDisplay = astar(graph); break;
+            case 3: statesToDisplay = DFS(graph); break;
             default: break;
         }
 

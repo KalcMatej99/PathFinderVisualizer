@@ -41,13 +41,6 @@ class GridNode extends Node {
 }
 
 class DijkstraNode extends GridNode {
-    /*constructor(id, row, column) {
-        super(id);
-        this.row = row;
-        this.column = column;
-        this.visited = false; // Add other variables - NINO
-    }*/
-
     constructor(row, column, visited) {
         super(row, column);
         this.visited = visited;
@@ -67,10 +60,11 @@ class DijkstraNode extends GridNode {
         return this.visited;
     }
 
-    /*constructor(node) {
-        super(node.id);
-        this.row = node.row;
-        this.column = node.column;
-        this.visited = false;
-    }*/
+}
+
+class DFSNode extends GridNode {
+    constructor(row, column, visited) {
+        super(row, column);
+        this.visited = visited;
+    }
 }
