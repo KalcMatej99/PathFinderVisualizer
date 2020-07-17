@@ -44,7 +44,7 @@ class GridGraph {
     setStartNode(row, column) {
         var currentStartNode = this.getStartNode();
         if (currentStartNode != null) currentStartNode.unmakeStartNode();
-        this.getNode(row,column).makeStartNode();
+        this.getNode(row, column).makeStartNode();
     }
 
 
@@ -109,21 +109,22 @@ class GridGraph {
 }
 
 class DijkstraGraph extends GridGraph {
-    clone (){
-        var tmp = new DijkstraGraph(this.numberOfRows,this.numberOfColumns)
+    clone() {
+        var tmp = new DijkstraGraph(this.numberOfRows, this.numberOfColumns)
+        tmp.pathIsFound = this.pathIsFound;
         for (var i = 0; i < this.numberOfRows; i++) {
             for (var j = 0; j < this.numberOfColumns; j++) {
                 var visited = this.nodes[i][j].visited;
                 var previous = this.nodes[i][j].previousNode;
                 var dist = this.nodes[i][j].dist;
 
-                var newDNode = new DijkstraNode(i, j,visited);
+                var newDNode = new DijkstraNode(i, j, visited);
                 newDNode.setPreviousNode(previous);
                 newDNode.setDist(dist);
 
-                if(this.nodes[i][j].isStartNode)
+                if (this.nodes[i][j].isStartNode)
                     newDNode.makeStartNode();
-                if(this.nodes[i][j].isEndNode)
+                if (this.nodes[i][j].isEndNode)
                     newDNode.makeEndNode();
                 tmp.setNode(i, j, newDNode);
 
@@ -131,17 +132,25 @@ class DijkstraGraph extends GridGraph {
         }
         return tmp;
     }
-    
+
     path() {
         var endNode = this.getEndNode();
         var pathArray = [];
-        if (endNode == null)  return null; 
+        if (endNode == null) return null;
         else {
-            while (endNode != null){
+            while (endNode != null) {
                 pathArray.push(endNode);
                 endNode = endNode.previousNode;
             }
             return pathArray;
         }
+    }
+
+    isPathFound() {
+        var endNode = this.getEndNode();
+        while (endNode != null && !endNode.isStartNode) {
+            endNode = endNode.previousNode;
+        }
+        return endNode != null && endNode.isStartNode;
     }
 }

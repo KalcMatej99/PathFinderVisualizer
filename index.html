@@ -30,6 +30,10 @@
         .node-visited {
             background-color: yellow;
         }
+
+        .node-in-path {
+            background-color: red;
+        }
     </style>
 
 </head>
@@ -210,10 +214,23 @@
         }
 
         var startNode = graph.getStartNode();
-        displayStartNode(startNode.row, startNode.column)
+        displayStartNode(startNode.row, startNode.column);
 
         var endNode = graph.getEndNode();
-        displayEndNode(endNode.row, endNode.column)
+        displayEndNode(endNode.row, endNode.column);
+
+        if(graph.pathIsFound) {
+            var path = graph.path();
+            console.log(graph)
+
+            for(var i = 0; i < path.length; i++) {
+                var nodeInPath = path[i];
+                var rowOfNodeInPath = nodeInPath.row;
+                var columnOfNodeInPath = nodeInPath.column;
+                //document.getElementById(getIdFor(rowOfNodeInPath, columnOfNodeInPath)).classList.remove("node-in-vis");
+                document.getElementById(getIdFor(rowOfNodeInPath, columnOfNodeInPath)).classList.add("node-in-path");
+            }
+        }
     }
 
     function clearGraph() {
@@ -312,13 +329,13 @@
 
             setTimeout(() => {
                 if (states != null && indexState < states.length) {
+                    if(indexState - 1 == states.length) isShownPath = true;
                     drawGraph(states[indexState])
                     indexState++;
                     if (indexState >= states.length) {
                         clearAllTimeouts();
                         states = null;
                     }
-                    isShownPath = true;
                 }
             }, speed * count);
         }
