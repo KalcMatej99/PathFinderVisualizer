@@ -222,6 +222,9 @@
         if (graph.pathIsFound) {
             drawPathInGraph(graph);
         }
+
+        this.graph = graph;
+        console.log(this.graph);
     }
 
     function drawPathInGraph(graph) {
@@ -234,7 +237,7 @@
             setTimeout(() => {
 
                 if (path != null && indexNode < path.length) {
-            console.log(count);
+                    
                     var nodeInPath = path[indexNode];
                     var rowOfNodeInPath = nodeInPath.row;
                     var columnOfNodeInPath = nodeInPath.column;
@@ -242,15 +245,12 @@
                     indexNode += 1;
                     if(indexNode >= path.length) {
                         //clearAllTimeouts();
+                        isShownPath = true;
                         path = null;
+                        animationIsExecuting = false;
                     }
                 }
             }, 100 * count);
-        }
-
-        console.log(graph)
-
-        for (var i = 0; i < path.length; i++) {
         }
     }
 
@@ -275,52 +275,45 @@
 
     function allowDrop(ev) {
         ev.preventDefault();
-
-        var rowAndColumnOfNodeTo = getRowAndColumnFromId(ev.target.id == '' ? ev.target.parentElement.id : ev.target.id);
-        var nodeTo = graph.getNode(rowAndColumnOfNodeTo[0], rowAndColumnOfNodeTo[1]);
-
-
-        console.log(ev.dataTransfer.getData("position"));
-        var rowAndColumnOfNodeFrom = getRowAndColumnFromId(ev.dataTransfer.getData("position"));
-        console.log(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
-        var nodeFrom = graph.getNode(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
-
-
-        if (nodeFrom.isStartNode && !nodeTo.isEndNode) {
-
-            graph.setStartNode(nodeTo.row, nodeTo.column);
-            if (isShownPath)
-                executePathFindingAlgorithm(false);
-            else
-                drawGraph(graph);
-
-        } else if (nodeFrom.isEndNode && !nodeTo.isStartNode) {
-            console.log("hello");
-
-            graph.setEndNode(nodeTo.row, nodeTo.column);
-            console.log(isShownPath);
-            if (isShownPath)
-                executePathFindingAlgorithm(false);
-            else
-                drawGraph(graph);
-
-            console.log("hello3");
-            console.log(graph);
-
-        }
     }
 
     function drag(ev) {
-
         var id = ev.target.id;
         if (id == null || id == '')
             id = ev.target.parentElement.id;
-        console.log(id);
+        console.log(this.graph);
         ev.dataTransfer.setData("position", id);
     }
 
     function drop(ev) {
         ev.preventDefault();
+
+        var rowAndColumnOfNodeTo = getRowAndColumnFromId(ev.target.id == '' ? ev.target.parentElement.id : ev.target.id);
+        var nodeTo = graph.getNode(rowAndColumnOfNodeTo[0], rowAndColumnOfNodeTo[1]);
+
+        var rowAndColumnOfNodeFrom = getRowAndColumnFromId(ev.dataTransfer.getData("position"));
+        console.log(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
+        var nodeFrom = graph.getNode(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
+
+        if (nodeFrom.isStartNode && !nodeTo.isEndNode) {
+
+            graph.setStartNode(nodeTo.row, nodeTo.column);
+            drawGraph(graph);
+            if (graph.isShownPath()) {
+                executePathFindingAlgorithm(false);
+            }
+
+        } else if (nodeFrom.isEndNode && !nodeTo.isStartNode) {
+
+            graph.setEndNode(nodeTo.row, nodeTo.column);
+            console.log(graph);
+            drawGraph(graph);
+            if (graph.isShownPath()) {
+                executePathFindingAlgorithm(false);
+            }
+
+
+        }
 
     }
 
@@ -356,6 +349,7 @@
                     if (indexState >= states.length) {
                         //clearAllTimeouts();
                         states = null;
+                        animationIsExecuting = false;
                     }
                 }
             }, speed * count);
