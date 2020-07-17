@@ -101,6 +101,7 @@ class GridGraph {
     }
 
     clean() {
+        this.pathIsFound = false;
         this.nodes = Array.from({ length: numberOfRows });
         for (var row = 0; row < numberOfRows; row++) {
             this.nodes[row] = Array.from({ length: numberOfColumns });
