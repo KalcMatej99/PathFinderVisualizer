@@ -107,6 +107,10 @@ class GridGraph {
             this.nodes[row] = Array.from({ length: numberOfColumns });
         }
     }
+
+    isPathFound() {
+        return false;
+    }
 }
 
 class DijkstraGraph extends GridGraph {
