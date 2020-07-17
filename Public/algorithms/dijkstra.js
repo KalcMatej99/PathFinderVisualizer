@@ -42,16 +42,11 @@ function dijkstra(graph) {
 
             }
         }
-
-        //console.log(neighbors);
     }
 
     dgraph.pathIsFound = true;
     var cloneState = dgraph.clone();
     stateList.push(cloneState);
-
-    console.log(stateList);
-    console.log(dgraph.path());   // array of used nodes from start <-> finish (in reverse)
 
     return stateList;
 };

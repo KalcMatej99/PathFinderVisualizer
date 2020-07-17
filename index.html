@@ -170,7 +170,7 @@
     var animationIsExecuting = false;
     var isShownPath = false;
 
-    const graph = new GridGraph(numberOfRows, numberOfColumns);
+    var graph = new GridGraph(numberOfRows, numberOfColumns);
 
     $(document).ready(function () {
         createInitialeGraph();
@@ -224,8 +224,9 @@
         }
 
         this.graph = graph;
-        console.log(this.graph);
     }
+
+    
 
     function drawPathInGraph(graph) {
         var path = graph.path();
@@ -281,7 +282,7 @@
         var id = ev.target.id;
         if (id == null || id == '')
             id = ev.target.parentElement.id;
-        console.log(this.graph);
+            
         ev.dataTransfer.setData("position", id);
     }
 
@@ -292,27 +293,25 @@
         var nodeTo = graph.getNode(rowAndColumnOfNodeTo[0], rowAndColumnOfNodeTo[1]);
 
         var rowAndColumnOfNodeFrom = getRowAndColumnFromId(ev.dataTransfer.getData("position"));
-        console.log(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
         var nodeFrom = graph.getNode(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
 
         if (nodeFrom.isStartNode && !nodeTo.isEndNode) {
 
+            var isPathDrawn = graph.isPathFound();
             graph.setStartNode(nodeTo.row, nodeTo.column);
             drawGraph(graph);
-            if (graph.isShownPath()) {
+            if (isPathDrawn) {
                 executePathFindingAlgorithm(false);
             }
 
         } else if (nodeFrom.isEndNode && !nodeTo.isStartNode) {
 
+            var isPathDrawn = graph.isPathFound();
             graph.setEndNode(nodeTo.row, nodeTo.column);
-            console.log(graph);
             drawGraph(graph);
-            if (graph.isShownPath()) {
+            if (isPathDrawn) {
                 executePathFindingAlgorithm(false);
             }
-
-
         }
 
     }
