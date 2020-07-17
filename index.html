@@ -228,7 +228,7 @@
         this.graph = graph;
     }
 
-    
+
 
     function drawPathInGraph(graph) {
         var path = graph.path();
@@ -240,13 +240,13 @@
             setTimeout(() => {
 
                 if (path != null && indexNode < path.length) {
-                    
+
                     var nodeInPath = path[indexNode];
                     var rowOfNodeInPath = nodeInPath.row;
                     var columnOfNodeInPath = nodeInPath.column;
                     document.getElementById(getIdFor(rowOfNodeInPath, columnOfNodeInPath)).classList.add("node-in-path");
                     indexNode += 1;
-                    if(indexNode >= path.length) {
+                    if (indexNode >= path.length) {
                         //clearAllTimeouts();
                         isShownPath = true;
                         path = null;
@@ -281,40 +281,44 @@
     }
 
     function drag(ev) {
-        var id = ev.target.id;
-        if (id == null || id == '')
-            id = ev.target.parentElement.id;
-            
-        ev.dataTransfer.setData("position", id);
+        if (!animationIsExecuting) {
+            var id = ev.target.id;
+            if (id == null || id == '')
+                id = ev.target.parentElement.id;
+
+            ev.dataTransfer.setData("position", id);
+        }
     }
 
     function drop(ev) {
         ev.preventDefault();
 
-        var rowAndColumnOfNodeTo = getRowAndColumnFromId(ev.target.id == '' ? ev.target.parentElement.id : ev.target.id);
-        var nodeTo = graph.getNode(rowAndColumnOfNodeTo[0], rowAndColumnOfNodeTo[1]);
+        if (!animationIsExecuting) {
+            var rowAndColumnOfNodeTo = getRowAndColumnFromId(ev.target.id == '' ? ev.target.parentElement.id : ev.target.id);
+            var nodeTo = graph.getNode(rowAndColumnOfNodeTo[0], rowAndColumnOfNodeTo[1]);
 
-        var rowAndColumnOfNodeFrom = getRowAndColumnFromId(ev.dataTransfer.getData("position"));
-        var nodeFrom = graph.getNode(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
+            var rowAndColumnOfNodeFrom = getRowAndColumnFromId(ev.dataTransfer.getData("position"));
+            var nodeFrom = graph.getNode(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
 
-        if (nodeFrom.isStartNode && !nodeTo.isEndNode) {
+            if (nodeFrom.isStartNode && !nodeTo.isEndNode) {
 
-            var isPathDrawn = graph.isPathFound();
-            graph.setStartNode(nodeTo.row, nodeTo.column);
-            if (isPathDrawn) {
-                executePathFindingAlgorithm(false);
-            } else {
-                drawGraph(graph);
+                var isPathDrawn = graph.isPathFound();
+                graph.setStartNode(nodeTo.row, nodeTo.column);
+                if (isPathDrawn) {
+                    executePathFindingAlgorithm(false);
+                } else {
+                    drawGraph(graph);
+                }
+
+            } else if (nodeFrom.isEndNode && !nodeTo.isStartNode) {
+
+                var isPathDrawn = graph.isPathFound();
+                graph.setEndNode(nodeTo.row, nodeTo.column);
+
+                if (isPathDrawn) {
+                    executePathFindingAlgorithm(false);
+                } else drawGraph(graph);
             }
-
-        } else if (nodeFrom.isEndNode && !nodeTo.isStartNode) {
-
-            var isPathDrawn = graph.isPathFound();
-            graph.setEndNode(nodeTo.row, nodeTo.column);
-            
-            if (isPathDrawn) {
-                executePathFindingAlgorithm(false);
-            } else drawGraph(graph);
         }
 
     }
