@@ -219,17 +219,38 @@
         var endNode = graph.getEndNode();
         displayEndNode(endNode.row, endNode.column);
 
-        if(graph.pathIsFound) {
-            var path = graph.path();
-            console.log(graph)
+        if (graph.pathIsFound) {
+            drawPathInGraph(graph);
+        }
+    }
 
-            for(var i = 0; i < path.length; i++) {
-                var nodeInPath = path[i];
-                var rowOfNodeInPath = nodeInPath.row;
-                var columnOfNodeInPath = nodeInPath.column;
-                //document.getElementById(getIdFor(rowOfNodeInPath, columnOfNodeInPath)).classList.remove("node-in-vis");
-                document.getElementById(getIdFor(rowOfNodeInPath, columnOfNodeInPath)).classList.add("node-in-path");
-            }
+    function drawPathInGraph(graph) {
+        var path = graph.path();
+        var indexNode = 0;
+        //clearAllTimeouts();
+
+        for (var count = 0; count < path.length; count++) {
+
+            setTimeout(() => {
+
+                if (path != null && indexNode < path.length) {
+            console.log(count);
+                    var nodeInPath = path[indexNode];
+                    var rowOfNodeInPath = nodeInPath.row;
+                    var columnOfNodeInPath = nodeInPath.column;
+                    document.getElementById(getIdFor(rowOfNodeInPath, columnOfNodeInPath)).classList.add("node-in-path");
+                    indexNode += 1;
+                    if(indexNode >= path.length) {
+                        //clearAllTimeouts();
+                        path = null;
+                    }
+                }
+            }, 100 * count);
+        }
+
+        console.log(graph)
+
+        for (var i = 0; i < path.length; i++) {
         }
     }
 
@@ -268,7 +289,7 @@
         if (nodeFrom.isStartNode && !nodeTo.isEndNode) {
 
             graph.setStartNode(nodeTo.row, nodeTo.column);
-            if(isShownPath)
+            if (isShownPath)
                 executePathFindingAlgorithm(false);
             else
                 drawGraph(graph);
@@ -278,7 +299,7 @@
 
             graph.setEndNode(nodeTo.row, nodeTo.column);
             console.log(isShownPath);
-            if(isShownPath)
+            if (isShownPath)
                 executePathFindingAlgorithm(false);
             else
                 drawGraph(graph);
@@ -300,11 +321,11 @@
 
     function drop(ev) {
         ev.preventDefault();
-        
+
     }
 
     function executePathFindingAlgorithm(animate) {
-        if(animationIsExecuting) return;
+        if (animationIsExecuting) return;
         animationIsExecuting = true;
         var idPathFindingAlgorithm = document.getElementById("selectAlgorithm").options[document.getElementById("selectAlgorithm").selectedIndex].value;
         idPathFindingAlgorithm = parseInt(idPathFindingAlgorithm, 10);
@@ -317,7 +338,7 @@
             default: break;
         }
 
-        if(animate)
+        if (animate)
             displayStates(statesToDisplay, 50);
         else
             drawGraph(statesToDisplay[statesToDisplay.length - 1]);
@@ -329,11 +350,11 @@
 
             setTimeout(() => {
                 if (states != null && indexState < states.length) {
-                    if(indexState - 1 == states.length) isShownPath = true;
+                    if (indexState - 1 == states.length) isShownPath = true;
                     drawGraph(states[indexState])
                     indexState++;
                     if (indexState >= states.length) {
-                        clearAllTimeouts();
+                        //clearAllTimeouts();
                         states = null;
                     }
                 }
