@@ -301,19 +301,20 @@
 
             var isPathDrawn = graph.isPathFound();
             graph.setStartNode(nodeTo.row, nodeTo.column);
-            drawGraph(graph);
             if (isPathDrawn) {
                 executePathFindingAlgorithm(false);
+            } else {
+                drawGraph(graph);
             }
 
         } else if (nodeFrom.isEndNode && !nodeTo.isStartNode) {
 
             var isPathDrawn = graph.isPathFound();
             graph.setEndNode(nodeTo.row, nodeTo.column);
-            drawGraph(graph);
+            
             if (isPathDrawn) {
                 executePathFindingAlgorithm(false);
-            }
+            } else drawGraph(graph);
         }
 
     }
