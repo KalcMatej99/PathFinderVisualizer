@@ -250,6 +250,7 @@
 
     function drag(ev) {
         if (!animationIsExecuting) {
+            canMakeWalls = false;
             var id = ev.target.id;
             if (id == null || id == '')
                 id = ev.target.parentElement.id;
@@ -262,6 +263,7 @@
         ev.preventDefault();
 
         if (!animationIsExecuting) {
+            canMakeWalls = false;
             var rowAndColumnOfNodeTo = getRowAndColumnFromId(ev.target.id == '' ? ev.target.parentElement.id : ev.target.id);
             var nodeTo = graph.getNode(rowAndColumnOfNodeTo[0], rowAndColumnOfNodeTo[1]);
 
@@ -287,6 +289,8 @@
                     executePathFindingAlgorithm(false);
                 } else drawGraph(graph);
             }
+            canMakeWalls = true;
+            mouseDown = false;
         }
     }
 

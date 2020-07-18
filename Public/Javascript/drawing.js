@@ -169,9 +169,10 @@ function makeWall(row, column) {
     }
 }
 
+var canMakeWalls = true;
+
 var mouseDown = false;
-document.body.onmousedown = function() { 
-    console.log("hello3");
+document.body.onmousedown = function() {
   mouseDown = true;
 }
 document.body.onmouseup = function() {
