@@ -49,12 +49,12 @@ function DFS(graph) {
 
     dfsgraph.getEndNode().visited=true; // set endNode as visited since we ended the loop as we reached it
     cloneState = dfsgraph.clone();
-    stateList.push(cloneState);
     
     dfsgraph.setPath(path);
     cloneState.setPath(path);
     dfsgraph.pathIsFound = true;
     cloneState.pathIsFound = true;
+    stateList.push(cloneState);
     //console.log(dfsgraph.pathIsFound);
 
     return stateList;

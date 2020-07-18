@@ -6,15 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Home - PathFindingVisualizer</title>
     <meta name="description" content="Our Path Finding Visualizer">
-    <link rel="stylesheet" href="./Public/Stylesheet/Card-Deck.css">
     <link rel="stylesheet" href="./Public/Stylesheet/Multi-Select-Dropdown-by-Jigar-Mistry.css">
     <link rel="stylesheet" href="./Public/Stylesheet/select.css">
     <link rel="stylesheet" href="./Public/Stylesheet/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic">
     <link rel="stylesheet" href="./Public/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="./Public/Stylesheet/Studious-selectbox.css">
-    <link rel="stylesheet" href="./Public/Stylesheet/4-Columns-Info-Icons.css">
     <style type="text/css">
         td,
         tbody,
@@ -34,13 +31,20 @@
         .node-in-path {
             background-color: red;
         }
+
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden
+        }
     </style>
 
 </head>
 
 <body id="page-top">
     <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-secondary text-uppercase" id="mainNav">
-        <div class="container"><a class="navbar-brand text-primary js-scroll-trigger" href="#page-top">Path Finding
+        <div class="container"><a class="navbar-brand js-scroll-trigger" href="#page-top">Path Finding
                 Visualizer</a><button data-toggle="collapse" data-target="#navbarResponsive"
                 class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><i
@@ -48,21 +52,19 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="nav navbar-nav ml-auto">
                     <li class="nav-item mx-0 mx-lg-1" role="presentation"><a
-                            class="nav-link text-primary py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                        class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: #ffffff;"
                             onclick="executePathFindingAlgorithm(true)">Start</a>
                     </li>
                     <li class="nav-item mx-0 mx-lg-1" role="presentation"><a
-                            class="nav-link text-primary py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                        class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: #ffffff;"
                             onclick="clearGraph()">Clear</a></li>
                     <li class="nav-item mx-0 mx-lg-1" role="presentation">
-                        <form class="form-inline">
-                            <div class="field"><select class="form-control" id="selectAlgorithm">
-                                    <option value="1" selected="">Dijkstra</option>
-                                    <option value="2">A*</option>
-                                    <option value="3">DFS</option>
-                                </select><label class="text-primary mb-0" for="float-input">Choose Algortihm</label>
-                            </div>
-                        </form>
+                        <form class="form-inline"><select class="form-control" id="selectAlgorithm"
+                                style="background-color: rgba(255,255,255,0);color: rgb(255,255,255);">
+                                <option value="1" selected="">Dijkstra</option>
+                                <option value="2">A*</option>
+                                <option value="3">DFS</option>
+                            </select></form>
                     </li>
                 </ul>
             </div>
@@ -72,6 +74,7 @@
         <br>
         <section>
             <div class="container">
+                <h3 style="text-align: center">Select an algorithm and click START</h3>
                 <div class="card-group">
                     <div class="card">
                         <div class="card-body">
@@ -107,53 +110,34 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <img width="60px" height="60px" src="./Public/Images/redBlock.png">
+                                </div>
+                                <div class="col">
+                                    <h4 class="card-title">Node In Path</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <br>
-            <div class="container">
-                <div class="table-responsive">
-                    <table class="table">
-                        <tbody id="tableBody">
-                        </tbody>
-                    </table>
-                </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody id="tableBody">
+                    </tbody>
+                </table>
             </div>
         </section>
     </main>
-    <footer class="footer text-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-5 mb-lg-0">
-                    <h4 class="text-uppercase">Follow us</h4>
-                    <ul class="list-inline">
-                        <li class="list-inline-item"><a
-                                class="btn btn-outline-light btn-social text-center rounded-circle" role="button"
-                                href="https://www.facebook.com/matej.kalc.58"><i class="fa fa-facebook fa-fw"></i></a>
-                        </li>
-                        <li class="list-inline-item"><a
-                                class="btn btn-outline-light btn-social text-center rounded-circle" role="button"
-                                href="https://matejkalc.me/"><i class="fa fa-dribbble fa-fw"></i></a></li>
-                        <li class="list-inline-item"><a
-                                class="btn btn-outline-light btn-social text-center rounded-circle" role="button"
-                                href="https://ninobrezac.me/"><i class="fa fa-dribbble fa-fw"></i></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <div class="copyright py-4 text-center text-white">
-        <div class="container"><small>Copyright ©&nbsp;Matej Kalc, Nino Brezac 2020</small></div>
-    </div>
-    <div class="d-lg-none scroll-to-top position-fixed rounded"><a
-            class="d-block js-scroll-trigger text-center text-white rounded" href="#page-top"><i
-                class="fa fa-chevron-up"></i></a></div>
 
-    <script src="./Public/Javascript/Multi-Select-Dropdown-by-Jigar-Mistry.js"></script>
     <script src="./Public/Javascript/jquery.min.js"></script>
     <script src="./Public/Javascript/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <script src="./Public/Javascript/freelancer.js"></script>
-    <script src="./Public/Javascript/Studious-selectbox.js"></script>
     <script src="./Public/algorithms/node.js"></script>
     <script src="./Public/algorithms/graph.js"></script>
     <script src="./Public/algorithms/dijkstra.js"></script>
@@ -163,10 +147,10 @@
 <script>
 
     const tableBody = document.getElementById("tableBody");
-    const widthOfNode = 30;
-    const heightOfNode = 30;
-    const numberOfColumns = tableBody.offsetWidth / widthOfNode;
-    const numberOfRows = tableBody.offsetWidth / (4 * heightOfNode);
+    const widthOfNode = 25;
+    const heightOfNode = 25;
+    const numberOfColumns = parseInt(tableBody.getBoundingClientRect().width / widthOfNode, 10);
+    const numberOfRows = parseInt((window.innerHeight - tableBody.getBoundingClientRect().y) / heightOfNode, 10);
     const pathToGoSign = "./Public/Images/goSign.png";
     const pathToFinishFlag = "./Public/Images/finishFlag.png";
     var animationIsExecuting = false;
@@ -181,6 +165,8 @@
 
     function createInitialeGraph() {
         isShownPath = false;
+        console.log(numberOfColumns);
+        console.log(numberOfRows);
         for (var i = 0; i < numberOfRows; i += 1) {
             for (var j = 0; j < numberOfColumns; j += 1) {
                 graph.setNode(i, j, new GridNode(i, j));
