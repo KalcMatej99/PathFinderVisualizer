@@ -97,54 +97,54 @@
                     <div class="modal-body">
                         <p>This page shows graphically how each path finding algorithm works.</p>
                         <p>A grid is shown with start and end nodes.</p>
-                            <div class="card-group">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col">
-                                                <img width="60px" height="60px" src="./Public/Images/goSign.png"></div>
-                                            <div class="col">
-                                                <p class="card-title">Start Node</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col">
-                                                <img width="60px" height="60px" src="./Public/Images/finishFlag.png"></div>
-                                            <div class="col">
-                                                <p class="card-title">End Node</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col">
-                                                <img width="60px" height="60px" src="./Public/Images/yellowBlock.png">
-                                            </div>
-                                            <div class="col">
-                                                <p class="card-title">Visited Node</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col">
-                                                <img width="60px" height="60px" src="./Public/Images/redBlock.png">
-                                            </div>
-                                            <div class="col">
-                                                <p class="card-title">Node In Path</p>
-                                            </div>
+                        <div class="card-group">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <img width="60px" height="60px" src="./Public/Images/goSign.png"></div>
+                                        <div class="col">
+                                            <p class="card-title">Start Node</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <img width="60px" height="60px" src="./Public/Images/finishFlag.png"></div>
+                                        <div class="col">
+                                            <p class="card-title">End Node</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <img width="60px" height="60px" src="./Public/Images/yellowBlock.png">
+                                        </div>
+                                        <div class="col">
+                                            <p class="card-title">Visited Node</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <img width="60px" height="60px" src="./Public/Images/redBlock.png">
+                                        </div>
+                                        <div class="col">
+                                            <p class="card-title">Node In Path</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <p>Start and end nodes are draggable, you can move those on the grid.</p>
                         <p>When ready select the algorithm and click START in the navbar.</p>
                         <p>Click CLEAR to clean the grid and start over.</p>
@@ -179,9 +179,10 @@
     const numberOfRows = parseInt((window.innerHeight - tableBody.getBoundingClientRect().y) / heightOfNode, 10);
     const pathToGoSign = "./Public/Images/goSign.png";
     const pathToFinishFlag = "./Public/Images/finishFlag.png";
+    const speedOfAnimation = 25;
+
     var animationIsExecuting = false;
     var isShownPath = false;
-
     var graph = new GridGraph(numberOfRows, numberOfColumns);
 
     $(document).ready(function () {
@@ -196,8 +197,6 @@
 
     function createInitialeGraph() {
         isShownPath = false;
-        console.log(numberOfColumns);
-        console.log(numberOfRows);
         for (var i = 0; i < numberOfRows; i += 1) {
             for (var j = 0; j < numberOfColumns; j += 1) {
                 graph.setNode(i, j, new GridNode(i, j));
@@ -247,6 +246,31 @@
         this.graph = graph;
     }
 
+    function drawDifferences(diff) {
+
+        for (var i = 0; i < diff.length; i++) {
+            var node = diff[i];
+            var row = node.row;
+            var column = node.column;
+
+            var elementNode = document.getElementById(getIdFor(row, column));
+
+            if (node.visited) {
+                elementNode.classList.add("node-visited");
+            } else {
+                elementNode.classList.remove("node-visited");
+            }
+
+            if(node.isStartNode) {
+                displayStartNode(row, column);
+            }
+
+            if(node.isEndNode) {
+                displayEndNode(row, column);
+            }
+        }
+    }
+
 
 
     function drawPathInGraph(graph) {
@@ -272,7 +296,7 @@
                         animationIsExecuting = false;
                     }
                 }
-            }, 100 * count);
+            }, speedOfAnimation * count);
         }
     }
 
@@ -286,12 +310,14 @@
 
     function displayStartNode(r, c) {
         document.getElementById(getIdFor(r, c)).classList.add("startNode");
-        document.getElementById(getIdFor(r, c)).draggable = true
+        document.getElementById(getIdFor(r, c)).draggable = true;
+        document.getElementById(getIdFor(r, c)).innerHTML = '';
         document.getElementById(getIdFor(r, c)).insertAdjacentHTML('beforeend', '<img style="object-fit: cover;" width="28px" height="28px" src="' + pathToGoSign + '"></img>');
     }
     function displayEndNode(r, c) {
         document.getElementById(getIdFor(r, c)).classList.add("endNode");
-        document.getElementById(getIdFor(r, c)).draggable = true
+        document.getElementById(getIdFor(r, c)).draggable = true;
+        document.getElementById(getIdFor(r, c)).innerHTML = '';
         document.getElementById(getIdFor(r, c)).insertAdjacentHTML('beforeend', '<img style="object-fit: cover;" width="28px" height="28px" src="' + pathToFinishFlag + '"></img>');
     }
 
@@ -358,7 +384,7 @@
         }
 
         if (animate)
-            displayStates(statesToDisplay, 100);
+            displayStates(statesToDisplay, speedOfAnimation);
         else
             drawGraph(statesToDisplay[statesToDisplay.length - 1]);
     }
@@ -370,7 +396,16 @@
             setTimeout(() => {
                 if (states != null && indexState < states.length) {
                     if (indexState - 1 == states.length) isShownPath = true;
-                    drawGraph(states[indexState])
+
+                    //drawGraph(states[indexState])
+                    var differences = findDifferenceBetweenStates(this.graph, states[indexState]);
+                    drawDifferences(differences);
+
+                    if (states[indexState].pathIsFound) {
+                        drawPathInGraph(states[indexState]);
+                    }
+
+                    this.graph = states[indexState];
                     indexState++;
                     if (indexState >= states.length) {
                         //clearAllTimeouts();
@@ -380,6 +415,19 @@
                 }
             }, speed * count);
         }
+    }
+
+    function findDifferenceBetweenStates(state1, state2) {
+        var differences = [];
+
+        for (var i = 0; i < state1.numberOfRows; i++) {
+            for (var j = 0; j < state1.numberOfColumns; j++) {
+                if (!state1.getNode(i, j).isEqual(state2.getNode(i, j)))
+                    differences.push(state2.getNode(i, j));
+            }
+        }
+
+        return differences;
     }
 
     function clearAllTimeouts() {

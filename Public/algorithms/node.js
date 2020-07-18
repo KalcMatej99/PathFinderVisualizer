@@ -53,7 +53,9 @@ class DijkstraNode extends GridNode {
     }
     
     isEqual(node){
-        return super.isEqual(node) && this.visited == node.visited && this.previousNode == node.previousNode && this.dist == node.dist;
+        if(this.previousNode == null || node.previousNode == null)
+            return super.isEqual(node) && this.visited == node.visited && this.dist == node.dist;
+        return super.isEqual(node) && this.visited == node.visited && this.previousNode.id == node.previousNode.id && this.dist == node.dist;
     }
 
     setDist(dist){
