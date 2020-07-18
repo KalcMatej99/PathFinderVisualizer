@@ -32,6 +32,10 @@
             background-color: red;
         }
 
+        .node-wall {
+            background-color: brown;
+        }
+
         html,
         body {
             margin: 0;
@@ -220,18 +224,20 @@
 
     function createInitialeGraph() {
         isShownPath = false;
+        animationIsExecuting = false;
         for (var i = 0; i < numberOfRows; i += 1) {
             for (var j = 0; j < numberOfColumns; j += 1) {
                 graph.setNode(i, j, new GridNode(i, j));
             }
         }
 
-        graph.setStartNode(parseInt(numberOfRows/2, 10), parseInt(numberOfColumns/2, 10) - 3);
-        graph.setEndNode(parseInt(numberOfRows/2, 10), parseInt(numberOfColumns/2, 10) + 3);
+        graph.setStartNode(parseInt(numberOfRows / 2, 10), parseInt(numberOfColumns / 2, 10) - 3);
+        graph.setEndNode(parseInt(numberOfRows / 2, 10), parseInt(numberOfColumns / 2, 10) + 3);
     }
 
     function clearGraph() {
         isShownPath = false;
+        animationIsExecuting = false;
         clearAllTimeouts();
         graph.clean();
         createInitialeGraph();
@@ -287,6 +293,7 @@
     function executePathFindingAlgorithm(animate) {
         if (animationIsExecuting) return;
         animationIsExecuting = true;
+        isShownPath = false;
         var idPathFindingAlgorithm = document.getElementById("selectAlgorithm").options[document.getElementById("selectAlgorithm").selectedIndex].value;
         idPathFindingAlgorithm = parseInt(idPathFindingAlgorithm, 10);
         var statesToDisplay = [];

@@ -28,6 +28,26 @@ class GridGraph {
         this.nodes[r][c] = node;
     }
 
+    setWall(r, c) {
+        this.nodes[r][c].isWall = true;
+    }
+
+    unsetWall(r, c) {
+        this.nodes[r][c].isWall = false;
+    }
+
+    getWalls() {
+        var walls = [];
+        for(var r = 0; r < numberOfRows; r++) {
+            for(var c = 0; c < numberOfColumns; c++) {
+                if(this.getNode(r,c).isWall) {
+                    walls.push(this.getNode(r, c));
+                }
+            }
+        }
+        return walls;
+    }
+
     //Get starting node in grid graph
     getStartNode() {
         for (var row = 0; row < this.numberOfRows; row++) {

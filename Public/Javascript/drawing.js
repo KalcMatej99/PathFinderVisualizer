@@ -8,18 +8,31 @@ function drawGraph(graph) {
         var tableRow = document.getElementById("row-" + i);
 
         for (var j = 0; j < numberOfColumns; j += 1) {
-            var newNode = '<td class="node" row="' + i + '" column="' + j + '" id="node-' + i + '-' + j + '" height="' + heightOfNode + '" width="' + widthOfNode + '" ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)"></td>';
+            var newNode = '<td class="node" row="' + i + '" column="' + j + '" id="node-' + i + '-' + j + '" \
+            height="' + heightOfNode + '" width="' + widthOfNode + '" ondragstart="drag(event)" ondrop="drop(event)" \
+            ondragover="allowDrop(event)" onclick="makeWall(' + i + ',' + j + ')"></td>';
             tableRow.insertAdjacentHTML('beforeend', newNode);
 
-            document.getElementById('node-' + i + '-' + j).style.padding = 0;
+            var nodeID = getIdFor(i, j);
+            var nodeElement = document.getElementById(nodeID);
 
-            if (graph.getNode(i, j).visited) {
-                document.getElementById('node-' + i + '-' + j).classList.add("node-visited");
+            nodeElement.style.padding = 0;
+
+            if (graph.getNode(i, j).isWall) {
+                nodeElement.classList.add("node-wall");
             } else {
-                document.getElementById('node-' + i + '-' + j).classList.remove("node-visited");
+
+                nodeElement.classList.remove("node-wall");
+
+                if (graph.getNode(i, j).visited) {
+                    nodeElement.classList.add("node-visited");
+                } else {
+                    nodeElement.classList.remove("node-visited");
+                }
+
             }
 
-            document.getElementById('node-' + i + '-' + j).classList.remove("node-in-path");
+            nodeElement.classList.remove("node-in-path");
 
         }
     }
@@ -46,17 +59,23 @@ function drawDifferences(diff) {
 
         var elementNode = document.getElementById(getIdFor(row, column));
 
-        if (node.visited) {
-            elementNode.classList.add("node-visited");
+        if (node.isWall) {
+            elementNode.classList.add("node-wall");
         } else {
-            elementNode.classList.remove("node-visited");
+
+            elementNode.classList.remove("node-wall");
+            if (node.visited) {
+                elementNode.classList.add("node-visited");
+            } else {
+                elementNode.classList.remove("node-visited");
+            }
         }
 
-        if(node.isStartNode) {
+        if (node.isStartNode) {
             displayStartNode(row, column);
         }
 
-        if(node.isEndNode) {
+        if (node.isEndNode) {
             displayEndNode(row, column);
         }
     }
@@ -131,4 +150,10 @@ function displayStates(states, speed) {
             }
         }, speed * count);
     }
+}
+
+function makeWall(row, column) {
+    this.graph.setWall(row, column);
+
+    drawGraph(this.graph);
 }
