@@ -38,6 +38,10 @@ class GridNode extends Node {
         this.row = row;
         this.column = column;
     }
+
+    isEqual(node){  // returns true if "this" is equal to node
+        return this.row == node.row && this.column == node.column && this.isStartNode == node.isStartNode && this.isEndNode == node.isEndNode;
+    }
 }
 
 class DijkstraNode extends GridNode {
@@ -48,6 +52,10 @@ class DijkstraNode extends GridNode {
         this.dist = Number.MAX_VALUE; 
     }
     
+    isEqual(node){
+        return super.isEqual(node) && this.visited == node.visited && this.previousNode == node.previousNode && this.dist == node.dist;
+    }
+
     setDist(dist){
         this.dist = dist;
     }
@@ -66,5 +74,9 @@ class DFSNode extends GridNode {
     constructor(row, column, visited) {
         super(row, column);
         this.visited = visited;
+    }
+
+    isEqual(node){
+        return super.isEqual(node) && this.visited == node.visited;
     }
 }

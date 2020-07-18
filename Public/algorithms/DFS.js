@@ -23,8 +23,10 @@ function DFS(graph) {
         }
     }
 
+    
     //DFS: Go up until you can't or it is already visited, same for right, down and left. Repeat until endnode found.
     while (!currNode.isEndNode){
+        path.push(currNode);
         var cloneState = dfsgraph.clone();
         stateList.push(cloneState);
         neighborTop = dfsgraph.getTopNeighborOfNode(currNode.row,currNode.column);
@@ -44,10 +46,10 @@ function DFS(graph) {
             currNode.visited = true;
             currNode = neighborLeft;
         }
-        path.push(currNode);
     }
 
-    dfsgraph.getEndNode().visited=true; // set endNode as visited since we ended the loop as we reached it
+    path.push(currNode);                // add endNode to path and set as visited since we ended the loop as we reached it
+    dfsgraph.getEndNode().visited=true;
     cloneState = dfsgraph.clone();
     
     dfsgraph.setPath(path);
