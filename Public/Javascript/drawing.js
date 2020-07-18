@@ -1,0 +1,133 @@
+function drawGraph(graph) {
+
+    tableBody.innerHTML = '';
+
+    for (var i = 0; i < numberOfRows; i += 1) {
+        var newRow = '<tr row="' + i + '" id="row-' + i + '" height="' + heightOfNode + '"></tr>';
+        tableBody.insertAdjacentHTML('beforeend', newRow);
+        var tableRow = document.getElementById("row-" + i);
+
+        for (var j = 0; j < numberOfColumns; j += 1) {
+            var newNode = '<td class="node" row="' + i + '" column="' + j + '" id="node-' + i + '-' + j + '" height="' + heightOfNode + '" width="' + widthOfNode + '" ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)"></td>';
+            tableRow.insertAdjacentHTML('beforeend', newNode);
+
+            document.getElementById('node-' + i + '-' + j).style.padding = 0;
+
+            if (graph.getNode(i, j).visited) {
+                document.getElementById('node-' + i + '-' + j).classList.add("node-visited");
+            } else {
+                document.getElementById('node-' + i + '-' + j).classList.remove("node-visited");
+            }
+
+            document.getElementById('node-' + i + '-' + j).classList.remove("node-in-path");
+
+        }
+    }
+
+    var startNode = graph.getStartNode();
+    displayStartNode(startNode.row, startNode.column);
+
+    var endNode = graph.getEndNode();
+    displayEndNode(endNode.row, endNode.column);
+
+    if (graph.pathIsFound) {
+        drawPathInGraph(graph);
+    }
+
+    this.graph = graph;
+}
+
+function drawDifferences(diff) {
+
+    for (var i = 0; i < diff.length; i++) {
+        var node = diff[i];
+        var row = node.row;
+        var column = node.column;
+
+        var elementNode = document.getElementById(getIdFor(row, column));
+
+        if (node.visited) {
+            elementNode.classList.add("node-visited");
+        } else {
+            elementNode.classList.remove("node-visited");
+        }
+
+        if(node.isStartNode) {
+            displayStartNode(row, column);
+        }
+
+        if(node.isEndNode) {
+            displayEndNode(row, column);
+        }
+    }
+}
+
+
+
+function drawPathInGraph(graph) {
+    var path = graph.path();
+    var indexNode = 0;
+    //clearAllTimeouts();
+
+    for (var count = 0; count < path.length; count++) {
+
+        setTimeout(() => {
+
+            if (path != null && indexNode < path.length) {
+
+                var nodeInPath = path[indexNode];
+                var rowOfNodeInPath = nodeInPath.row;
+                var columnOfNodeInPath = nodeInPath.column;
+                document.getElementById(getIdFor(rowOfNodeInPath, columnOfNodeInPath)).classList.add("node-in-path");
+                indexNode += 1;
+                if (indexNode >= path.length) {
+                    //clearAllTimeouts();
+                    isShownPath = true;
+                    path = null;
+                    animationIsExecuting = false;
+                }
+            }
+        }, speedOfAnimation * count);
+    }
+}
+
+function displayStartNode(r, c) {
+    document.getElementById(getIdFor(r, c)).classList.add("startNode");
+    document.getElementById(getIdFor(r, c)).draggable = true;
+    document.getElementById(getIdFor(r, c)).innerHTML = '';
+    document.getElementById(getIdFor(r, c)).insertAdjacentHTML('beforeend', '<img style="object-fit: cover;" width="28px" height="28px" src="' + pathToGoSign + '"></img>');
+}
+function displayEndNode(r, c) {
+    document.getElementById(getIdFor(r, c)).classList.add("endNode");
+    document.getElementById(getIdFor(r, c)).draggable = true;
+    document.getElementById(getIdFor(r, c)).innerHTML = '';
+    document.getElementById(getIdFor(r, c)).insertAdjacentHTML('beforeend', '<img style="object-fit: cover;" width="28px" height="28px" src="' + pathToFinishFlag + '"></img>');
+}
+
+function displayStates(states, speed) {
+    var indexState = 0;
+    for (var count = 0; count < states.length; count++) {
+
+        setTimeout(() => {
+            if (states != null && indexState < states.length) {
+                if (indexState - 1 == states.length) isShownPath = true;
+
+                //drawGraph(states[indexState])
+                var differences = findDifferenceBetweenStates(this.graph, states[indexState]);
+                drawDifferences(differences);
+
+                if (states[indexState].pathIsFound) {
+                    drawPathInGraph(states[indexState]);
+                }
+
+                this.graph = states[indexState];
+                indexState++;
+                if (indexState >= states.length) {
+                    //clearAllTimeouts();
+                    states = null;
+                    animationIsExecuting = false;
+                }
+            }
+        }, speed * count);
+    }
+}

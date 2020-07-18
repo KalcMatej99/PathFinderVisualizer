@@ -148,11 +148,30 @@
                         <p>Start and end nodes are draggable, you can move those on the grid.</p>
                         <p>When ready select the algorithm and click START in the navbar.</p>
                         <p>Click CLEAR to clean the grid and start over.</p>
-                        <p>The site works on mobile and on PC/Desktop, but it has been optimised for PC/Desktop</p>
+                        <p>The site works only on PC/Desktop.</p>
                         <p>To continue click 'Ok'.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="noMobileUsageModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Path Finding Visualizer</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>This page shows graphically how each path finding algorithm works.</p>
+                        <p>Start and end nodes are draggable, you can move those on the grid.</p>
+                        <p>When ready select the algorithm and click START in the navbar.</p>
+                        <p>Click CLEAR to clean the grid and start over.</p>
+                        <p>The site works only on PC/Desktop.</p>
+                        <p>Please try again on a PC/Desktop.</p>
                     </div>
                 </div>
 
@@ -168,31 +187,35 @@
     <script src="./Public/algorithms/DFS.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="./Public/Javascript/bootstrap.min.js"></script>
+    <script src="./Public/Javascript/constants.js"></script>
+    <script src="./Public/Javascript/utility.js"></script>
+    <script src="./Public/Javascript/drawing.js"></script>
 </body>
 
 <script>
-
-    const tableBody = document.getElementById("tableBody");
-    const widthOfNode = 30;
-    const heightOfNode = 30;
-    const numberOfColumns = parseInt(tableBody.getBoundingClientRect().width / widthOfNode, 10);
-    const numberOfRows = parseInt((window.innerHeight - tableBody.getBoundingClientRect().y) / heightOfNode, 10);
-    const pathToGoSign = "./Public/Images/goSign.png";
-    const pathToFinishFlag = "./Public/Images/finishFlag.png";
-    const speedOfAnimation = 25;
 
     var animationIsExecuting = false;
     var isShownPath = false;
     var graph = new GridGraph(numberOfRows, numberOfColumns);
 
     $(document).ready(function () {
-        createInitialeGraph();
-        drawGraph(graph);
-        showInstructions();
+        if (deviceIsPhone()) {
+            showNoMobileUsage();
+        } else {
+            createInitialeGraph();
+            drawGraph(graph);
+            showInstructions();
+        }
     });
 
     function showInstructions() {
         $('#informationModal').modal('show');
+    }
+    function showNoMobileUsage() {
+        $('#noMobileUsageModal').modal('show');
+    }
+    function deviceIsPhone() {
+        return isMobile.any() != null;
     }
 
     function createInitialeGraph() {
@@ -207,118 +230,12 @@
         graph.setEndNode(3, 5);
     }
 
-    function drawGraph(graph) {
-
-        tableBody.innerHTML = '';
-
-        for (var i = 0; i < numberOfRows; i += 1) {
-            var newRow = '<tr row="' + i + '" id="row-' + i + '" height="' + heightOfNode + '"></tr>';
-            tableBody.insertAdjacentHTML('beforeend', newRow);
-            var tableRow = document.getElementById("row-" + i);
-
-            for (var j = 0; j < numberOfColumns; j += 1) {
-                var newNode = '<td class="node" row="' + i + '" column="' + j + '" id="node-' + i + '-' + j + '" height="' + heightOfNode + '" width="' + widthOfNode + '" ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)"></td>';
-                tableRow.insertAdjacentHTML('beforeend', newNode);
-
-                document.getElementById('node-' + i + '-' + j).style.padding = 0;
-
-                if (graph.getNode(i, j).visited) {
-                    document.getElementById('node-' + i + '-' + j).classList.add("node-visited");
-                } else {
-                    document.getElementById('node-' + i + '-' + j).classList.remove("node-visited");
-                }
-
-                document.getElementById('node-' + i + '-' + j).classList.remove("node-in-path");
-
-            }
-        }
-
-        var startNode = graph.getStartNode();
-        displayStartNode(startNode.row, startNode.column);
-
-        var endNode = graph.getEndNode();
-        displayEndNode(endNode.row, endNode.column);
-
-        if (graph.pathIsFound) {
-            drawPathInGraph(graph);
-        }
-
-        this.graph = graph;
-    }
-
-    function drawDifferences(diff) {
-
-        for (var i = 0; i < diff.length; i++) {
-            var node = diff[i];
-            var row = node.row;
-            var column = node.column;
-
-            var elementNode = document.getElementById(getIdFor(row, column));
-
-            if (node.visited) {
-                elementNode.classList.add("node-visited");
-            } else {
-                elementNode.classList.remove("node-visited");
-            }
-
-            if(node.isStartNode) {
-                displayStartNode(row, column);
-            }
-
-            if(node.isEndNode) {
-                displayEndNode(row, column);
-            }
-        }
-    }
-
-
-
-    function drawPathInGraph(graph) {
-        var path = graph.path();
-        var indexNode = 0;
-        //clearAllTimeouts();
-
-        for (var count = 0; count < path.length; count++) {
-
-            setTimeout(() => {
-
-                if (path != null && indexNode < path.length) {
-
-                    var nodeInPath = path[indexNode];
-                    var rowOfNodeInPath = nodeInPath.row;
-                    var columnOfNodeInPath = nodeInPath.column;
-                    document.getElementById(getIdFor(rowOfNodeInPath, columnOfNodeInPath)).classList.add("node-in-path");
-                    indexNode += 1;
-                    if (indexNode >= path.length) {
-                        //clearAllTimeouts();
-                        isShownPath = true;
-                        path = null;
-                        animationIsExecuting = false;
-                    }
-                }
-            }, speedOfAnimation * count);
-        }
-    }
-
     function clearGraph() {
         isShownPath = false;
         clearAllTimeouts();
         graph.clean();
         createInitialeGraph();
         drawGraph(graph);
-    }
-
-    function displayStartNode(r, c) {
-        document.getElementById(getIdFor(r, c)).classList.add("startNode");
-        document.getElementById(getIdFor(r, c)).draggable = true;
-        document.getElementById(getIdFor(r, c)).innerHTML = '';
-        document.getElementById(getIdFor(r, c)).insertAdjacentHTML('beforeend', '<img style="object-fit: cover;" width="28px" height="28px" src="' + pathToGoSign + '"></img>');
-    }
-    function displayEndNode(r, c) {
-        document.getElementById(getIdFor(r, c)).classList.add("endNode");
-        document.getElementById(getIdFor(r, c)).draggable = true;
-        document.getElementById(getIdFor(r, c)).innerHTML = '';
-        document.getElementById(getIdFor(r, c)).insertAdjacentHTML('beforeend', '<img style="object-fit: cover;" width="28px" height="28px" src="' + pathToFinishFlag + '"></img>');
     }
 
     function allowDrop(ev) {
@@ -365,7 +282,6 @@
                 } else drawGraph(graph);
             }
         }
-
     }
 
     function executePathFindingAlgorithm(animate) {
@@ -389,78 +305,6 @@
             drawGraph(statesToDisplay[statesToDisplay.length - 1]);
     }
 
-    function displayStates(states, speed) {
-        var indexState = 0;
-        for (var count = 0; count < states.length; count++) {
-
-            setTimeout(() => {
-                if (states != null && indexState < states.length) {
-                    if (indexState - 1 == states.length) isShownPath = true;
-
-                    //drawGraph(states[indexState])
-                    var differences = findDifferenceBetweenStates(this.graph, states[indexState]);
-                    drawDifferences(differences);
-
-                    if (states[indexState].pathIsFound) {
-                        drawPathInGraph(states[indexState]);
-                    }
-
-                    this.graph = states[indexState];
-                    indexState++;
-                    if (indexState >= states.length) {
-                        //clearAllTimeouts();
-                        states = null;
-                        animationIsExecuting = false;
-                    }
-                }
-            }, speed * count);
-        }
-    }
-
-    function findDifferenceBetweenStates(state1, state2) {
-        var differences = [];
-
-        for (var i = 0; i < state1.numberOfRows; i++) {
-            for (var j = 0; j < state1.numberOfColumns; j++) {
-                if (!state1.getNode(i, j).isEqual(state2.getNode(i, j)))
-                    differences.push(state2.getNode(i, j));
-            }
-        }
-
-        return differences;
-    }
-
-    function clearAllTimeouts() {
-        var highestTimeoutId = setTimeout(";");
-        for (var i = 0; i < highestTimeoutId; i++) {
-            clearTimeout(i);
-        }
-        animationIsExecuting = false;
-    }
-
-    function getIdFor(r, c) {
-        return 'node-' + r + '-' + c;
-    }
-
-    function getRowAndColumnFromId(id) {
-        return [id.split("-")[1], id.split("-")[2]];
-    }
 </script>
 
 </html>
-
-
-
-<!--
-<header class="masthead bg-primary text-white text-center">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div><p>Halooo</p></div>
-            </div>
-            <div class="col">
-                <div><p>Banaaaana</p></div>
-            </div>
-        </div>
-    </div>
-</header> -->
