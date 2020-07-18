@@ -228,6 +228,7 @@
     $(document).ready(function () {
         if (deviceIsPhone()) {
             showNoMobileUsage();
+            alert("Page available only on PC/Desktop");
         } else {
             createInitialeGraph();
             drawGraph(graph);
