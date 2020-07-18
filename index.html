@@ -66,6 +66,8 @@
                                 <option value="3">DFS</option>
                             </select></form>
                     </li>
+                    <li class="nav-item mx-0 mx-lg-1" role="presentation">
+                        <button class="btn btn-primary" onclick="showInstructions()">Show instructions</button></li>
                 </ul>
             </div>
         </div>
@@ -75,54 +77,6 @@
         <section>
             <div class="container">
                 <h3 style="text-align: center">Select an algorithm and click START</h3>
-                <div class="card-group">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <img width="60px" height="60px" src="./Public/Images/goSign.png"></div>
-                                <div class="col">
-                                    <h4 class="card-title">Start Node</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <img width="60px" height="60px" src="./Public/Images/finishFlag.png"></div>
-                                <div class="col">
-                                    <h4 class="card-title">End Node</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <img width="60px" height="60px" src="./Public/Images/yellowBlock.png">
-                                </div>
-                                <div class="col">
-                                    <h4 class="card-title">Visited Node</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <img width="60px" height="60px" src="./Public/Images/redBlock.png">
-                                </div>
-                                <div class="col">
-                                    <h4 class="card-title">Node In Path</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <br>
             <div class="table-responsive">
@@ -143,6 +97,54 @@
                     <div class="modal-body">
                         <p>This page shows graphically how each path finding algorithm works.</p>
                         <p>A grid is shown with start and end nodes.</p>
+                            <div class="card-group">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <img width="60px" height="60px" src="./Public/Images/goSign.png"></div>
+                                            <div class="col">
+                                                <p class="card-title">Start Node</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <img width="60px" height="60px" src="./Public/Images/finishFlag.png"></div>
+                                            <div class="col">
+                                                <p class="card-title">End Node</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <img width="60px" height="60px" src="./Public/Images/yellowBlock.png">
+                                            </div>
+                                            <div class="col">
+                                                <p class="card-title">Visited Node</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <img width="60px" height="60px" src="./Public/Images/redBlock.png">
+                                            </div>
+                                            <div class="col">
+                                                <p class="card-title">Node In Path</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         <p>Start and end nodes are draggable, you can move those on the grid.</p>
                         <p>When ready select the algorithm and click START in the navbar.</p>
                         <p>Click CLEAR to clean the grid and start over.</p>
@@ -185,8 +187,12 @@
     $(document).ready(function () {
         createInitialeGraph();
         drawGraph(graph);
-        $('#informationModal').modal('show');
+        showInstructions();
     });
+
+    function showInstructions() {
+        $('#informationModal').modal('show');
+    }
 
     function createInitialeGraph() {
         isShownPath = false;
