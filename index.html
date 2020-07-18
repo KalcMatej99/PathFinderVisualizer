@@ -52,15 +52,15 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="nav navbar-nav ml-auto">
                     <li class="nav-item mx-0 mx-lg-1" role="presentation"><a
-                        class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: #ffffff;"
+                            class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: #ffffff;"
                             onclick="executePathFindingAlgorithm(true)">Start</a>
                     </li>
                     <li class="nav-item mx-0 mx-lg-1" role="presentation"><a
-                        class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: #ffffff;"
+                            class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: #ffffff;"
                             onclick="clearGraph()">Clear</a></li>
                     <li class="nav-item mx-0 mx-lg-1" role="presentation">
                         <form class="form-inline"><select class="form-control" id="selectAlgorithm"
-                                style="background-color: rgba(255,255,255,0);color: rgb(255,255,255);">
+                                style="background-color: rgba(255,255,255,0);color: rgb(255,255,255);border-color: rgba(255,255,255,0);">
                                 <option value="1" selected="">Dijkstra</option>
                                 <option value="2">A*</option>
                                 <option value="3">DFS</option>
@@ -132,16 +132,40 @@
                 </table>
             </div>
         </section>
+
+        <!-- Modal -->
+        <div class="modal fade" id="informationModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Path Finding Visualizer</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>This page shows graphically how each path finding algorithm works.</p>
+                        <p>A grid is shown with start and end nodes.</p>
+                        <p>Start and end nodes are draggable, you can move those on the grid.</p>
+                        <p>When ready select the algorithm and click START in the navbar.</p>
+                        <p>Click CLEAR to clean the grid and start over.</p>
+                        <p>The site works on mobile and on PC/Desktop, but it has been optimised for PC/Desktop</p>
+                        <p>To continue click 'Ok'.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </main>
 
-    <script src="./Public/Javascript/jquery.min.js"></script>
-    <script src="./Public/Javascript/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <script src="./Public/Javascript/freelancer.js"></script>
     <script src="./Public/algorithms/node.js"></script>
     <script src="./Public/algorithms/graph.js"></script>
     <script src="./Public/algorithms/dijkstra.js"></script>
     <script src="./Public/algorithms/DFS.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="./Public/Javascript/bootstrap.min.js"></script>
 </body>
 
 <script>
@@ -161,6 +185,7 @@
     $(document).ready(function () {
         createInitialeGraph();
         drawGraph(graph);
+        $('#informationModal').modal('show');
     });
 
     function createInitialeGraph() {
