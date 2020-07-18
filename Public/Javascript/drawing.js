@@ -10,7 +10,7 @@ function drawGraph(graph) {
         for (var j = 0; j < numberOfColumns; j += 1) {
             var newNode = '<td class="node" row="' + i + '" column="' + j + '" id="node-' + i + '-' + j + '" \
             height="' + heightOfNode + '" width="' + widthOfNode + '" ondragstart="drag(event)" ondrop="drop(event)" \
-            ondragover="allowDrop(event)" onclick="makeWall(' + i + ',' + j + ')"></td>';
+            ondragover="allowDrop(event)" onmouseover="makeWall(' + i + ',' + j + ')"></td>';
             tableRow.insertAdjacentHTML('beforeend', newNode);
 
             var nodeID = getIdFor(i, j);
@@ -153,7 +153,27 @@ function displayStates(states, speed) {
 }
 
 function makeWall(row, column) {
-    this.graph.setWall(row, column);
 
-    drawGraph(this.graph);
+    if(mouseDown && !graph.getNode(row, column).isStartNode && !graph.getNode(row, column).isEndNode) {
+        
+        var oldGraph = this.graph.clone();
+        this.graph.setWall(row, column);
+
+        console.log(row, column);
+        console.log(oldGraph);
+        console.log(graph);
+
+        var differences = findDifferenceBetweenStates(oldGraph, this.graph);
+        console.log(differences);
+        drawDifferences(differences);
+    }
+}
+
+var mouseDown = false;
+document.body.onmousedown = function() { 
+    console.log("hello3");
+  mouseDown = true;
+}
+document.body.onmouseup = function() {
+    mouseDown = false;
 }

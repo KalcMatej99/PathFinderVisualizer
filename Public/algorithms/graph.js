@@ -38,9 +38,9 @@ class GridGraph {
 
     getWalls() {
         var walls = [];
-        for(var r = 0; r < numberOfRows; r++) {
-            for(var c = 0; c < numberOfColumns; c++) {
-                if(this.getNode(r,c).isWall) {
+        for (var r = 0; r < numberOfRows; r++) {
+            for (var c = 0; c < numberOfColumns; c++) {
+                if (this.getNode(r, c).isWall) {
                     walls.push(this.getNode(r, c));
                 }
             }
@@ -131,6 +131,27 @@ class GridGraph {
     isPathFound() {
         return false;
     }
+
+    clone() {
+        var tmp = new GridGraph(this.numberOfRows, this.numberOfColumns)
+
+        for (var i = 0; i < this.numberOfRows; i++) {
+            for (var j = 0; j < this.numberOfColumns; j++) {
+
+                var newDNode = new GridNode(i, j);
+                
+                if (this.nodes[i][j].isStartNode)
+                    newDNode.makeStartNode();
+                if (this.nodes[i][j].isEndNode)
+                    newDNode.makeEndNode();
+                if (this.nodes[i][j].isWall)
+                    newDNode.isWall = true;
+                tmp.setNode(i, j, newDNode);
+
+            }
+        }
+        return tmp;
+    }
 }
 
 class DijkstraGraph extends GridGraph {
@@ -180,18 +201,18 @@ class DijkstraGraph extends GridGraph {
     }
 }
 
-class DFSGraph extends DijkstraGraph {  
+class DFSGraph extends DijkstraGraph {
     pathAtt = [];               // pathAtt because we can't have an attribute and function with identical names
-    setPath (path){
+    setPath(path) {
         this.pathAtt = path;
     }
 
-    path (){
+    path() {
         return this.pathAtt;
     }
 
-    isPathFound (){
-        if (this.path()!=[]) return true;
+    isPathFound() {
+        if (this.path() != []) return true;
         else return false;
     }
 

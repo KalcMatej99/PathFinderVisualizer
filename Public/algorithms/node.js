@@ -37,10 +37,11 @@ class GridNode extends Node {
         super(row + "-" + column);
         this.row = row;
         this.column = column;
+        this.isWall = false;
     }
 
     isEqual(node){  // returns true if "this" is equal to node
-        return this.row == node.row && this.column == node.column && this.isStartNode == node.isStartNode && this.isEndNode == node.isEndNode;
+        return this.isWall == node.isWall && this.row == node.row && this.column == node.column && this.isStartNode == node.isStartNode && this.isEndNode == node.isEndNode;
     }
 }
 
