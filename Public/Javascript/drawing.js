@@ -10,7 +10,7 @@ function drawGraph(graph) {
         for (var j = 0; j < numberOfColumns; j += 1) {
             var newNode = '<td class="node" row="' + i + '" column="' + j + '" id="node-' + i + '-' + j + '" \
             height="' + heightOfNode + '" width="' + widthOfNode + '" ondragstart="drag(event)" ondrop="drop(event)" \
-            ondragover="allowDrop(event)" onmouseover="makeWall(' + i + ',' + j + ')"></td>';
+            ondragover="allowDrop(event)" onmouseover="makeWall(' + i + ',' + j + ')" onclick="removeWall(' + i + ',' + j + ')"></td>';
             tableRow.insertAdjacentHTML('beforeend', newNode);
 
             var nodeID = getIdFor(i, j);
@@ -19,10 +19,8 @@ function drawGraph(graph) {
             nodeElement.style.padding = 0;
 
             if (graph.getNode(i, j).isWall) {
-                nodeElement.classList.add("node-wall");
+                displayWall(i, j);
             } else {
-
-                nodeElement.classList.remove("node-wall");
 
                 if (graph.getNode(i, j).visited) {
                     nodeElement.classList.add("node-visited");
@@ -59,16 +57,12 @@ function drawDifferences(diff) {
 
         var elementNode = document.getElementById(getIdFor(row, column));
 
-        if (node.isWall) {
-            elementNode.classList.add("node-wall");
-        } else {
+        elementNode.innerHTML = '';
 
-            elementNode.classList.remove("node-wall");
-            if (node.visited) {
-                elementNode.classList.add("node-visited");
-            } else {
-                elementNode.classList.remove("node-visited");
-            }
+        if (node.visited) {
+            elementNode.classList.add("node-visited");
+        } else {
+            elementNode.classList.remove("node-visited");
         }
 
         if (node.isStartNode) {
@@ -77,6 +71,11 @@ function drawDifferences(diff) {
 
         if (node.isEndNode) {
             displayEndNode(row, column);
+        }
+
+        if (node.isWall) {
+            elementNode.classList.remove("node-visited");
+            displayWall(row, column);
         }
     }
 }
@@ -122,6 +121,11 @@ function displayEndNode(r, c) {
     document.getElementById(getIdFor(r, c)).innerHTML = '';
     document.getElementById(getIdFor(r, c)).insertAdjacentHTML('beforeend', '<img style="object-fit: cover;" width="28px" height="28px" src="' + pathToFinishFlag + '"></img>');
 }
+function displayWall(r, c) {
+    document.getElementById(getIdFor(r, c)).classList.add("wall");
+    document.getElementById(getIdFor(r, c)).innerHTML = '';
+    document.getElementById(getIdFor(r, c)).insertAdjacentHTML('beforeend', '<img class="unselectable" style="object-fit: cover;" width="28px" height="28px" src="' + pathToWallImage + '"></img>');
+}
 
 function displayStates(states, speed) {
     drawGraph(states[0]);
@@ -154,27 +158,31 @@ function displayStates(states, speed) {
 
 function makeWall(row, column) {
 
-    if(mouseDown && !graph.getNode(row, column).isStartNode && !graph.getNode(row, column).isEndNode) {
-        
+    if (mouseDown && !graph.getNode(row, column).isStartNode && !graph.getNode(row, column).isEndNode) {
+
         var oldGraph = this.graph.clone();
         this.graph.setWall(row, column);
 
-        console.log(row, column);
-        console.log(oldGraph);
-        console.log(graph);
-
         var differences = findDifferenceBetweenStates(oldGraph, this.graph);
-        console.log(differences);
         drawDifferences(differences);
     }
+}
+
+function removeWall(row, column) {
+
+    var oldGraph = this.graph.clone();
+    if(this.graph.getNode(row, column).isWall)this.graph.unsetWall(row, column);
+    else this.graph.setWall(row, column);
+    var differences = findDifferenceBetweenStates(oldGraph, this.graph);
+    drawDifferences(differences);
 }
 
 var canMakeWalls = true;
 
 var mouseDown = false;
-document.body.onmousedown = function() {
-  mouseDown = true;
+document.body.onmousedown = function () {
+    mouseDown = true;
 }
-document.body.onmouseup = function() {
+document.body.onmouseup = function () {
     mouseDown = false;
 }

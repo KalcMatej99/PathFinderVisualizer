@@ -42,6 +42,15 @@
             height: 100%;
             overflow: hidden
         }
+
+        .unselectable {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
     </style>
 
 </head>
@@ -106,7 +115,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <img width="60px" height="60px" src="./Public/Images/goSign.png"></div>
+                                            <img width="40px" height="40px" src="./Public/Images/goSign.png"></div>
                                         <div class="col">
                                             <p class="card-title">Start Node</p>
                                         </div>
@@ -117,7 +126,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <img width="60px" height="60px" src="./Public/Images/finishFlag.png"></div>
+                                            <img width="40px" height="40px" src="./Public/Images/finishFlag.png"></div>
                                         <div class="col">
                                             <p class="card-title">End Node</p>
                                         </div>
@@ -128,7 +137,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <img width="60px" height="60px" src="./Public/Images/yellowBlock.png">
+                                            <img width="40px" height="40px" src="./Public/Images/yellowBlock.png">
                                         </div>
                                         <div class="col">
                                             <p class="card-title">Visited Node</p>
@@ -140,10 +149,22 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <img width="60px" height="60px" src="./Public/Images/redBlock.png">
+                                            <img width="40px" height="40px" src="./Public/Images/redBlock.png">
                                         </div>
                                         <div class="col">
                                             <p class="card-title">Node In Path</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <img width="40px" height="40px" src="./Public/Images/wall.png">
+                                        </div>
+                                        <div class="col">
+                                            <p class="card-title">Wall</p>
                                         </div>
                                     </div>
                                 </div>
