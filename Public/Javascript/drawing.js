@@ -105,8 +105,9 @@ function displayEndNode(r, c) {
 }
 
 function displayStates(states, speed) {
-    var indexState = 0;
-    for (var count = 0; count < states.length; count++) {
+    drawGraph(states[0]);
+    var indexState = 1;
+    for (var count = 1; count < states.length; count++) {
 
         setTimeout(() => {
             if (states != null && indexState < states.length) {

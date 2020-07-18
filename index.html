@@ -226,8 +226,8 @@
             }
         }
 
-        graph.setStartNode(3, 3);
-        graph.setEndNode(3, 5);
+        graph.setStartNode(parseInt(numberOfRows/2, 10), parseInt(numberOfColumns/2, 10) - 3);
+        graph.setEndNode(parseInt(numberOfRows/2, 10), parseInt(numberOfColumns/2, 10) + 3);
     }
 
     function clearGraph() {
