@@ -13,6 +13,7 @@ function dijkstra(graph) {
             //Nov node: DijkstraNode ki ima lastnosti node: GridNode 
 
             var newDNode = new DijkstraNode(i, j, false);
+            newDNode.isWall = rows[i][j].isWall;
             if (rows[i][j].isStartNode) {
                 newDNode.setDist(0);
                 newDNode.visited = true;
@@ -30,9 +31,8 @@ function dijkstra(graph) {
         stateList.push(cloneState);
 
         var currNode = queue.shift();
-        if(currNode.isWall){
+        if(currNode == null || currNode.isWall){
             continue;
-            console.log(currNode);
         }
         
 

@@ -262,7 +262,7 @@
         isShownPath = false;
         animationIsExecuting = false;
         clearAllTimeouts();
-        graph.clean();
+        graph = new GridGraph(numberOfRows, numberOfColumns);
         createInitialeGraph();
         drawGraph(graph);
     }
@@ -319,6 +319,8 @@
 
     function executePathFindingAlgorithm(animate) {
         if (animationIsExecuting) return;
+
+        console.log(this.graph.getWalls());
         animationIsExecuting = true;
         isShownPath = false;
         var idPathFindingAlgorithm = document.getElementById("selectAlgorithm").options[document.getElementById("selectAlgorithm").selectedIndex].value;
@@ -337,6 +339,10 @@
             displayStates(statesToDisplay, speedOfAnimation);
         else
             drawGraph(statesToDisplay[statesToDisplay.length - 1]);
+    }
+
+    window.onresize = function(){
+        window.location.reload(false);
     }
 
 </script>

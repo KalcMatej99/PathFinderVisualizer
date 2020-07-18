@@ -12,6 +12,7 @@ function DFS(graph) {
     for (var i = 0; i < rows.length; i++) {                 // similar to Dijkstra initialization, here we initialize the DFS Graph
         for (var j = 0; j < rows[i].length; j++) {
             var newDNode = new DFSNode(i, j, false);
+            newDNode.isWall = rows[i][j].isWall;
             if (rows[i][j].isStartNode) {
                 newDNode.visited = true;
                 newDNode.makeStartNode();

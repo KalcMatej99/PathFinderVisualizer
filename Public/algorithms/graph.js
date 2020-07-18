@@ -90,28 +90,28 @@ class GridGraph {
     // Get top neighbor for node at position (r, c)
     getTopNeighborOfNode(r, c) {
         if (r > 0)
-            return this.getNode(r - 1, c);
+            return this.getNode(r - 1, c).isWall ? null : this.getNode(r - 1, c);
         return null;
     }
 
     // Get bottom neighbor for node at position (r, c)
     getBottomNeighborOfNode(r, c) {
         if (r < this.numberOfRows - 1)
-            return this.getNode(r + 1, c);
+            return this.getNode(r + 1, c).isWall ? null : this.getNode(r + 1, c);
         return null;
     }
 
     // Get right neighbor for node at position (r, c)
     getRightNeighborOfNode(r, c) {
         if (c < this.numberOfColumns - 1)
-            return this.getNode(r, c + 1);
+            return this.getNode(r, c + 1).isWall ? null : this.getNode(r, c + 1);
         return null;
     }
 
     // Get left neighbor for node at position (r, c)
     getLeftNeighborOfNode(r, c) {
         if (c > 0)
-            return this.getNode(r, c - 1);
+            return this.getNode(r, c - 1).isWall ? null : this.getNode(r, c - 1);
         return null;
     }
 
