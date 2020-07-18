@@ -30,6 +30,12 @@ function dijkstra(graph) {
         stateList.push(cloneState);
 
         var currNode = queue.shift();
+        if(currNode.isWall){
+            continue;
+            console.log(currNode);
+        }
+        
+
         currNode.visited = true;
         if (currNode.isEndNode) break;
         var neighbors = dgraph.getNeighborsForNode(currNode.row, currNode.column)

@@ -163,10 +163,12 @@ class DijkstraGraph extends GridGraph {
                 var visited = this.nodes[i][j].visited;
                 var previous = this.nodes[i][j].previousNode;
                 var dist = this.nodes[i][j].dist;
+                var wall = this.nodes[i][j].isWall;
 
                 var newDNode = new DijkstraNode(i, j, visited);
                 newDNode.setPreviousNode(previous);
                 newDNode.setDist(dist);
+                if (wall) newDNode.isWall = true;
 
                 if (this.nodes[i][j].isStartNode)
                     newDNode.makeStartNode();
@@ -222,8 +224,10 @@ class DFSGraph extends DijkstraGraph {
         for (var i = 0; i < this.numberOfRows; i++) {
             for (var j = 0; j < this.numberOfColumns; j++) {
                 var visited = this.nodes[i][j].visited;
-                var newDNode = new DijkstraNode(i, j, visited);
-
+                var wall = this.nodes[i][j].isWall;
+                var newDNode = new DFSNode(i, j, visited);
+                
+                if (wall) newDNode.isWall = true;
                 if (this.nodes[i][j].isStartNode)
                     newDNode.makeStartNode();
                 if (this.nodes[i][j].isEndNode)

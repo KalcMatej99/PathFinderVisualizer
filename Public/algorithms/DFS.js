@@ -25,6 +25,8 @@ function DFS(graph) {
 
     
     //DFS: Go up until you can't or it is already visited, same for right, down and left. Repeat until endnode found.
+    // if the node is a wall, we simply skip it
+    
     while (!currNode.isEndNode){
         path.push(currNode);
         var cloneState = dfsgraph.clone();
@@ -33,16 +35,16 @@ function DFS(graph) {
         neighborRight = dfsgraph.getRightNeighborOfNode(currNode.row,currNode.column);
         neighborBottom = dfsgraph.getBottomNeighborOfNode(currNode.row,currNode.column);
         neighborLeft = dfsgraph.getLeftNeighborOfNode(currNode.row,currNode.column);
-        if (neighborTop!=null && !neighborTop.visited && currNode.row > 0 ){
+        if (neighborTop!=null && !neighborTop.visited && currNode.row > 0 && !neighborTop.isWall){
             currNode.visited = true;
             currNode = neighborTop;
-        } else if (neighborRight!=null && !neighborRight.visited && currNode.column < dfsgraph.numberOfColumns-1 ) {
+        } else if (neighborRight!=null && !neighborRight.visited && currNode.column < dfsgraph.numberOfColumns-1 && !neighborRight.isWall) {
             currNode.visited = true;
             currNode = neighborRight;
-        } else if (neighborBottom!=null && !neighborBottom.visited && currNode.row < dfsgraph.numberOfRows-1 ) {
+        } else if (neighborBottom!=null && !neighborBottom.visited && currNode.row < dfsgraph.numberOfRows-1 && !neighborBottom.isWall) {
             currNode.visited = true;
             currNode = neighborBottom;
-        } else if (neighborLeft!=null && !neighborLeft.visited && currNode.column > 0 ) {
+        } else if (neighborLeft!=null && !neighborLeft.visited && currNode.column > 0 && !neighborLeft.isWall) {
             currNode.visited = true;
             currNode = neighborLeft;
         }
