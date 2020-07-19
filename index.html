@@ -91,7 +91,7 @@
         <br>
         <section>
             <div class="container">
-                <h3 style="text-align: center">Select an algorithm and click START</h3>
+                <h3 style="text-align: center" id="title">Select an algorithm and click START</h3>
             </div>
             <br>
             <div class="table-responsive">
@@ -229,6 +229,7 @@
         if (deviceIsPhone()) {
             showNoMobileUsage();
             alert("Page available only on PC/Desktop");
+            document.getElementById("title").textContent = "Page available only on PC/Desktop";
         } else {
             createInitialeGraph();
             drawGraph(graph);
@@ -239,9 +240,11 @@
     function showInstructions() {
         $('#informationModal').modal('show');
     }
+
     function showNoMobileUsage() {
         $('#noMobileUsageModal').modal('show');
     }
+    
     function deviceIsPhone() {
         return isMobile.any() != null;
     }
