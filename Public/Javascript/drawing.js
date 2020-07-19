@@ -188,19 +188,6 @@ document.body.onmouseup = function () {
     mouseDown = false;
 }
 
-function clearWalls() {
-
-    if (!animationIsExecuting) {
-        var walls = graph.getWalls();
-
-        for (var i = 0; i < walls.length; i++) {
-            graph.unsetWall(walls[i].row, walls[i].column)
-        }
-
-        drawGraph(this.graph);
-    }
-}
-
 function setAnimationIsExecuting(value) {
 
     if (value) {
