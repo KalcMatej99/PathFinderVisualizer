@@ -76,7 +76,7 @@
                 <li class="nav-item mx-0 mx-lg-1" role="presentation">
                     <select class="form-control nav-link px-0 px-lg-3 rounded" id="selectAlgorithm" style="margin: auto; width:100%; height:100%; background-color: rgba(0,0,0,0); color: #ffffff;">
                             <option value="1" selected="" style="color:black">Dijkstra</option>
-                            <option value="2" style="color:black">A*</option>
+                            <option value="2" style="color:black">Bidirectional</option>
                             <option value="3" style="color:black">DFS</option>
                     </select>
                 </li>
@@ -211,6 +211,7 @@
     <script src="./Public/algorithms/graph.js"></script>
     <script src="./Public/algorithms/dijkstra.js"></script>
     <script src="./Public/algorithms/DFS.js"></script>
+    <script src="./Public/algorithms/bidirectional.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="./Public/Javascript/bootstrap.min.js"></script>
     <script src="./Public/Javascript/constants.js"></script>
@@ -332,7 +333,7 @@
         switch (idPathFindingAlgorithm) {
             case 1:
                 statesToDisplay = dijkstra(graph); break;
-            case 2: alert("Sorry this algorithm is not yet implemented"); break;//statesToDisplay = astar(graph); break;
+            case 2: statesToDisplay = bidirectional(graph); break;
             case 3: statesToDisplay = DFS(graph); break;
             default: break;
         }

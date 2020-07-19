@@ -239,3 +239,47 @@ class DFSGraph extends DijkstraGraph {
         return tmp;
     }
 }
+
+class BidirectionalGraph extends GridGraph {
+    path() {
+        var endNode = this.getEndNode();
+        var pathArray = [];
+        if (endNode == null) return null;
+        else {
+            while (endNode != null) {
+                pathArray.push(endNode);
+                endNode = endNode.previousNode;
+            }
+            return pathArray;
+        }
+    }
+    
+    clone() {
+        var tmp = new BidirectionalGraph(this.numberOfRows, this.numberOfColumns)
+        tmp.pathIsFound = this.pathIsFound;
+        for (var i = 0; i < this.numberOfRows; i++) {
+            for (var j = 0; j < this.numberOfColumns; j++) {
+                var visitedStart = this.nodes[i][j].visitedStart;
+                var visitedFinish = this.nodes[i][j].visitedFinish;
+                var previous = this.nodes[i][j].previousNode;
+                var dist = this.nodes[i][j].dist;
+                var wall = this.nodes[i][j].isWall;
+
+                var newBNode = new BidirectionalNode(i, j);
+                if (visitedStart) newBNode.setVisitedStart(visitedStart);
+                if (visitedFinish) newBNode.setVisitedFinish(visitedFinish);
+                newBNode.setPreviousNode(previous);
+                newBNode.setDist(dist);
+                if (wall) newBNode.isWall = true;
+
+                if (this.nodes[i][j].isStartNode)
+                    newBNode.makeStartNode();
+                if (this.nodes[i][j].isEndNode)
+                    newBNode.makeEndNode();
+                tmp.setNode(i, j, newBNode);
+
+            }
+        }
+        return tmp;
+    }
+}

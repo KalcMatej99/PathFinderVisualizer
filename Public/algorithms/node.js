@@ -83,3 +83,35 @@ class DFSNode extends GridNode {
         return super.isEqual(node) && this.visited == node.visited;
     }
 }
+
+class BidirectionalNode extends GridNode {
+    constructor(row, column){
+        super(row, column);
+        this.visitedStart = false;
+        this.visitedFinish = false;
+        this.previousNode = null;
+        this.dist = Number.MAX_VALUE;
+    }
+
+    setVisitedStart(visitedStart){
+        this.visitedStart = visitedStart;
+    }
+
+    setVisitedFinish(visitedFinish){
+        this.visitedFinish = visitedFinish;
+    }
+
+    setDist(dist){
+        this.dist = dist;
+    }
+
+    setPreviousNode(previousNode){
+        this.previousNode = previousNode;
+    }
+
+    isEqual (node){
+        if(this.previousNode == null || node.previousNode == null)
+            return super.isEqual(node) && this.visitedStart == node.visitedStart && this.visitedFinish == node.visitedFinish && this.dist == node.dist;
+        return super.isEqual(node) && this.visitedStart == node.visitedStart && this.visitedFinish == node.visitedFinish && this.previousNode.id == node.previousNode.id && this.dist == node.dist;
+    }
+}
