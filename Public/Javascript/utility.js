@@ -16,7 +16,8 @@ function clearAllTimeouts() {
     for (var i = 0; i < highestTimeoutId; i++) {
         clearTimeout(i);
     }
-    animationIsExecuting = false;
+    
+    setAnimationIsExecuting(false);
 }
 
 function getIdFor(r, c) {

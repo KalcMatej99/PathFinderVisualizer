@@ -85,7 +85,9 @@ function drawDifferences(diff) {
 function drawPathInGraph(graph) {
     var path = graph.path();
     var indexNode = 0;
-    //clearAllTimeouts();
+    
+    setAnimationIsExecuting(true);
+    isShownPath = false;
 
     for (var count = 0; count < path.length; count++) {
 
@@ -99,10 +101,9 @@ function drawPathInGraph(graph) {
                 document.getElementById(getIdFor(rowOfNodeInPath, columnOfNodeInPath)).classList.add("node-in-path");
                 indexNode += 1;
                 if (indexNode >= path.length) {
-                    //clearAllTimeouts();
                     isShownPath = true;
                     path = null;
-                    animationIsExecuting = false;
+                    setAnimationIsExecuting(false);
                 }
             }
         }, speedOfAnimation * count);
@@ -130,26 +131,24 @@ function displayWall(r, c) {
 function displayStates(states, speed) {
     drawGraph(states[0]);
     var indexState = 1;
+    setAnimationIsExecuting(true);
     for (var count = 1; count < states.length; count++) {
 
         setTimeout(() => {
             if (states != null && indexState < states.length) {
                 if (indexState - 1 == states.length) isShownPath = true;
 
-                //drawGraph(states[indexState])
                 var differences = findDifferenceBetweenStates(this.graph, states[indexState]);
                 drawDifferences(differences);
-
-                if (states[indexState].pathIsFound) {
-                    drawPathInGraph(states[indexState]);
-                }
 
                 this.graph = states[indexState];
                 indexState++;
                 if (indexState >= states.length) {
-                    //clearAllTimeouts();
-                    states = null;
-                    animationIsExecuting = false;
+                    setAnimationIsExecuting(false);
+                }
+
+                if (this.graph.pathIsFound) {
+                    drawPathInGraph(this.graph);
                 }
             }
         }, speed * count);
@@ -158,7 +157,7 @@ function displayStates(states, speed) {
 
 function makeWall(row, column) {
 
-    if (mouseDown && !graph.getNode(row, column).isStartNode && !graph.getNode(row, column).isEndNode) {
+    if (!animationIsExecuting && mouseDown && !graph.getNode(row, column).isStartNode && !graph.getNode(row, column).isEndNode) {
 
         var oldGraph = this.graph.clone();
         this.graph.setWall(row, column);
@@ -170,11 +169,13 @@ function makeWall(row, column) {
 
 function removeWall(row, column) {
 
-    var oldGraph = this.graph.clone();
-    if(this.graph.getNode(row, column).isWall)this.graph.unsetWall(row, column);
-    else this.graph.setWall(row, column);
-    var differences = findDifferenceBetweenStates(oldGraph, this.graph);
-    drawDifferences(differences);
+    if (!animationIsExecuting && !graph.getNode(row, column).isStartNode && !graph.getNode(row, column).isEndNode) {
+        var oldGraph = this.graph.clone();
+        if (this.graph.getNode(row, column).isWall) this.graph.unsetWall(row, column);
+        else this.graph.setWall(row, column);
+        var differences = findDifferenceBetweenStates(oldGraph, this.graph);
+        drawDifferences(differences);
+    }
 }
 
 var canMakeWalls = true;

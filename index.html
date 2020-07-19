@@ -244,14 +244,14 @@
     function showNoMobileUsage() {
         $('#noMobileUsageModal').modal('show');
     }
-    
+
     function deviceIsPhone() {
         return isMobile.any() != null;
     }
 
     function createInitialeGraph() {
         isShownPath = false;
-        animationIsExecuting = false;
+        setAnimationIsExecuting(false);
         for (var i = 0; i < numberOfRows; i += 1) {
             for (var j = 0; j < numberOfColumns; j += 1) {
                 graph.setNode(i, j, new GridNode(i, j));
@@ -264,7 +264,7 @@
 
     function clearGraph() {
         isShownPath = false;
-        animationIsExecuting = false;
+        setAnimationIsExecuting(false);
         clearAllTimeouts();
         graph = new GridGraph(numberOfRows, numberOfColumns);
         createInitialeGraph();
@@ -324,8 +324,7 @@
     function executePathFindingAlgorithm(animate) {
         if (animationIsExecuting) return;
 
-        console.log(this.graph.getWalls());
-        animationIsExecuting = true;
+        setAnimationIsExecuting(true);
         isShownPath = false;
         var idPathFindingAlgorithm = document.getElementById("selectAlgorithm").options[document.getElementById("selectAlgorithm").selectedIndex].value;
         idPathFindingAlgorithm = parseInt(idPathFindingAlgorithm, 10);
@@ -345,8 +344,26 @@
             drawGraph(statesToDisplay[statesToDisplay.length - 1]);
     }
 
-    window.onresize = function(){
+    window.onresize = function () {
         window.location.reload(false);
+    }
+
+    function setAnimationIsExecuting(value) {
+
+        if (value) {
+            animationIsExecuting = true;
+            var startNode = graph.getStartNode();
+            document.getElementById(getIdFor(startNode.row, startNode.column)).draggable = false;
+            var endNode = graph.getEndNode();
+            document.getElementById(getIdFor(endNode.row, endNode.column)).draggable = false;
+
+        } else {
+            animationIsExecuting = false;
+            var startNode = graph.getStartNode();
+            if(startNode != null) document.getElementById(getIdFor(startNode.row, startNode.column)).draggable = true;
+            var endNode = graph.getEndNode();
+            if(endNode != null) document.getElementById(getIdFor(endNode.row, endNode.column)).draggable = true;
+        }
     }
 
 </script>
