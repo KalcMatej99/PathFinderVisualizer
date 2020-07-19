@@ -85,7 +85,7 @@ function drawDifferences(diff) {
 function drawPathInGraph(graph) {
     var path = graph.path();
     var indexNode = 0;
-    
+
     setAnimationIsExecuting(true);
     isShownPath = false;
 
@@ -186,4 +186,35 @@ document.body.onmousedown = function () {
 }
 document.body.onmouseup = function () {
     mouseDown = false;
+}
+
+function clearWalls() {
+
+    if (!animationIsExecuting) {
+        var walls = graph.getWalls();
+
+        for (var i = 0; i < walls.length; i++) {
+            graph.unsetWall(walls[i].row, walls[i].column)
+        }
+
+        drawGraph(this.graph);
+    }
+}
+
+function setAnimationIsExecuting(value) {
+
+    if (value) {
+        animationIsExecuting = true;
+        var startNode = graph.getStartNode();
+        document.getElementById(getIdFor(startNode.row, startNode.column)).draggable = false;
+        var endNode = graph.getEndNode();
+        document.getElementById(getIdFor(endNode.row, endNode.column)).draggable = false;
+
+    } else {
+        animationIsExecuting = false;
+        var startNode = graph.getStartNode();
+        if (startNode != null) document.getElementById(getIdFor(startNode.row, startNode.column)).draggable = true;
+        var endNode = graph.getEndNode();
+        if (endNode != null) document.getElementById(getIdFor(endNode.row, endNode.column)).draggable = true;
+    }
 }
