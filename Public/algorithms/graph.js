@@ -249,7 +249,7 @@ class BidirectionalGraph extends GridGraph {
 
     path() {
         var pathArray = [];
-        debugger;
+        //debugger;
         var middle1 = this.getMiddle1();
         var middle2 = this.getMiddle2();
         if (middle1 == null) return null;

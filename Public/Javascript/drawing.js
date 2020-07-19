@@ -21,8 +21,10 @@ function drawGraph(graph) {
             if (graph.getNode(i, j).isWall) {
                 displayWall(i, j);
             } else {
-
-                if (graph.getNode(i, j).visited) {
+                if (graph.getNode(i, j).visitedStart || graph.getNode(i, j).visitedFinish){
+                    //debugger;
+                    nodeElement.classList.add("node-visited");
+                } else if (graph.getNode(i, j).visited) {
                     nodeElement.classList.add("node-visited");
                 } else {
                     nodeElement.classList.remove("node-visited");
@@ -59,6 +61,10 @@ function drawDifferences(diff) {
 
         elementNode.innerHTML = '';
 
+        if (node.visitedStart || node.visitedFinish){
+            elementNode.classList.add("node-visited");
+        }
+        
         if (node.visited) {
             elementNode.classList.add("node-visited");
         } else {
