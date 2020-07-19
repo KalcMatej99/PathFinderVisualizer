@@ -90,7 +90,8 @@ class BidirectionalNode extends GridNode {
         this.visitedStart = false;
         this.visitedFinish = false;
         this.previousNode = null;
-        this.dist = Number.MAX_VALUE;
+        this.distStart = Number.MAX_VALUE;
+        this.distFinish = Number.MAX_VALUE;
     }
 
     setVisitedStart(visitedStart){
@@ -101,8 +102,12 @@ class BidirectionalNode extends GridNode {
         this.visitedFinish = visitedFinish;
     }
 
-    setDist(dist){
-        this.dist = dist;
+    setDistStart(distStart){
+        this.distStart = distStart;
+    }
+
+    setDistFinish(distFinish){
+        this.distFinish = distFinish;
     }
 
     setPreviousNode(previousNode){
@@ -111,7 +116,7 @@ class BidirectionalNode extends GridNode {
 
     isEqual (node){
         if(this.previousNode == null || node.previousNode == null)
-            return super.isEqual(node) && this.visitedStart == node.visitedStart && this.visitedFinish == node.visitedFinish && this.dist == node.dist;
-        return super.isEqual(node) && this.visitedStart == node.visitedStart && this.visitedFinish == node.visitedFinish && this.previousNode.id == node.previousNode.id && this.dist == node.dist;
+            return super.isEqual(node) && this.visitedStart == node.visitedStart && this.visitedFinish == node.visitedFinish && this.distStart == node.distStart && this.distFinish == node.distFinish;
+        return super.isEqual(node) && this.visitedStart == node.visitedStart && this.visitedFinish == node.visitedFinish && this.previousNode.id == node.previousNode.id && this.distStart == node.distStart && this.distFinish == node.distFinish;
     }
 }
