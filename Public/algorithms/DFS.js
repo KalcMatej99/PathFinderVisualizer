@@ -113,13 +113,12 @@ function DFS(graph) {
     dfsgraph.pathIsFound = true;
     debugger;
     stateList.push(dfsgraph);
-    return stateList;
+    return stateListGlobal;
 };
 
 var stateListGlobal = [];
 
 function recursion (currNode, dfsgraph, path, stateList){
-    debugger;
     path.push(currNode);
     stateList.push(dfsgraph.clone());
     currNode.visited = true;
@@ -134,14 +133,14 @@ function recursion (currNode, dfsgraph, path, stateList){
     var yo = false;
     //debugger;
     if (neighborTop != null && !neighborTop.visited && currNode.row > 0 && !neighborTop.isWall) {
-        if (recursion(neighborTop,dfsgraph,path)!=null) {
+        if (recursion(neighborTop,dfsgraph,path, stateList)!=null) {
             yo = true;
             //path.push(currNode);
             //path = recursion(neighborTop,dfsgraph,path)
             //currNode = neighborTop;
         } else {
             //debugger;
-            neighborTop = dfsgraph.getTopNeighborOfNode(currNode.row, currNode.column);
+            neighborTop = dfsgraph.getTopNeighborOfNode(currNode.row, currNode.column);             // here because it worked?
             neighborRight = dfsgraph.getRightNeighborOfNode(currNode.row, currNode.column);
             neighborBottom = dfsgraph.getBottomNeighborOfNode(currNode.row, currNode.column);
             neighborLeft = dfsgraph.getLeftNeighborOfNode(currNode.row, currNode.column);
@@ -152,7 +151,7 @@ function recursion (currNode, dfsgraph, path, stateList){
         }
     } 
     if (!yo && neighborRight != null && !neighborRight.visited && currNode.column < dfsgraph.numberOfColumns - 1 && !neighborRight.isWall) {
-        if (recursion(neighborRight,dfsgraph,path)!=null) {
+        if (recursion(neighborRight,dfsgraph,path, stateList)!=null) {
             yo = true;
             //path = recursion(neighborRight,dfsgraph,path)
             //currNode = neighborRight;
@@ -168,7 +167,7 @@ function recursion (currNode, dfsgraph, path, stateList){
         }
      } 
      if (!yo && neighborBottom != null && !neighborBottom.visited && currNode.row < dfsgraph.numberOfRows - 1 && !neighborBottom.isWall) {
-        if (recursion(neighborBottom,dfsgraph,path)!=null) {
+        if (recursion(neighborBottom,dfsgraph,path, stateList)!=null) {
             yo = true;
             //path = recursion(neighborBottom,dfsgraph,path)
             //currNode = neighborBottom;
@@ -184,7 +183,7 @@ function recursion (currNode, dfsgraph, path, stateList){
         }
     } 
     if (!yo && neighborLeft != null && !neighborLeft.visited && currNode.column > 0 && !neighborLeft.isWall) {
-        if (recursion(neighborLeft,dfsgraph,path)!=null) {
+        if (recursion(neighborLeft,dfsgraph,path, stateList)!=null) {
             yo = true;
             //path = recursion(neighborLeft,dfsgraph,path)
             //currNode = neighborLeft;
