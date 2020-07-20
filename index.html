@@ -74,7 +74,7 @@
                         class="btn btn-secondary nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
                         style="color: #ffffff;" onclick="clearWalls()">Remove Walls</button></li>
                 <li class="nav-item mx-0 mx-lg-1" role="presentation">
-                    <select class="form-control nav-link px-0 px-lg-3 rounded" id="selectAlgorithm"
+                    <select onchange="selectAlgorithmChanged()" class="form-control nav-link px-0 px-lg-3 rounded" id="selectAlgorithm"
                         style="margin: auto; width:100%; height:100%; background-color: rgba(0,0,0,0); color: #ffffff;border-color: rgba(0,0,0,0);">
                         <option value="1" selected="" style="color:black">Dijkstra</option>
                         <option value="2" style="color:black">Bidirectional</option>
@@ -99,7 +99,7 @@
         <br>
         <section>
             <div class="container">
-                <h3 style="text-align: center" id="title">Select an algorithm and click START</h3>
+                <h3 style="text-align: center" id="title">Dijkstra's algorithm <b>garantees</b> the shortest path</h3>
             </div>
             <br>
             <div class="table-responsive">
@@ -383,6 +383,19 @@
             default: break;
         }
     }
+
+    function selectAlgorithmChanged() {
+        var selectedVelocity = document.getElementById("selectAlgorithm").selectedIndex;
+        var title = document.getElementById("title");
+        switch(selectedVelocity){
+            case 0: title.innerHTML = "Dijkstra's algorithm <b>guarantees</b> the shortest path"; break;
+            case 1: title.innerHTML = "Bidirectional search <b>guarantees</b> the shortest path"; break;
+            case 2: title.innerHTML = "DFS <b>does not guarantee</b>the shortest path"; break;
+            default: break;
+        }
+    }
+
+    
 
 </script>
 
