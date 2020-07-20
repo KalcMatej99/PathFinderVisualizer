@@ -239,7 +239,7 @@
         if (deviceIsPhone()) {
             showNoMobileUsage();
             alert("Page available only on PC/Desktop");
-            document.getElementById("title").textContent = "Page available only on PC/Desktop";
+            document.getElementById("title").innerHTML = "Page available only on PC/Desktop";
         } else {
             createInitialeGraph();
             drawGraph(graph);
