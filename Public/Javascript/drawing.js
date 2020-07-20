@@ -130,7 +130,6 @@ function displayWall(r, c) {
 
 function displayStates(states, speed) {
 
-    console.log("yo");
     drawGraph(states[0]);
     var indexState = 1;
     setAnimationIsExecuting(true);
@@ -138,7 +137,6 @@ function displayStates(states, speed) {
 
         setTimeout(() => {
             if (states != null && indexState < states.length) {
-                console.log("yo " + indexState);
                 if (indexState - 1 == states.length) isShownPath = true;
 
                 var differences = findDifferenceBetweenStates(this.graph, states[indexState]);

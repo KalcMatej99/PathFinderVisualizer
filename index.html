@@ -74,10 +74,19 @@
                         class="btn btn-secondary nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
                         style="color: #ffffff;" onclick="clearWalls()">Remove Walls</button></li>
                 <li class="nav-item mx-0 mx-lg-1" role="presentation">
-                    <select class="form-control nav-link px-0 px-lg-3 rounded" id="selectAlgorithm" style="margin: auto; width:100%; height:100%; background-color: rgba(0,0,0,0); color: #ffffff;">
-                            <option value="1" selected="" style="color:black">Dijkstra</option>
-                            <option value="2" style="color:black">Bidirectional</option>
-                            <option value="3" style="color:black">DFS</option>
+                    <select class="form-control nav-link px-0 px-lg-3 rounded" id="selectAlgorithm"
+                        style="margin: auto; width:100%; height:100%; background-color: rgba(0,0,0,0); color: #ffffff;border-color: rgba(0,0,0,0);">
+                        <option value="1" selected="" style="color:black">Dijkstra</option>
+                        <option value="2" style="color:black">Bidirectional</option>
+                        <option value="3" style="color:black">DFS</option>
+                    </select>
+                </li>
+                <li class="nav-item mx-0 mx-lg-1" role="presentation">
+                    <select onchange="selectVelocityChanged()" class="form-control nav-link px-0 px-lg-3 rounded" id="selectVelocity"
+                        style="margin: auto; width:100%; height:100%; background-color: rgba(0,0,0,0); color: #ffffff;border-color: rgba(0,0,0,0);">
+                        <option value="1" style="color:black">Slow</option>
+                        <option value="2" style="color:black">Medium</option>
+                        <option value="3" selected="" style="color:black">Fast</option>
                     </select>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1" role="presentation">
@@ -224,6 +233,7 @@
     var animationIsExecuting = false;
     var isShownPath = false;
     var graph = new GridGraph(numberOfRows, numberOfColumns);
+    var speedOfAnimation = fastSpeedOfAnimation;
 
     $(document).ready(function () {
         if (deviceIsPhone()) {
@@ -338,7 +348,6 @@
             default: break;
         }
 
-        console.log("yo");
         if (animate)
             displayStates(statesToDisplay, speedOfAnimation);
         else
@@ -359,9 +368,19 @@
                     graph.unsetWall(walls[i].row, walls[i].column)
                 }
 
-                if(isShownPath) executePathFindingAlgorithm(false);
+                if (isShownPath) executePathFindingAlgorithm(false);
                 else drawGraph(this.graph);
             }
+        }
+    }
+
+    function selectVelocityChanged() {
+        var selectedVelocity = document.getElementById("selectVelocity").selectedIndex;
+        switch(selectedVelocity){
+            case 0: speedOfAnimation = slowSpeedOfAnimation; break;
+            case 1: speedOfAnimation = mediumSpeedOfAnimation; break;
+            case 2: speedOfAnimation = fastSpeedOfAnimation; break;
+            default: break;
         }
     }
 
