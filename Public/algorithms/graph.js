@@ -128,6 +128,10 @@ class GridGraph {
         }
     }
 
+    path() {
+        return [];
+    }
+
     isPathFound() {
         return false;
     }
@@ -200,6 +204,14 @@ class DijkstraGraph extends GridGraph {
             endNode = endNode.previousNode;
         }
         return endNode != null && endNode.isStartNode;
+    }
+
+    isNodeInPath(r, c) {
+        var path = this.path();
+        for(var i = 0; path != null && i < path.length; i++) {
+            if(path[i].row == r && path[i].column == c) return true;
+        }
+        return false;
     }
 }
 

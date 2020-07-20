@@ -21,7 +21,7 @@ function drawGraph(graph) {
             if (graph.getNode(i, j).isWall) {
                 displayWall(i, j);
             } else {
-                if (graph.getNode(i, j).isVisited()){
+                if (graph.getNode(i, j).isVisited()) {
                     //debugger;
                     nodeElement.classList.add("node-visited");
                 } else {
@@ -59,7 +59,7 @@ function drawDifferences(diff) {
 
         elementNode.innerHTML = '';
 
-        if (node.isVisited()){
+        if (node.isVisited()) {
             elementNode.classList.add("node-visited");
         } else {
             elementNode.classList.remove("node-visited");
@@ -160,11 +160,16 @@ function makeWall(row, column) {
 
     if (!animationIsExecuting && mouseDown && !graph.getNode(row, column).isStartNode && !graph.getNode(row, column).isEndNode) {
 
+        var isNodeInPath = this.graph.isNodeInPath(row, column);
         var oldGraph = this.graph.clone();
         this.graph.setWall(row, column);
 
-        var differences = findDifferenceBetweenStates(oldGraph, this.graph);
-        drawDifferences(differences);
+        if (isNodeInPath) {
+            executePathFindingAlgorithm(false);
+        } else {
+            var differences = findDifferenceBetweenStates(oldGraph, this.graph);
+            drawDifferences(differences);
+        }
     }
 }
 
@@ -172,10 +177,23 @@ function removeWall(row, column) {
 
     if (!animationIsExecuting && !graph.getNode(row, column).isStartNode && !graph.getNode(row, column).isEndNode) {
         var oldGraph = this.graph.clone();
-        if (this.graph.getNode(row, column).isWall) this.graph.unsetWall(row, column);
-        else this.graph.setWall(row, column);
-        var differences = findDifferenceBetweenStates(oldGraph, this.graph);
-        drawDifferences(differences);
+        if (this.graph.getNode(row, column).isWall) {
+
+            this.graph.unsetWall(row, column);
+            var differences = findDifferenceBetweenStates(oldGraph, this.graph);
+            drawDifferences(differences);
+
+        } else {
+
+            var isNodeInPath = this.graph.isNodeInPath(row, column);
+            this.graph.setWall(row, column);
+            if (isNodeInPath) {
+                executePathFindingAlgorithm(false);
+            } else {
+                var differences = findDifferenceBetweenStates(oldGraph, this.graph);
+                drawDifferences(differences);
+            }
+        }
     }
 }
 
