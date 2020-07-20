@@ -133,7 +133,8 @@ class GridGraph {
     }
 
     isPathFound() {
-        return false;
+        if (this.path() != []) return true;
+        else return false;
     }
 
     clone() {
@@ -155,6 +156,14 @@ class GridGraph {
             }
         }
         return tmp;
+    }
+
+    isNodeInPath(r, c) {
+        var path = this.path();
+        for(var i = 0; path != null && i < path.length; i++) {
+            if(path[i].row == r && path[i].column == c) return true;
+        }
+        return false;
     }
 }
 
@@ -205,14 +214,6 @@ class DijkstraGraph extends GridGraph {
         }
         return endNode != null && endNode.isStartNode;
     }
-
-    isNodeInPath(r, c) {
-        var path = this.path();
-        for(var i = 0; path != null && i < path.length; i++) {
-            if(path[i].row == r && path[i].column == c) return true;
-        }
-        return false;
-    }
 }
 
 class DFSGraph extends DijkstraGraph {
@@ -223,11 +224,6 @@ class DFSGraph extends DijkstraGraph {
 
     path() {
         return this.pathAtt;
-    }
-
-    isPathFound() {
-        if (this.path() != []) return true;
-        else return false;
     }
 
     clone() {
@@ -261,7 +257,6 @@ class BidirectionalGraph extends GridGraph {
 
     path() {
         var pathArray = [];
-        //debugger;
         var middle1 = this.getMiddle1();
         var middle2 = this.getMiddle2();
         while (middle1 != null) {

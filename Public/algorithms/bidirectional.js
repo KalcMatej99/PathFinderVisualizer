@@ -25,23 +25,27 @@ function bidirectional (graph){
         }
     }
 
-    var yo = false; // silly flag that designates end
-    while (queueStart != null || queueFinish !=null) {
+    var middle1 = null;
+    var middle2 = null;
+
+    while ((queueStart != null || queueFinish !=null) && middle1 == null && middle2 == null) {
         var cloneState = bgraph.clone();
         stateList.push(cloneState);
         var currNodeStart = queueStart.shift();
         var currNodeFinish = queueFinish.shift();
         
-        if(currNodeStart != null && !currNodeStart.isWall){
+        if(middle1 == null && middle2 == null && currNodeStart != null && !currNodeStart.isWall){
             currNodeStart.visitedStart = true;
             var neighbors = bgraph.getNeighborsForNode(currNodeStart.row, currNodeStart.column)
 
             for (var i in neighbors) {
-                if (neighbors[i] != null && !neighbors[i].visitedStart && currNodeStart.distStart + 1 < neighbors[i].distStart) { // +1 because we have a grid, each block is one currency of movement
+                if (middle1 == null && middle2 == null && neighbors[i] != null && !neighbors[i].visitedStart && currNodeStart.distStart + 1 < neighbors[i].distStart) { // +1 because we have a grid, each block is one currency of movement
                     if (neighbors[i].visitedFinish) {       // we already flagged this from the other side
-                        var middle1 = currNodeStart;
+                        middle1 = currNodeStart;
+                        middle2 = neighbors[i];
+
                         break;
-                    } else {
+                    } else if(neighbors[i].previousNode == null){
                         neighbors[i].distStart = currNodeStart.distStart + 1;
                         neighbors[i].previousNode = currNodeStart;
                         queueStart.push(neighbors[i]);
@@ -53,28 +57,26 @@ function bidirectional (graph){
         //var cloneState = bgraph.clone();              when should we save states? after neighbors of startNode, or after both neighbors?
         //stateList.push(cloneState);
 
-        if(currNodeFinish != null && !currNodeFinish.isWall){
+        if(middle1 == null && middle2 == null && currNodeFinish != null && !currNodeFinish.isWall){
             currNodeFinish.visitedFinish = true;
-            /*if (currNodeFinish.visitedStart) {         maybe better to check currNode instead of neighbor[i]? 
-                debugger;
+            /*if (currNodeFinish.visitedStart) {
                 break;
             }*/
             var neighbors = bgraph.getNeighborsForNode(currNodeFinish.row, currNodeFinish.column)
 
             for (var i in neighbors) {
-                if (neighbors[i] != null && !neighbors[i].visitedFinish && currNodeFinish.distFinish + 1 < neighbors[i].distFinish) { // +1 because we have a grid, each block is one currency of movement
+                if (middle1 == null && middle2 == null && neighbors[i] != null && !neighbors[i].visitedFinish && currNodeFinish.distFinish + 1 < neighbors[i].distFinish) { // +1 because we have a grid, each block is one currency of movement
                     if (neighbors[i].visitedStart) {        // we already flagged this from the other side
-                        var middle2 = neighbors[i];
-                        yo = true;                          // set flag to exit
+                        middle1 = neighbors[i];
+                        middle2 = currNodeFinish;  
                         break;
-                    } else {
+                    } else if(neighbors[i].previousNode == null) {
                         neighbors[i].distFinish = currNodeFinish.distFinish + 1;
                         neighbors[i].previousNode = currNodeFinish;
                         queueFinish.push(neighbors[i]);
                     }
                 }
             }
-            if (yo) break;         // exit
         }  
     }
     

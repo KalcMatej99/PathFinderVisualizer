@@ -22,7 +22,6 @@ function drawGraph(graph) {
                 displayWall(i, j);
             } else {
                 if (graph.getNode(i, j).isVisited()) {
-                    //debugger;
                     nodeElement.classList.add("node-visited");
                 } else {
                     nodeElement.classList.remove("node-visited");
