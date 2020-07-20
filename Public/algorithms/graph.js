@@ -239,3 +239,80 @@ class DFSGraph extends DijkstraGraph {
         return tmp;
     }
 }
+
+class BidirectionalGraph extends GridGraph {
+    constructor(numberOfRows, numberOfColumns) {
+        super(numberOfRows, numberOfColumns);
+        this.middle1 = null;
+        this.middle2 = null;
+    }
+
+    path() {
+        var pathArray = [];
+        //debugger;
+        var middle1 = this.getMiddle1();
+        var middle2 = this.getMiddle2();
+        if (middle1 == null) return null;
+        else {
+            while (middle1 != null){
+                pathArray.push(middle1);
+                middle1 = middle1.previousNode;
+            }
+        }
+        if (middle2 == null) return null;
+        else {
+            while (middle2 != null){
+                pathArray.push(middle2);
+                middle2 = middle2.previousNode;
+            }
+        }
+        return pathArray;
+    }
+
+    getMiddle1(){
+        return this.middle1;
+    }
+
+    getMiddle2(){
+        return this.middle2;
+    }
+
+    setMiddle1 (middle1){
+        this.middle1 = middle1;
+    }
+
+    setMiddle2 (middle2){
+        this.middle2 = middle2;
+    }
+
+    clone() {
+        var tmp = new BidirectionalGraph(this.numberOfRows, this.numberOfColumns)
+        tmp.pathIsFound = this.pathIsFound;
+        for (var i = 0; i < this.numberOfRows; i++) {
+            for (var j = 0; j < this.numberOfColumns; j++) {
+                var visitedStart = this.nodes[i][j].visitedStart;
+                var visitedFinish = this.nodes[i][j].visitedFinish;
+                var previous = this.nodes[i][j].previousNode;
+                var distStart = this.nodes[i][j].distStart;
+                var distFinish = this.nodes[i][j].distFinish;
+                var wall = this.nodes[i][j].isWall;
+
+                var newBNode = new BidirectionalNode(i, j);
+                if (visitedStart) newBNode.setVisitedStart(visitedStart);
+                if (visitedFinish) newBNode.setVisitedFinish(visitedFinish);
+                newBNode.setPreviousNode(previous);
+                newBNode.setDistStart(distStart);
+                newBNode.setDistFinish(distFinish);
+                if (wall) newBNode.isWall = true;
+
+                if (this.nodes[i][j].isStartNode)
+                    newBNode.makeStartNode();
+                if (this.nodes[i][j].isEndNode)
+                    newBNode.makeEndNode();
+                tmp.setNode(i, j, newBNode);
+
+            }
+        }
+        return tmp;
+    }
+}
