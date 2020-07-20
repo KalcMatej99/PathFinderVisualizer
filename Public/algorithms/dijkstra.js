@@ -21,20 +21,21 @@ function dijkstra(graph) {
                 queue.push(newDNode);
             } else if (rows[i][j].isEndNode) {
                 newDNode.makeEndNode();
-            } 
+            }
             dgraph.setNode(i, j, newDNode);
         }
     }
 
-    while (queue != null) {
+    while (queue != null && queue.length > 0) {
+
         var cloneState = dgraph.clone();
         stateList.push(cloneState);
 
         var currNode = queue.shift();
-        if(currNode == null || currNode.isWall){
+        if (currNode == null || currNode.isWall) {
             continue;
         }
-        
+
 
         currNode.visited = true;
         if (currNode.isEndNode) break;
@@ -48,8 +49,11 @@ function dijkstra(graph) {
 
             }
         }
+
+        debugger;
     }
 
+    debugger;
     dgraph.pathIsFound = true;
     var cloneState = dgraph.clone();
     stateList.push(cloneState);

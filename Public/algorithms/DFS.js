@@ -1,7 +1,7 @@
 function DFS(graph) {
 
     rows = graph.nodes;
-    currNode = null ;
+    currNode = null;
     stateList = []; // Here we save the states
     var path = []; // here we save the path
 
@@ -19,48 +19,95 @@ function DFS(graph) {
                 currNode = newDNode;
             } else if (rows[i][j].isEndNode) {
                 newDNode.makeEndNode();
-            } 
+            }
             dfsgraph.setNode(i, j, newDNode);
         }
     }
 
-    
+
     //DFS: Go up until you can't or it is already visited, same for right, down and left. Repeat until endnode found.
     // if the node is a wall, we simply skip it
-    
-    while (!currNode.isEndNode){
+
+    var noPathFound = false;
+
+    /*
+    function blabla(currNode) {
         path.push(currNode);
         var cloneState = dfsgraph.clone();
         stateList.push(cloneState);
-        neighborTop = dfsgraph.getTopNeighborOfNode(currNode.row,currNode.column);
-        neighborRight = dfsgraph.getRightNeighborOfNode(currNode.row,currNode.column);
-        neighborBottom = dfsgraph.getBottomNeighborOfNode(currNode.row,currNode.column);
-        neighborLeft = dfsgraph.getLeftNeighborOfNode(currNode.row,currNode.column);
-        if (neighborTop!=null && !neighborTop.visited && currNode.row > 0 && !neighborTop.isWall){
+        neighborTop = dfsgraph.getTopNeighborOfNode(currNode.row, currNode.column);
+        neighborRight = dfsgraph.getRightNeighborOfNode(currNode.row, currNode.column);
+        neighborBottom = dfsgraph.getBottomNeighborOfNode(currNode.row, currNode.column);
+        neighborLeft = dfsgraph.getLeftNeighborOfNode(currNode.row, currNode.column);
+        if (neighborTop != null && !neighborTop.visited && currNode.row > 0 && !neighborTop.isWall) {
+            
+            /* Smo dobili pot? 
+            pot = blabla(zgornji sosed)
+            return pot
+            //...
+        }
+        if (neighborRight != null && !neighborRight.visited && currNode.column < dfsgraph.numberOfColumns - 1 && !neighborRight.isWall) {
+            /* Smo dobili pot? 
+            pot = blabla(desni sosed)
+            return pot
+            //...
+        } 
+        if (neighborBottom != null && !neighborBottom.visited && currNode.row < dfsgraph.numberOfRows - 1 && !neighborBottom.isWall) {
+            
+            return pot
+            //...
+        }
+        if (neighborLeft != null && !neighborLeft.visited && currNode.column > 0 && !neighborLeft.isWall) {
+            
+            return pot
+            //...
+        }
+
+        return null;
+    }*/
+
+    while (!currNode.isEndNode && !noPathFound) {
+        path.push(currNode);
+        var cloneState = dfsgraph.clone();
+        stateList.push(cloneState);
+        neighborTop = dfsgraph.getTopNeighborOfNode(currNode.row, currNode.column);
+        neighborRight = dfsgraph.getRightNeighborOfNode(currNode.row, currNode.column);
+        neighborBottom = dfsgraph.getBottomNeighborOfNode(currNode.row, currNode.column);
+        neighborLeft = dfsgraph.getLeftNeighborOfNode(currNode.row, currNode.column);
+        if (neighborTop != null && !neighborTop.visited && currNode.row > 0 && !neighborTop.isWall) {
             currNode.visited = true;
             currNode = neighborTop;
-        } else if (neighborRight!=null && !neighborRight.visited && currNode.column < dfsgraph.numberOfColumns-1 && !neighborRight.isWall) {
+        } else if (neighborRight != null && !neighborRight.visited && currNode.column < dfsgraph.numberOfColumns - 1 && !neighborRight.isWall) {
             currNode.visited = true;
             currNode = neighborRight;
-        } else if (neighborBottom!=null && !neighborBottom.visited && currNode.row < dfsgraph.numberOfRows-1 && !neighborBottom.isWall) {
+        } else if (neighborBottom != null && !neighborBottom.visited && currNode.row < dfsgraph.numberOfRows - 1 && !neighborBottom.isWall) {
             currNode.visited = true;
             currNode = neighborBottom;
-        } else if (neighborLeft!=null && !neighborLeft.visited && currNode.column > 0 && !neighborLeft.isWall) {
+        } else if (neighborLeft != null && !neighborLeft.visited && currNode.column > 0 && !neighborLeft.isWall) {
             currNode.visited = true;
             currNode = neighborLeft;
+        } else {
+            noPathFound = true;
         }
     }
 
-    path.push(currNode);                // add endNode to path and set as visited since we ended the loop as we reached it
-    dfsgraph.getEndNode().visited=true;
-    cloneState = dfsgraph.clone();
-    
-    dfsgraph.setPath(path);
-    cloneState.setPath(path);
-    dfsgraph.pathIsFound = true;
-    cloneState.pathIsFound = true;
-    stateList.push(cloneState);
-    //console.log(dfsgraph.pathIsFound);
+    if (!noPathFound) {
+
+        path.push(currNode);                // add endNode to path and set as visited since we ended the loop as we reached it
+        dfsgraph.getEndNode().visited = true;
+        cloneState = dfsgraph.clone();
+
+        dfsgraph.setPath(path);
+        cloneState.setPath(path);
+        dfsgraph.pathIsFound = true;
+        cloneState.pathIsFound = true;
+        stateList.push(cloneState);
+    } else {
+
+        dfsgraph.pathIsFound = false;
+        cloneState.pathIsFound = false;
+        stateList.push(cloneState);
+    }
 
     return stateList;
 };
