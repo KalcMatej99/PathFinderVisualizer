@@ -139,7 +139,7 @@ class GridGraph {
             for (var j = 0; j < this.numberOfColumns; j++) {
 
                 var newDNode = new GridNode(i, j);
-                
+
                 if (this.nodes[i][j].isStartNode)
                     newDNode.makeStartNode();
                 if (this.nodes[i][j].isEndNode)
@@ -226,7 +226,7 @@ class DFSGraph extends DijkstraGraph {
                 var visited = this.nodes[i][j].visited;
                 var wall = this.nodes[i][j].isWall;
                 var newDNode = new DFSNode(i, j, visited);
-                
+
                 if (wall) newDNode.isWall = true;
                 if (this.nodes[i][j].isStartNode)
                     newDNode.makeStartNode();
@@ -252,36 +252,33 @@ class BidirectionalGraph extends GridGraph {
         //debugger;
         var middle1 = this.getMiddle1();
         var middle2 = this.getMiddle2();
-        if (middle1 == null) return null;
-        else {
-            while (middle1 != null){
-                pathArray.push(middle1);
-                middle1 = middle1.previousNode;
-            }
+        while (middle1 != null) {
+            pathArray.push(middle1);
+            middle1 = middle1.previousNode;
         }
-        if (middle2 == null) return null;
-        else {
-            while (middle2 != null){
-                pathArray.push(middle2);
-                middle2 = middle2.previousNode;
-            }
+
+        pathArray.reverse();
+        while (middle2 != null) {
+            pathArray.push(middle2);
+            middle2 = middle2.previousNode;
         }
+
         return pathArray;
     }
 
-    getMiddle1(){
+    getMiddle1() {
         return this.middle1;
     }
 
-    getMiddle2(){
+    getMiddle2() {
         return this.middle2;
     }
 
-    setMiddle1 (middle1){
+    setMiddle1(middle1) {
         this.middle1 = middle1;
     }
 
-    setMiddle2 (middle2){
+    setMiddle2(middle2) {
         this.middle2 = middle2;
     }
 

@@ -43,6 +43,9 @@ class GridNode extends Node {
     isEqual(node){  // returns true if "this" is equal to node
         return this.isWall == node.isWall && this.row == node.row && this.column == node.column && this.isStartNode == node.isStartNode && this.isEndNode == node.isEndNode;
     }
+    isVisited(){
+        return false;
+    }
 }
 
 class DijkstraNode extends GridNode {
@@ -82,6 +85,10 @@ class DFSNode extends GridNode {
     isEqual(node){
         return super.isEqual(node) && this.visited == node.visited;
     }
+
+    isVisited(){
+        return this.visited;
+    }
 }
 
 class BidirectionalNode extends GridNode {
@@ -92,6 +99,10 @@ class BidirectionalNode extends GridNode {
         this.previousNode = null;
         this.distStart = Number.MAX_VALUE;
         this.distFinish = Number.MAX_VALUE;
+    }
+
+    isVisited() {
+        return this.visitedStart || this.visitedFinish;
     }
 
     setVisitedStart(visitedStart){

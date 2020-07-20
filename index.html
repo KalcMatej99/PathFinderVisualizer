@@ -358,7 +358,8 @@
                     graph.unsetWall(walls[i].row, walls[i].column)
                 }
 
-                executePathFindingAlgorithm(false);
+                if(isShownPath) executePathFindingAlgorithm(false);
+                else drawGraph(this.graph);
             }
         }
     }

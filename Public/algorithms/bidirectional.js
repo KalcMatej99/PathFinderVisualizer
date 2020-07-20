@@ -77,9 +77,6 @@ function bidirectional (graph){
             if (yo) break;         // exit
         }  
     }
-
-    console.log("YO");
-    //debugger;
     
     bgraph.pathIsFound = true;
     var cloneState = bgraph.clone();

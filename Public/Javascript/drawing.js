@@ -21,10 +21,8 @@ function drawGraph(graph) {
             if (graph.getNode(i, j).isWall) {
                 displayWall(i, j);
             } else {
-                if (graph.getNode(i, j).visitedStart || graph.getNode(i, j).visitedFinish){
+                if (graph.getNode(i, j).isVisited()){
                     //debugger;
-                    nodeElement.classList.add("node-visited");
-                } else if (graph.getNode(i, j).visited) {
                     nodeElement.classList.add("node-visited");
                 } else {
                     nodeElement.classList.remove("node-visited");
@@ -61,11 +59,7 @@ function drawDifferences(diff) {
 
         elementNode.innerHTML = '';
 
-        if (node.visitedStart || node.visitedFinish){
-            elementNode.classList.add("node-visited");
-        }
-        
-        if (node.visited) {
+        if (node.isVisited()){
             elementNode.classList.add("node-visited");
         } else {
             elementNode.classList.remove("node-visited");
@@ -95,6 +89,7 @@ function drawPathInGraph(graph) {
     setAnimationIsExecuting(true);
     isShownPath = false;
 
+    console.log(path);
     for (var count = 0; count < path.length; count++) {
 
         setTimeout(() => {
