@@ -28,91 +28,9 @@ function DFS(graph) {
     //DFS: Go up until you can't or it is already visited, same for right, down and left. Repeat until endnode found.
     // if the node is a wall, we simply skip it
 
-    var noPathFound = false;
-
-    /*
-    function blabla(currNode) {
-        path.push(currNode);
-        var cloneState = dfsgraph.clone();
-        stateList.push(cloneState);
-        neighborTop = dfsgraph.getTopNeighborOfNode(currNode.row, currNode.column);
-        neighborRight = dfsgraph.getRightNeighborOfNode(currNode.row, currNode.column);
-        neighborBottom = dfsgraph.getBottomNeighborOfNode(currNode.row, currNode.column);
-        neighborLeft = dfsgraph.getLeftNeighborOfNode(currNode.row, currNode.column);
-        if (neighborTop != null && !neighborTop.visited && currNode.row > 0 && !neighborTop.isWall) {
-            
-            /* Smo dobili pot? 
-            pot = blabla(zgornji sosed)
-            return pot
-            //...
-        }
-        if (neighborRight != null && !neighborRight.visited && currNode.column < dfsgraph.numberOfColumns - 1 && !neighborRight.isWall) {
-            /* Smo dobili pot? 
-            pot = blabla(desni sosed)
-            return pot
-            //...
-        } 
-        if (neighborBottom != null && !neighborBottom.visited && currNode.row < dfsgraph.numberOfRows - 1 && !neighborBottom.isWall) {
-            
-            return pot
-            //...
-        }
-        if (neighborLeft != null && !neighborLeft.visited && currNode.column > 0 && !neighborLeft.isWall) {
-            
-            return pot
-            //...
-        }
-
-        return null;
-    }*/
-
-    /*while (!currNode.isEndNode && !noPathFound) {
-        path.push(currNode);
-        var cloneState = dfsgraph.clone();
-        stateList.push(cloneState);
-        neighborTop = dfsgraph.getTopNeighborOfNode(currNode.row, currNode.column);
-        neighborRight = dfsgraph.getRightNeighborOfNode(currNode.row, currNode.column);
-        neighborBottom = dfsgraph.getBottomNeighborOfNode(currNode.row, currNode.column);
-        neighborLeft = dfsgraph.getLeftNeighborOfNode(currNode.row, currNode.column);
-        if (neighborTop != null && !neighborTop.visited && currNode.row > 0 && !neighborTop.isWall) {
-            currNode.visited = true;
-            currNode = neighborTop;
-        } else if (neighborRight != null && !neighborRight.visited && currNode.column < dfsgraph.numberOfColumns - 1 && !neighborRight.isWall) {
-            currNode.visited = true;
-            currNode = neighborRight;
-        } else if (neighborBottom != null && !neighborBottom.visited && currNode.row < dfsgraph.numberOfRows - 1 && !neighborBottom.isWall) {
-            currNode.visited = true;
-            currNode = neighborBottom;
-        } else if (neighborLeft != null && !neighborLeft.visited && currNode.column > 0 && !neighborLeft.isWall) {
-            currNode.visited = true;
-            currNode = neighborLeft;
-        } else {
-            noPathFound = true;
-        }
-    }
-
-    if (!noPathFound) {
-
-        path.push(currNode);                // add endNode to path and set as visited since we ended the loop as we reached it
-        dfsgraph.getEndNode().visited = true;
-        cloneState = dfsgraph.clone();
-
-        dfsgraph.setPath(path);
-        cloneState.setPath(path);
-        dfsgraph.pathIsFound = true;
-        cloneState.pathIsFound = true;
-        stateList.push(cloneState);
-    } else {
-
-        dfsgraph.pathIsFound = false;
-        cloneState.pathIsFound = false;
-        stateList.push(cloneState);
-    }*/
-    //debugger;
-    dfsgraph.setPath(recursion(dfsgraph.getStartNode(),dfsgraph, [], [dfsgraph]));
+    dfsgraph.setPath(recursion(dfsgraph.getStartNode(),dfsgraph, [], []));
     dfsgraph.pathIsFound = true;
-    debugger;
-    stateList.push(dfsgraph);
+    stateListGlobal.push(dfsgraph);
     return stateListGlobal;
 };
 
@@ -130,33 +48,26 @@ function recursion (currNode, dfsgraph, path, stateList){
     neighborRight = dfsgraph.getRightNeighborOfNode(currNode.row, currNode.column);
     neighborBottom = dfsgraph.getBottomNeighborOfNode(currNode.row, currNode.column);
     neighborLeft = dfsgraph.getLeftNeighborOfNode(currNode.row, currNode.column);
-    var yo = false;
-    //debugger;
+    var success = false;
     if (neighborTop != null && !neighborTop.visited && currNode.row > 0 && !neighborTop.isWall) {
         if (recursion(neighborTop,dfsgraph,path, stateList)!=null) {
-            yo = true;
-            //path.push(currNode);
-            //path = recursion(neighborTop,dfsgraph,path)
-            //currNode = neighborTop;
+            success = true;
         } else {
-            //debugger;
             neighborTop = dfsgraph.getTopNeighborOfNode(currNode.row, currNode.column);             // here because it worked?
             neighborRight = dfsgraph.getRightNeighborOfNode(currNode.row, currNode.column);
             neighborBottom = dfsgraph.getBottomNeighborOfNode(currNode.row, currNode.column);
             neighborLeft = dfsgraph.getLeftNeighborOfNode(currNode.row, currNode.column);
-            yo = false;
-            currNode.visited = false;
+            success = false;                                                                             // option didn't succed, we remove the visited attribute, the last entry in path and last state in stateList
+            currNode.visited = false;                                                                    // success set to false so algorithm/recursion proceeds to search in other directions
             path.pop();
             stateList.pop();
         }
     } 
-    if (!yo && neighborRight != null && !neighborRight.visited && currNode.column < dfsgraph.numberOfColumns - 1 && !neighborRight.isWall) {
+    if (!success && neighborRight != null && !neighborRight.visited && currNode.column < dfsgraph.numberOfColumns - 1 && !neighborRight.isWall) {
         if (recursion(neighborRight,dfsgraph,path, stateList)!=null) {
-            yo = true;
-            //path = recursion(neighborRight,dfsgraph,path)
-            //currNode = neighborRight;
+            success = true;
         } else {
-            yo = false;
+            success = false;
             neighborTop = dfsgraph.getTopNeighborOfNode(currNode.row, currNode.column);
             neighborRight = dfsgraph.getRightNeighborOfNode(currNode.row, currNode.column);
             neighborBottom = dfsgraph.getBottomNeighborOfNode(currNode.row, currNode.column);
@@ -166,13 +77,11 @@ function recursion (currNode, dfsgraph, path, stateList){
             stateList.pop();
         }
      } 
-     if (!yo && neighborBottom != null && !neighborBottom.visited && currNode.row < dfsgraph.numberOfRows - 1 && !neighborBottom.isWall) {
+     if (!success && neighborBottom != null && !neighborBottom.visited && currNode.row < dfsgraph.numberOfRows - 1 && !neighborBottom.isWall) {
         if (recursion(neighborBottom,dfsgraph,path, stateList)!=null) {
-            yo = true;
-            //path = recursion(neighborBottom,dfsgraph,path)
-            //currNode = neighborBottom;
+            success = true;
         } else {
-            yo = false;
+            success = false;
             neighborTop = dfsgraph.getTopNeighborOfNode(currNode.row, currNode.column);
             neighborRight = dfsgraph.getRightNeighborOfNode(currNode.row, currNode.column);
             neighborBottom = dfsgraph.getBottomNeighborOfNode(currNode.row, currNode.column);
@@ -182,13 +91,11 @@ function recursion (currNode, dfsgraph, path, stateList){
             stateList.pop();
         }
     } 
-    if (!yo && neighborLeft != null && !neighborLeft.visited && currNode.column > 0 && !neighborLeft.isWall) {
+    if (!success && neighborLeft != null && !neighborLeft.visited && currNode.column > 0 && !neighborLeft.isWall) {
         if (recursion(neighborLeft,dfsgraph,path, stateList)!=null) {
-            yo = true;
-            //path = recursion(neighborLeft,dfsgraph,path)
-            //currNode = neighborLeft;
+            success = true;
         } else {
-            yo = false;
+            success = false;
             neighborTop = dfsgraph.getTopNeighborOfNode(currNode.row, currNode.column);
             neighborRight = dfsgraph.getRightNeighborOfNode(currNode.row, currNode.column);
             neighborBottom = dfsgraph.getBottomNeighborOfNode(currNode.row, currNode.column);
@@ -198,6 +105,6 @@ function recursion (currNode, dfsgraph, path, stateList){
             stateList.pop();
         }
     }
-    if (!yo) return null;
+    if (!success) return null;
     else return path;
 }
