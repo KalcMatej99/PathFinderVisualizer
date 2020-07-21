@@ -50,10 +50,10 @@ function dijkstra(graph) {
             }
         }
 
-        debugger;
+        
     }
 
-    debugger;
+    
     dgraph.pathIsFound = true;
     var cloneState = dgraph.clone();
     stateList.push(cloneState);
