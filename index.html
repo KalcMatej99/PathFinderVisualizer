@@ -304,7 +304,7 @@
 
             var rowAndColumnOfNodeFrom = getRowAndColumnFromId(ev.dataTransfer.getData("position"));
             var nodeFrom = graph.getNode(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
-            if (nodeFrom.isStartNode && !nodeTo.isEndNode) {
+            if (nodeFrom.isStartNode && !nodeTo.isWall && !nodeTo.isEndNode) {
 
                 var isPathDrawn = graph.isPathFound();
                 graph.setStartNode(nodeTo.row, nodeTo.column);
@@ -314,7 +314,7 @@
                     drawGraph(graph);
                 }
 
-            } else if (nodeFrom.isEndNode && !nodeTo.isStartNode) {
+            } else if (nodeFrom.isEndNode && !nodeTo.isWall && !nodeTo.isStartNode) {
 
                 var isPathDrawn = graph.isPathFound();
                 graph.setEndNode(nodeTo.row, nodeTo.column);

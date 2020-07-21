@@ -29,6 +29,10 @@ class Node {
     unmakeEndNode() {
         this.isEndNode = false;
     }
+
+    isWall() {
+        return false;
+    }
 }
 
 //GridNode is the default class in use
