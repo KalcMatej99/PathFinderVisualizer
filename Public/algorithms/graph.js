@@ -11,13 +11,6 @@ class GridGraph {
         this.pathIsFound = false;
     }
 
-    //Construct grid graph from nodes: [[]]
-    /*constructor(nodes) {
-        this.nodes = nodes;
-        this.numberOfRows = nodes.length;
-        this.numberOfColumns = nodes[0].length;
-    }*/
-
     //Get node at position (r, c)
     getNode(r, c) {
         return this.nodes[r][c];
@@ -67,6 +60,33 @@ class GridGraph {
         this.getNode(row, column).makeStartNode();
     }
 
+    //Remove intermind point
+    removeIntermidNode(row, column) {
+        this.getNode(row, column).unmakeIntermidNode();
+    }
+
+    //Set intermind point
+    setIntermindNode(row, column, priority) {
+        this.getNode(row, column).makeIntermidNode(priority);
+    }
+
+    //Set intermind point
+    getIntermindNodes() {
+        var nodes = [];
+        for (var row = 0; row < this.numberOfRows; row++) {
+            for (var column = 0; column < this.numberOfColumns; column++) {
+                if (this.nodes[row][column] != null && this.nodes[row][column].isIntermidNode) {
+                    nodes.push(this.getNode(row, column));
+                }
+            }
+        }
+        return nodes;
+    }
+
+    getNumberOfIntermidNodes() {
+        return this.getIntermindNodes().length;
+    }
+
 
     //get end node in grid graph
     getEndNode() {
@@ -94,10 +114,24 @@ class GridGraph {
         return null;
     }
 
+     // Get top neighbor for node at position (r, c)
+     getTopNode(r, c) {
+        if (r > 0)
+            return this.getNode(r - 1, c);
+        return null;
+    }
+
     // Get bottom neighbor for node at position (r, c)
     getBottomNeighborOfNode(r, c) {
         if (r < this.numberOfRows - 1)
             return this.getNode(r + 1, c).isWall ? null : this.getNode(r + 1, c);
+        return null;
+    }
+
+    // Get bottom neighbor for node at position (r, c)
+    getBottomNode(r, c) {
+        if (r < this.numberOfRows - 1)
+            return this.getNode(r + 1, c);
         return null;
     }
 
@@ -108,6 +142,13 @@ class GridGraph {
         return null;
     }
 
+    // Get right neighbor for node at position (r, c)
+    getRightNode(r, c) {
+        if (c < this.numberOfColumns - 1)
+            return this.getNode(r, c + 1);
+        return null;
+    }
+
     // Get left neighbor for node at position (r, c)
     getLeftNeighborOfNode(r, c) {
         if (c > 0)
@@ -115,9 +156,20 @@ class GridGraph {
         return null;
     }
 
+    // Get left neighbor for node at position (r, c)
+    getLeftNode(r, c) {
+        if (c > 0)
+            return this.getNode(r, c - 1);
+        return null;
+    }
+
     // Get neighbors for node at position (r, c); TOP, RIGHT, BOTTOM, LEFT
     getNeighborsForNode(r, c) {
         return [this.getTopNeighborOfNode(r, c), this.getRightNeighborOfNode(r, c), this.getBottomNeighborOfNode(r, c), this.getLeftNeighborOfNode(r, c)];
+    }
+
+    getNearNodes(r, c) {
+        return [this.getTopNode(r, c), this.getRightNode(r, c), this.getBottomNode(r, c), this.getLeftNode(r, c)];
     }
 
     clean() {
@@ -133,8 +185,8 @@ class GridGraph {
     }
 
     isPathFound() {
-        if (this.path() != []) return true;
-        else return false;
+        if (this.path() != [] && this.path().length > 0) return true;
+        return false;
     }
 
     clone() {
@@ -164,6 +216,41 @@ class GridGraph {
             if(path[i].row == r && path[i].column == c) return true;
         }
         return false;
+    }
+
+    generateIntermidGraphs() {
+        var graphs = [];
+        var intermidNodes = this.getIntermindNodes();
+        var numIntermidNodes = intermidNodes.length;
+        for(var i = 0; i <= numIntermidNodes; i++) {
+            var first = this.clone();
+            if(i > 0) {
+                first.setStartNode(intermidNodes[i - 1].row, intermidNodes[i - 1].column);
+            }
+
+            if(i < numIntermidNodes) {
+                first.setEndNode(intermidNodes[i].row, intermidNodes[i].column);
+            }
+
+            graphs.push(first);
+
+        }
+        return graphs;
+    }
+
+    combineWithGraph(graph) {
+        var newGraph = this.clone();
+
+        for(var r = 0; r < graph.numberOfRows; r++) {
+            for(var c = 0; c < graph.numberOfColumns; c++) {
+
+                var nodeInSecondGraph = graph.getNode(r,c);
+                if(nodeInSecondGraph.visited) newGraph.getNode(r,c).visited = true;
+
+            }
+        }
+        
+        return newGraph;
     }
 }
 
@@ -205,6 +292,22 @@ class DijkstraGraph extends GridGraph {
             }
             return pathArray;
         }
+    }
+
+    combineWithGraph(graph) {
+        var newGraph = super.combineWithGraph(graph);
+
+        for(var r = 0; r < graph.numberOfRows; r++) {
+            for(var c = 0; c < graph.numberOfColumns; c++) {
+
+                var nodeInSecondGraph = graph.getNode(r,c);
+                if(nodeInSecondGraph.previousNode != null) newGraph.previousNode = nodeInSecondGraph.previousNode;
+
+            }
+        }
+
+        return newGraph;
+
     }
 
     isPathFound() {

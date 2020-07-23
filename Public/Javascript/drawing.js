@@ -29,6 +29,10 @@ function drawGraph(graph) {
 
             }
 
+            if(graph.getNode(i,j).isIntermidNode) {
+                displayIntermidNode(i, j);
+            }
+
             nodeElement.classList.remove("node-in-path");
 
         }
@@ -88,7 +92,6 @@ function drawPathInGraph(graph) {
     setAnimationIsExecuting(true);
     isShownPath = false;
 
-    console.log(path);
     for (var count = 0; count < path.length; count++) {
 
         setTimeout(() => {
@@ -127,8 +130,13 @@ function displayWall(r, c) {
     document.getElementById(getIdFor(r, c)).innerHTML = '';
     document.getElementById(getIdFor(r, c)).insertAdjacentHTML('beforeend', '<img class="unselectable" style="object-fit: cover;" width="28px" height="28px" src="' + pathToWallImage + '"></img>');
 }
+function displayIntermidNode(r, c) {
+    document.getElementById(getIdFor(r, c)).classList.add("intermidiate-node");
+    document.getElementById(getIdFor(r, c)).innerHTML = '';
+    document.getElementById(getIdFor(r, c)).insertAdjacentHTML('beforeend', '<img class="unselectable" style="object-fit: cover;" width="28px" height="28px" src="' + pathToIntermidiateNodeImage + '"></img>');
+}
 
-function displayStates(states, speed) {
+function displayStates(states, speed, callback) {
 
     drawGraph(states[0]);
     var indexState = 1;
@@ -149,7 +157,7 @@ function displayStates(states, speed) {
                 }
 
                 if (this.graph.pathIsFound) {
-                    drawPathInGraph(this.graph);
+                    callback(this.graph);
                 }
             }
         }, speed * count);
@@ -158,7 +166,7 @@ function displayStates(states, speed) {
 
 function makeWall(row, column) {
 
-    if (!animationIsExecuting && mouseDown && !graph.getNode(row, column).isStartNode && !graph.getNode(row, column).isEndNode) {
+    if (!animationIsExecuting && mouseDown && !graph.getNode(row, column).isIntermidNode && !graph.getNode(row, column).isStartNode && !graph.getNode(row, column).isEndNode) {
 
         var isNodeInPath = this.graph.isNodeInPath(row, column);
         var oldGraph = this.graph.clone();
@@ -175,7 +183,7 @@ function makeWall(row, column) {
 
 function removeWall(row, column) {
 
-    if (!animationIsExecuting && !graph.getNode(row, column).isStartNode && !graph.getNode(row, column).isEndNode) {
+    if (!animationIsExecuting && !graph.getNode(row, column).isStartNode && !graph.getNode(row, column).isIntermidNode && !graph.getNode(row, column).isEndNode) {
         var oldGraph = this.graph.clone();
         if (this.graph.getNode(row, column).isWall) {
 

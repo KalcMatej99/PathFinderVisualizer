@@ -69,6 +69,9 @@
                 </li>
                 <li class="nav-item mx-0 mx-lg-1" role="presentation"><button
                         class="btn btn-secondary nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                        style="color: #ffffff;" onclick="addIntermidNode()">Add Intermid Node</button></li>
+                <li class="nav-item mx-0 mx-lg-1" role="presentation"><button
+                        class="btn btn-secondary nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
                         style="color: #ffffff;" onclick="clearGraph()">Clear</button></li>
                 <li class="nav-item mx-0 mx-lg-1" role="presentation"><button
                         class="btn btn-secondary nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
@@ -157,6 +160,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="card-group">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
@@ -176,7 +181,19 @@
                                             <img width="40px" height="40px" src="./Public/Images/wall.png">
                                         </div>
                                         <div class="col">
-                                            <p class="card-title">Wall</p>
+                                            <p class="card-title">Wall Node</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <img width="40px" height="40px" src="./Public/Images/intermidPoint.png">
+                                        </div>
+                                        <div class="col">
+                                            <p class="card-title">Intermidiate Node</p>
                                         </div>
                                     </div>
                                 </div>
@@ -314,17 +331,27 @@
             var rowAndColumnOfNodeFrom = getRowAndColumnFromId(ev.dataTransfer.getData("position"));
             var nodeFrom = graph.getNode(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
 
-            if (nodeFrom.isStartNode && !nodeTo.isWall && !nodeTo.isEndNode) {
+            debugger;
+            if (nodeFrom.isStartNode && !nodeTo.isWall && !nodeTo.isEndNode && !nodeTo.isIntermidNode()) {
 
                 var isPathDrawn = graph.isPathFound();
                 graph.setStartNode(nodeTo.row, nodeTo.column);
-                if (isPathDrawn)executePathFindingAlgorithm(false);
+                if (isPathDrawn) executePathFindingAlgorithm(false);
                 else drawGraph(graph);
 
-            } else if (nodeFrom.isEndNode && !nodeTo.isWall && !nodeTo.isStartNode) {
+            } else if (nodeFrom.isEndNode && !nodeTo.isWall && !nodeTo.isStartNode && !nodeTo.isIntermidNode()) {
 
                 var isPathDrawn = graph.isPathFound();
                 graph.setEndNode(nodeTo.row, nodeTo.column);
+
+                if (isPathDrawn) executePathFindingAlgorithm(false);
+                else drawGraph(graph);
+
+            } else if (nodeFrom.isIntermidNode && !nodeTo.isWall && !nodeTo.isStartNode && !nodeTo.isEndNode) {
+                var isPathDrawn = graph.isPathFound();
+
+                graph.removeIntermidNode(nodeFrom.row, nodeFrom.column);
+                graph.setIntermindNode(nodeTo.row, nodeTo.column);
 
                 if (isPathDrawn) executePathFindingAlgorithm(false);
                 else drawGraph(graph);
@@ -344,18 +371,42 @@
         idPathFindingAlgorithm = parseInt(idPathFindingAlgorithm, 10);
         var statesToDisplay = [];
 
-        switch (idPathFindingAlgorithm) {
-            case 1:
-                statesToDisplay = dijkstra(graph); break;
-            case 2: statesToDisplay = bidirectional(graph); break;
-            case 3: statesToDisplay = DFS(graph); break;
-            default: break;
-        }
+        debugger;
+        if (graph.getNumberOfIntermidNodes() == 0) {
+            switch (idPathFindingAlgorithm) {
+                case 1: statesToDisplay = dijkstra(graph); break;
+                case 2: statesToDisplay = bidirectional(graph); break;
+                case 3: statesToDisplay = DFS(graph); break;
+                default: break;
+            }
+            if (animate)
+                displayStates(statesToDisplay, speedOfAnimation, function(graph){
+                    drawPathInGraph(graph);
+                });
+            else
+                drawGraph(statesToDisplay[statesToDisplay.length - 1]);
+        } else {
+            var graphs = this.graph.generateIntermidGraphs();
+            debugger;
+            var cumulativeGraph = this.graph;
+            for (var i = 0; i < graphs.length; i++) {
+                switch (idPathFindingAlgorithm) {
+                    case 1: statesToDisplay = statesToDisplay.concat(dijkstra(graph)); break;
+                    case 2: statesToDisplay = statesToDisplay.concat(bidirectional(graph)); break;
+                    case 3: statesToDisplay = statesToDisplay.concat(DFS(graph)); break;
+                    default: break;
+                }
 
-        if (animate)
-            displayStates(statesToDisplay, speedOfAnimation);
-        else
-            drawGraph(statesToDisplay[statesToDisplay.length - 1]);
+                cumulativeGraph = cumulativeGraph.combineWithGraph(statesToDisplay[statesToDisplay.length - 1]);
+            }
+
+
+            if (animate) {
+                displayStates(statesToDisplay, speedOfAnimation, null);
+                drawPathInGraph(cumulativeGraph);
+            } else
+                drawGraph(cumulativeGraph);
+        }
     }
 
     window.onresize = function () {
@@ -398,6 +449,19 @@
             default: break;
         }
     }
+
+    function addIntermidNode() {
+        if (this.numberOfIntermidNodes >= 1) {
+            alert("Only one intermid node is possible.");
+            return;
+        }
+        this.numberOfIntermidNodes = 1;
+
+        var mostCentralNode = findFrePositionInCenter(this.graph);
+        graph.setIntermindNode(mostCentralNode.row, mostCentralNode.column, graph.getIntermindNodes().length + 1);
+        drawGraph(graph);
+    }
+
 
 
 

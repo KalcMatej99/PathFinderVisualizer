@@ -5,6 +5,8 @@ class Node {
         this.id = id;
         this.isStartNode = false;
         this.isEndNode = false;
+        this.isIntermidNode = false;
+        this.priotityIntermidNode = -1;
     }
 
     isStartNode() {
@@ -32,6 +34,20 @@ class Node {
 
     isWall() {
         return false;
+    }
+
+    makeIntermidNode(priority) {
+        this.isIntermidNode = true;
+        this.priotityIntermidNode = priority;
+    }
+
+    unmakeIntermidNode() {
+        this.isIntermidNode = false;
+        this.priotityIntermidNode = -1;
+    }
+
+    isIntermidNode() {
+        return this.isIntermidNode;
     }
 }
 

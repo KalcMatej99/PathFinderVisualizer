@@ -6,6 +6,7 @@ const numberOfRows = parseInt((window.innerHeight - tableBody.getBoundingClientR
 const pathToGoSign = "./Public/Images/goSign.png";
 const pathToFinishFlag = "./Public/Images/finishFlag.png";
 const pathToWallImage = "./Public/Images/wall.png";
+const pathToIntermidiateNodeImage = "./Public/Images/intermidPoint.png";
 const slowSpeedOfAnimation = 50;
 const mediumSpeedOfAnimation = 25;
 const fastSpeedOfAnimation = 10;
