@@ -6,6 +6,8 @@ function DFS(graph) {
 
     rows = graph.nodes;
     currNode = null;
+    path = [];
+    stateList = [];
 
     // initialize nodes
 
@@ -54,18 +56,21 @@ function recursion(currNode, dfsgraph) {
             return true;
         }
     }
+
     if (neighborRight != null && !neighborRight.visited && currNode.column < dfsgraph.numberOfColumns - 1 && !neighborRight.isWall) {
         if (recursion(neighborRight, dfsgraph)) {
             path.push(currNode);
             return true;
         }
     }
+
     if (neighborBottom != null && !neighborBottom.visited && currNode.row < dfsgraph.numberOfRows - 1 && !neighborBottom.isWall) {
         if (recursion(neighborBottom, dfsgraph)) {
             path.push(currNode);
             return true;
         }
     }
+
     if (neighborLeft != null && !neighborLeft.visited && currNode.column > 0 && !neighborLeft.isWall) {
         if (recursion(neighborLeft, dfsgraph)) {
             path.push(currNode);

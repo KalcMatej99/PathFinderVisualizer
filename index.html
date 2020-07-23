@@ -270,6 +270,9 @@
         graph.setEndNode(parseInt(numberOfRows / 2, 10), parseInt(numberOfColumns / 2, 10) + 3);
     }
 
+    /*
+        This function resets the whole graph. Removes walls and so on. Clear Timeouts. Like refresh page.
+    */
     function clearGraph() {
         isShownPath = false;
         setAnimationIsExecuting(false);
@@ -283,6 +286,9 @@
         ev.preventDefault();
     }
 
+    /*
+        This function is called when start or end node has started dragging.
+    */
     function drag(ev) {
         if (!animationIsExecuting) {
             canMakeWalls = false;
@@ -294,6 +300,9 @@
         }
     }
 
+    /*
+        This function is called when start or end node has dropped.
+    */
     function drop(ev) {
         ev.preventDefault();
 
@@ -304,25 +313,23 @@
 
             var rowAndColumnOfNodeFrom = getRowAndColumnFromId(ev.dataTransfer.getData("position"));
             var nodeFrom = graph.getNode(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
+
             if (nodeFrom.isStartNode && !nodeTo.isWall && !nodeTo.isEndNode) {
 
                 var isPathDrawn = graph.isPathFound();
                 graph.setStartNode(nodeTo.row, nodeTo.column);
-                if (isPathDrawn) {
-                    executePathFindingAlgorithm(false);
-                } else {
-                    drawGraph(graph);
-                }
+                if (isPathDrawn)executePathFindingAlgorithm(false);
+                else drawGraph(graph);
 
             } else if (nodeFrom.isEndNode && !nodeTo.isWall && !nodeTo.isStartNode) {
 
                 var isPathDrawn = graph.isPathFound();
                 graph.setEndNode(nodeTo.row, nodeTo.column);
 
-                if (isPathDrawn) {
-                    executePathFindingAlgorithm(false);
-                } else drawGraph(graph);
+                if (isPathDrawn) executePathFindingAlgorithm(false);
+                else drawGraph(graph);
             }
+
             canMakeWalls = true;
             mouseDown = false;
         }
