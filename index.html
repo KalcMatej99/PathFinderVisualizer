@@ -331,15 +331,14 @@
             var rowAndColumnOfNodeFrom = getRowAndColumnFromId(ev.dataTransfer.getData("position"));
             var nodeFrom = graph.getNode(rowAndColumnOfNodeFrom[0], rowAndColumnOfNodeFrom[1]);
 
-            debugger;
-            if (nodeFrom.isStartNode && !nodeTo.isWall && !nodeTo.isEndNode && !nodeTo.isIntermidNode()) {
+            if (nodeFrom.isStartNode && !nodeTo.isWall && !nodeTo.isEndNode && !nodeTo.isIntermidNode) {
 
                 var isPathDrawn = graph.isPathFound();
                 graph.setStartNode(nodeTo.row, nodeTo.column);
                 if (isPathDrawn) executePathFindingAlgorithm(false);
                 else drawGraph(graph);
 
-            } else if (nodeFrom.isEndNode && !nodeTo.isWall && !nodeTo.isStartNode && !nodeTo.isIntermidNode()) {
+            } else if (nodeFrom.isEndNode && !nodeTo.isWall && !nodeTo.isStartNode && !nodeTo.isIntermidNode) {
 
                 var isPathDrawn = graph.isPathFound();
                 graph.setEndNode(nodeTo.row, nodeTo.column);

@@ -114,8 +114,8 @@ class GridGraph {
         return null;
     }
 
-     // Get top neighbor for node at position (r, c)
-     getTopNode(r, c) {
+    // Get top neighbor for node at position (r, c)
+    getTopNode(r, c) {
         if (r > 0)
             return this.getNode(r - 1, c);
         return null;
@@ -212,8 +212,8 @@ class GridGraph {
 
     isNodeInPath(r, c) {
         var path = this.path();
-        for(var i = 0; path != null && i < path.length; i++) {
-            if(path[i].row == r && path[i].column == c) return true;
+        for (var i = 0; path != null && i < path.length; i++) {
+            if (path[i].row == r && path[i].column == c) return true;
         }
         return false;
     }
@@ -222,13 +222,13 @@ class GridGraph {
         var graphs = [];
         var intermidNodes = this.getIntermindNodes();
         var numIntermidNodes = intermidNodes.length;
-        for(var i = 0; i <= numIntermidNodes; i++) {
+        for (var i = 0; i <= numIntermidNodes; i++) {
             var first = this.clone();
-            if(i > 0) {
+            if (i > 0) {
                 first.setStartNode(intermidNodes[i - 1].row, intermidNodes[i - 1].column);
             }
 
-            if(i < numIntermidNodes) {
+            if (i < numIntermidNodes) {
                 first.setEndNode(intermidNodes[i].row, intermidNodes[i].column);
             }
 
@@ -239,23 +239,29 @@ class GridGraph {
     }
 
     combineWithGraph(graph) {
-        console.log(this);
-        var newGraph = this.clone();
-        console.log(newGraph);
+        var newGraph = this.clone(true);
 
         var endNodeOfSecondGraph = graph.getEndNode();
         newGraph.setEndNode(endNodeOfSecondGraph.row, endNodeOfSecondGraph.column);
 
-        for(var r = 0; r < graph.numberOfRows; r++) {
-            for(var c = 0; c < graph.numberOfColumns; c++) {
+        for (var r = 0; r < graph.numberOfRows; r++) {
+            for (var c = 0; c < graph.numberOfColumns; c++) {
 
-                var nodeInSecondGraph = graph.getNode(r,c);
-                if(nodeInSecondGraph.visited) newGraph.getNode(r,c).visited = true;
+                var nodeInSecondGraph = graph.getNode(r, c);
+                if (nodeInSecondGraph.visited) newGraph.getNode(r, c).visited = true;
 
             }
         }
-        
+
         return newGraph;
+    }
+
+    pathContains(r, c) {
+        var p = this.path();
+        for (var i = 0; i < p.length; i++) {
+            if (p[i].row == r && p[i].column == c) return true
+        }
+        return false;
     }
 }
 
@@ -263,6 +269,7 @@ class DijkstraGraph extends GridGraph {
     clone() {
         var tmp = new DijkstraGraph(this.numberOfRows, this.numberOfColumns)
         tmp.pathIsFound = this.pathIsFound;
+
         for (var i = 0; i < this.numberOfRows; i++) {
             for (var j = 0; j < this.numberOfColumns; j++) {
                 var visited = this.nodes[i][j].visited;
@@ -271,7 +278,7 @@ class DijkstraGraph extends GridGraph {
                 var wall = this.nodes[i][j].isWall;
 
                 var newDNode = new DijkstraNode(i, j, visited);
-                if(previous != null) newDNode.setPreviousNode(previous);
+                if (previous != null) newDNode.setPreviousNode(previous);
                 newDNode.setDist(dist);
                 if (wall) newDNode.isWall = true;
 
@@ -282,7 +289,6 @@ class DijkstraGraph extends GridGraph {
                 tmp.setNode(i, j, newDNode);
 
             }
-            console.log(tmp);
         }
         return tmp;
     }
@@ -301,21 +307,13 @@ class DijkstraGraph extends GridGraph {
     }
 
     combineWithGraph(graph) {
-        console.log(this);
+        var secondPath = graph.path();
         var newGraph = super.combineWithGraph(graph);
 
-        console.log(newGraph);
-        for(var r = 0; r < graph.numberOfRows; r++) {
-            for(var c = 0; c < graph.numberOfColumns; c++) {
-
-                var nodeInSecondGraph = graph.getNode(r,c);
-                if(nodeInSecondGraph.previousNode != null) newGraph.getNode(r,c).previousNode = nodeInSecondGraph.previousNode;
-
-            }
+        for (var i = 0; i < secondPath.length - 1; i++) {
+            var elem = secondPath[i];
+            newGraph.getNode(elem.row, elem.column).previousNode = newGraph.getNode(elem.previousNode.row, elem.previousNode.column);
         }
-
-        console.log(newGraph);
-
 
         return newGraph;
     }
@@ -358,6 +356,18 @@ class DFSGraph extends DijkstraGraph {
             }
         }
         return tmp;
+    }
+
+    combineWithGraph(graph) {
+        var secondPath = graph.path();
+        var newGraph = super.combineWithGraph(graph);
+
+        for (var i = 0; i < secondPath.length - 1; i++) {
+            var elem = secondPath[i];
+            newGraph.getNode(elem.row, elem.column).previousNode = newGraph.getNode(elem.previousNode.row, elem.previousNode.column);
+        }
+
+        return newGraph;
     }
 }
 
