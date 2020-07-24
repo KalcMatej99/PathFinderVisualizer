@@ -433,3 +433,32 @@ class BidirectionalGraph extends GridGraph {
         return tmp;
     }
 }
+
+class PrimGraph extends GridGraph {
+    clone() {
+        var tmp = new PrimGraph(this.numberOfRows, this.numberOfColumns)
+        tmp.pathIsFound = this.pathIsFound;
+        for (var i = 0; i < this.numberOfRows; i++) {
+            for (var j = 0; j < this.numberOfColumns; j++) {
+                var visited = this.nodes[i][j].visited;
+                var previous = this.nodes[i][j].previousNode;
+                var dist = this.nodes[i][j].dist;
+                var wall = this.nodes[i][j].isWall;
+
+                var newPNode = new PrimNode(i, j, visited);
+                if(previous != null) newPNode.setPreviousNode(previous);
+                newPNode.setDist(dist);
+                if (wall) newPNode.isWall = true;
+
+                if (this.nodes[i][j].isStartNode)
+                    newPNode.makeStartNode();
+                if (this.nodes[i][j].isEndNode)
+                    newPNode.makeEndNode();
+                tmp.setNode(i, j, newPNode);
+
+            }
+            //console.log(tmp);
+        }
+        return tmp;
+    }
+}

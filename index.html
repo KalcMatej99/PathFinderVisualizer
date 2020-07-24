@@ -83,6 +83,7 @@
                         <option value="1" selected="" style="color:black">Dijkstra</option>
                         <option value="2" style="color:black">Bidirectional</option>
                         <option value="3" style="color:black">DFS</option>
+                        <option value="4" style="color:black">Prim</option>
                     </select>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1" role="presentation">
@@ -104,7 +105,7 @@
         <br>
         <section>
             <div class="container">
-                <h3 style="text-align: center" id="title">Dijkstra's algorithm <b>garantees</b> the shortest path</h3>
+                <h3 style="text-align: center" id="title">Dijkstra's algorithm <b>guarantees</b> the shortest path</h3>
             </div>
             <br>
             <div class="table-responsive">
@@ -240,6 +241,7 @@
     <script src="./Public/algorithms/dijkstra.js"></script>
     <script src="./Public/algorithms/DFS.js"></script>
     <script src="./Public/algorithms/bidirectional.js"></script>
+    <script src="./Public/algorithms/prim.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="./Public/Javascript/bootstrap.min.js"></script>
     <script src="./Public/Javascript/constants.js"></script>
@@ -376,6 +378,7 @@
                 case 1: statesToDisplay = dijkstra(graph); break;
                 case 2: statesToDisplay = bidirectional(graph); break;
                 case 3: statesToDisplay = DFS(graph); break;
+                case 4: statesToDisplay = prim(graph);
                 default: break;
             }
             if (animate)
@@ -396,6 +399,7 @@
                     case 1: statesToDisplay = statesToDisplay.concat(dijkstra(graphs[i])); break;
                     case 2: statesToDisplay = statesToDisplay.concat(bidirectional(graphs[i])); break;
                     case 3: statesToDisplay = statesToDisplay.concat(DFS(graphs[i])); break;
+                    case 4: statesToDisplay = statesToDisplay.concat(prim(graphs[i])); break;
                     default: break;
                 }
 
@@ -463,6 +467,7 @@
             case 0: title.innerHTML = "Dijkstra's algorithm <b>guarantees</b> the shortest path"; break;
             case 1: title.innerHTML = "Bidirectional search <b>guarantees</b> the shortest path"; break;
             case 2: title.innerHTML = "DFS <b>does not guarantee</b>the shortest path"; break;
+            case 3: title.innerHTML = "Prim's algorithm results in the <b>minimum spanning tree</b>"; break;
             default: break;
         }
     }
