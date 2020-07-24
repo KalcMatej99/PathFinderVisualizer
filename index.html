@@ -371,7 +371,6 @@
         idPathFindingAlgorithm = parseInt(idPathFindingAlgorithm, 10);
         var statesToDisplay = [];
 
-        debugger;
         if (graph.getNumberOfIntermidNodes() == 0) {
             switch (idPathFindingAlgorithm) {
                 case 1: statesToDisplay = dijkstra(graph); break;
@@ -380,30 +379,48 @@
                 default: break;
             }
             if (animate)
-                displayStates(statesToDisplay, speedOfAnimation, function(graph){
+                displayStates(statesToDisplay, speedOfAnimation, function (graph) {
                     drawPathInGraph(graph);
                 });
             else
                 drawGraph(statesToDisplay[statesToDisplay.length - 1]);
         } else {
             var graphs = this.graph.generateIntermidGraphs();
-            debugger;
-            var cumulativeGraph = this.graph;
+            var startNodeOfOriginalGraph = this.graph.getStartNode();
+            var endNodeOfOriginalGraph = this.graph.getEndNode();
+            var intermidNodesOfOriginalGraph = this.graph.getIntermindNodes();
+
+            var cumulativeGraph = null;
             for (var i = 0; i < graphs.length; i++) {
                 switch (idPathFindingAlgorithm) {
-                    case 1: statesToDisplay = statesToDisplay.concat(dijkstra(graph)); break;
-                    case 2: statesToDisplay = statesToDisplay.concat(bidirectional(graph)); break;
-                    case 3: statesToDisplay = statesToDisplay.concat(DFS(graph)); break;
+                    case 1: statesToDisplay = statesToDisplay.concat(dijkstra(graphs[i])); break;
+                    case 2: statesToDisplay = statesToDisplay.concat(bidirectional(graphs[i])); break;
+                    case 3: statesToDisplay = statesToDisplay.concat(DFS(graphs[i])); break;
                     default: break;
                 }
 
-                cumulativeGraph = cumulativeGraph.combineWithGraph(statesToDisplay[statesToDisplay.length - 1]);
+                cumulativeGraph = cumulativeGraph != null ? cumulativeGraph.combineWithGraph(statesToDisplay[statesToDisplay.length - 1]) : statesToDisplay[statesToDisplay.length - 1];
+                console.log(cumulativeGraph);
+            }
+
+            //We need to correct all states to display because start node or end node are not correct
+            for (var i = 0; i < statesToDisplay.length; i++) {
+                var state = statesToDisplay[i];
+
+                state.setStartNode(startNodeOfOriginalGraph.row, startNodeOfOriginalGraph.column);
+                state.setEndNode(endNodeOfOriginalGraph.row, endNodeOfOriginalGraph.column);
+
+                for (var j = 0; j < intermidNodesOfOriginalGraph.length; j++) {
+                    state.setIntermindNode(intermidNodesOfOriginalGraph[j].row, intermidNodesOfOriginalGraph[j].column);
+                }
             }
 
 
             if (animate) {
-                displayStates(statesToDisplay, speedOfAnimation, null);
-                drawPathInGraph(cumulativeGraph);
+                displayMultipleStates(statesToDisplay, speedOfAnimation, function (_) {
+                    debugger;
+                    drawPathInGraph(cumulativeGraph);
+                });
             } else
                 drawGraph(cumulativeGraph);
         }

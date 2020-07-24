@@ -49,6 +49,14 @@ class Node {
     isIntermidNode() {
         return this.isIntermidNode;
     }
+
+    clone() {
+        var newNode = new Node(this.id);
+        if(this.isStartNode) newNode.makeStartNode();
+        if(this.isEndNode) newNode.makeEndNode();
+        if(this.isIntermidNode) newNode.makeIntermidNode(this.priority);
+        return newNode;
+    }
 }
 
 //GridNode is the default class in use
@@ -65,6 +73,12 @@ class GridNode extends Node {
     }
     isVisited(){
         return false;
+    }
+
+    clone() {
+        var newNode = super.clone();
+        if(this.isWall) newNode.isWall = true;
+        return newNode;
     }
 }
 
@@ -93,6 +107,13 @@ class DijkstraNode extends GridNode {
     isVisited(){
         return this.visited;
     }
+
+    /*clone() {
+        var newNode = super.clone();
+
+        if(this.visited) newNode.visited = true;
+        if(this.previousNode != null) newNode.previousNode = this.previousNode.clone();
+    }*/
 
 }
 

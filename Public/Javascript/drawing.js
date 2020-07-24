@@ -29,7 +29,7 @@ function drawGraph(graph) {
 
             }
 
-            if(graph.getNode(i,j).isIntermidNode) {
+            if (graph.getNode(i, j).isIntermidNode) {
                 displayIntermidNode(i, j);
             }
 
@@ -64,8 +64,6 @@ function drawDifferences(diff) {
 
         if (node.isVisited()) {
             elementNode.classList.add("node-visited");
-        } else {
-            elementNode.classList.remove("node-visited");
         }
 
         if (node.isStartNode) {
@@ -80,6 +78,10 @@ function drawDifferences(diff) {
             elementNode.classList.remove("node-visited");
             displayWall(row, column);
         }
+
+        if (node.isIntermidNode) {
+            displayIntermidNode(row, column);
+        }
     }
 }
 
@@ -93,7 +95,6 @@ function drawPathInGraph(graph) {
     isShownPath = false;
 
     for (var count = 0; count < path.length; count++) {
-
         setTimeout(() => {
 
             if (path != null && indexNode < path.length) {
@@ -157,6 +158,31 @@ function displayStates(states, speed, callback) {
                 }
 
                 if (this.graph.pathIsFound) {
+                    callback(this.graph);
+                }
+            }
+        }, speed * count);
+    }
+}
+
+function displayMultipleStates(states, speed, callback) {
+
+    drawGraph(states[0]);
+    var indexState = 1;
+    setAnimationIsExecuting(true);
+    for (var count = 1; count < states.length; count++) {
+
+        setTimeout(() => {
+            if (states != null && indexState < states.length) {
+                if (indexState - 1 == states.length) isShownPath = true;
+
+                var differences = findDifferenceBetweenStates(this.graph, states[indexState]);
+                drawDifferences(differences);
+
+                this.graph = states[indexState];
+                indexState++;
+                if (indexState >= states.length) {
+                    setAnimationIsExecuting(false);
                     callback(this.graph);
                 }
             }
