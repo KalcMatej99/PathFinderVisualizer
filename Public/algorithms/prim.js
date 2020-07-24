@@ -50,11 +50,8 @@ function prim (graph){
             }  
         }
         //check?
-        if (ix==-1){
-            debugger;   // ix hasn't changed -> all remaining nodes are visited or walls
-            break;
-        } else {
-            if (yo.length==943) debugger;
+        if (ix==-1) break;  // ix hasn't changed -> all remaining nodes are visited or walls
+        else {
             yo.push(minNode);
             minNode.visited = true;
             minNode.dist = sourceNode.dist+1;
@@ -62,7 +59,7 @@ function prim (graph){
         }
         
     }
-    debugger;
+    currNode.visited = true;
     pgraph.pathIsFound = true;
     var cloneState = pgraph.clone();
     stateList.push(cloneState);

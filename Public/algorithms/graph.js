@@ -441,12 +441,10 @@ class PrimGraph extends GridGraph {
         for (var i = 0; i < this.numberOfRows; i++) {
             for (var j = 0; j < this.numberOfColumns; j++) {
                 var visited = this.nodes[i][j].visited;
-                var previous = this.nodes[i][j].previousNode;
                 var dist = this.nodes[i][j].dist;
                 var wall = this.nodes[i][j].isWall;
 
                 var newPNode = new PrimNode(i, j, visited);
-                if(previous != null) newPNode.setPreviousNode(previous);
                 newPNode.setDist(dist);
                 if (wall) newPNode.isWall = true;
 
@@ -460,5 +458,8 @@ class PrimGraph extends GridGraph {
             //console.log(tmp);
         }
         return tmp;
+    }
+    path (){
+        return [];
     }
 }

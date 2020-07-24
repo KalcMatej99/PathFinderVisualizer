@@ -177,17 +177,18 @@ class PrimNode extends GridNode {
     constructor(row, column, visited) {
         super(row, column);
         this.visited = visited;
-        this.previousNode = null;
         this.dist = Number.MAX_VALUE; 
     }
     
     isEqual(node){
-        if(this.previousNode == null || node.previousNode == null)
-            return super.isEqual(node) && this.visited == node.visited && this.dist == node.dist;
-        return super.isEqual(node) && this.visited == node.visited && this.previousNode.id == node.previousNode.id && this.dist == node.dist;
+        return super.isEqual(node) && this.visited == node.visited && this.dist == node.dist;
     }
 
     setDist(dist){
         this.dist = dist;
+    }
+
+    isVisited(){
+        return this.visited;
     }
 }
