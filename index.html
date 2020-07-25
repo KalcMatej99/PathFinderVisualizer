@@ -401,7 +401,7 @@
                     case 2: statesToDisplay = statesToDisplay.concat(bidirectional(graphs[i])); break;
                     case 3: statesToDisplay = statesToDisplay.concat(DFS(graphs[i])); break;
                     case 4: statesToDisplay =
-                        statesToDisplay.concat(prim(graphs[i])); 
+                        statesToDisplay.concat(prim(graphs[i]));
                         break;
                     default: break;
                 }
@@ -467,13 +467,34 @@
     function selectAlgorithmChanged() {
         var selectedVelocity = document.getElementById("selectAlgorithm").selectedIndex;
         var title = document.getElementById("title");
+        
         switch (selectedVelocity) {
-            case 0: title.innerHTML = "Dijkstra's algorithm <b>guarantees</b> the shortest path"; break;
-            case 1: title.innerHTML = "Bidirectional search <b>guarantees</b> the shortest path"; break;
-            case 2: title.innerHTML = "DFS <b>does not guarantee</b> the shortest path"; break;
-            case 3: title.innerHTML = "Prim's algorithm results in the <b>minimum spanning tree</b>"; break;
+            case 0: 
+                title.innerHTML = "Dijkstra's algorithm <b>guarantees</b> the shortest path";
+                if (this.graph.getEndNode() == null) {
+                    var pos = findFrePositionInPosition(this.graph, parseInt(numberOfRows / 2, 10), parseInt(numberOfColumns / 2, 10) + 3);
+                    this.graph.setEndNode(pos.row, pos.column);
+                }
+                break;
+            case 1:
+                title.innerHTML = "Bidirectional search <b>guarantees</b> the shortest path";
+                if (this.graph.getEndNode() == null) {
+                    var pos = findFrePositionInPosition(this.graph, parseInt(numberOfRows / 2, 10), parseInt(numberOfColumns / 2, 10) + 3);
+                    this.graph.setEndNode(pos.row, pos.column);
+                }
+                break;
+            case 2: 
+                title.innerHTML = "DFS <b>does not guarantee</b> the shortest path";
+                if (this.graph.getEndNode() == null) {
+                    var pos = findFrePositionInPosition(this.graph, parseInt(numberOfRows / 2, 10), parseInt(numberOfColumns / 2, 10) + 3);
+                    this.graph.setEndNode(pos.row, pos.column);
+                }
+                break;
+            case 3: title.innerHTML = "Prim's algorithm results in the <b>minimum spanning tree</b>"; this.graph.unsetEndNode(); break;
             default: break;
         }
+
+        drawGraph(this.graph);
     }
 
     function addIntermidNode() {

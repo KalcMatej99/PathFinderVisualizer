@@ -102,9 +102,14 @@ class GridGraph {
 
     //Set end node in grid graph
     setEndNode(row, column) {
+        this.unsetEndNode();
+        this.getNode(row, column).makeEndNode();
+    }
+
+    //Unset end node in grid graph
+    unsetEndNode() {
         var currentEndNode = this.getEndNode();
         if (currentEndNode != null) currentEndNode.unmakeEndNode();
-        this.getNode(row, column).makeEndNode();
     }
 
     // Get top neighbor for node at position (r, c)

@@ -42,6 +42,10 @@ function deviceIsPhone() {
 }
 
 function findFrePositionInCenter(graph) {
+    return this.findFrePositionInPosition(graph, parseInt(nRows/2, 10), parseInt(nColumns/2, 10));
+}
+
+function findFrePositionInPosition(graph, row, column) {
     var rows = graph.nodes;
 
     var dgraph = new DijkstraGraph(graph.numberOfRows, graph.numberOfColumns);
@@ -62,15 +66,12 @@ function findFrePositionInCenter(graph) {
         }
     }
 
-    var nRows = dgraph.numberOfRows;
-    var nColumns = dgraph.numberOfColumns;
-
-    var queue = [dgraph.getNode(parseInt(nRows/2, 10), parseInt(nColumns/2, 10))];
+    var queue = [dgraph.getNode(row, column)];
 
     while(queue != null && queue != []) {
         var elem = queue.shift();
 
-        if(!elem.visited && !elem.isWall && !elem.isStartNode && !elem.isEndNode) return elem;
+        if(!elem.visited && !elem.isWall && !elem.isStartNode && !elem.isEndNode && !elem.isIntermidNode) return elem;
 
         elem.visited = true;
         
