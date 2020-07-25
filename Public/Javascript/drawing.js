@@ -39,10 +39,10 @@ function drawGraph(graph) {
     }
 
     var startNode = graph.getStartNode();
-    displayStartNode(startNode.row, startNode.column);
+    if(startNode != null) displayStartNode(startNode.row, startNode.column);
 
     var endNode = graph.getEndNode();
-    displayEndNode(endNode.row, endNode.column);
+    if(endNode != null) displayEndNode(endNode.row, endNode.column);
 
     if (graph.pathIsFound) {
         drawPathInGraph(graph);
@@ -246,9 +246,9 @@ function setAnimationIsExecuting(value) {
     if (value) {
         animationIsExecuting = true;
         var startNode = graph.getStartNode();
-        document.getElementById(getIdFor(startNode.row, startNode.column)).draggable = false;
+        if(startNode != null) document.getElementById(getIdFor(startNode.row, startNode.column)).draggable = false;
         var endNode = graph.getEndNode();
-        document.getElementById(getIdFor(endNode.row, endNode.column)).draggable = false;
+        if(endNode != null) document.getElementById(getIdFor(endNode.row, endNode.column)).draggable = false;
 
     } else {
         animationIsExecuting = false;

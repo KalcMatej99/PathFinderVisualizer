@@ -14,9 +14,8 @@ function prim (graph){
                 newPNode.visited = true;
                 visitedSet.push(newPNode);
                 newPNode.makeStartNode();
-            } else if (rows[i][j].isEndNode) {
-                newPNode.makeEndNode();
             }
+            
             pgraph.setNode(i, j, newPNode);
         }
     }

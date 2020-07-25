@@ -239,9 +239,7 @@ class GridGraph {
     }
 
     combineWithGraph(graph) {
-        debugger;
         var newGraph = this.clone();
-        debugger;
 
         var endNodeOfSecondGraph = graph.getEndNode();
         newGraph.setEndNode(endNodeOfSecondGraph.row, endNodeOfSecondGraph.column);
@@ -481,8 +479,6 @@ class BidirectionalGraph extends GridGraph {
         }
         newGraph.middle1 = newGraph.getNode(this.getEndNode().row, this.getEndNode().column);
         
-        debugger;
-
         return newGraph;
     }
 }

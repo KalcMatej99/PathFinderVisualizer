@@ -344,6 +344,7 @@
 
                 var isPathDrawn = graph.isPathFound();
                 graph.setEndNode(nodeTo.row, nodeTo.column);
+                debugger;
 
                 if (isPathDrawn) executePathFindingAlgorithm(false);
                 else drawGraph(graph);
@@ -392,18 +393,20 @@
             var endNodeOfOriginalGraph = this.graph.getEndNode();
             var intermidNodesOfOriginalGraph = this.graph.getIntermindNodes();
 
+
             var cumulativeGraph = null;
             for (var i = 0; i < graphs.length; i++) {
                 switch (idPathFindingAlgorithm) {
                     case 1: statesToDisplay = statesToDisplay.concat(dijkstra(graphs[i])); break;
                     case 2: statesToDisplay = statesToDisplay.concat(bidirectional(graphs[i])); break;
                     case 3: statesToDisplay = statesToDisplay.concat(DFS(graphs[i])); break;
-                    case 4: statesToDisplay = statesToDisplay.concat(prim(graphs[i])); break;
+                    case 4: statesToDisplay =
+                        statesToDisplay.concat(prim(graphs[i])); 
+                        break;
                     default: break;
                 }
 
                 cumulativeGraph = cumulativeGraph != null ? cumulativeGraph.combineWithGraph(statesToDisplay[statesToDisplay.length - 1]) : statesToDisplay[statesToDisplay.length - 1];
-                console.log(cumulativeGraph);
             }
 
             //We need to correct all states to display because start node or end node are not correct
@@ -423,8 +426,11 @@
                 displayMultipleStates(statesToDisplay, speedOfAnimation, function (_) {
                     drawPathInGraph(cumulativeGraph);
                 });
-            } else
-                drawGraph(cumulativeGraph);
+            } else {
+                displayMultipleStates(statesToDisplay, 0, function (_) {
+                    drawPathInGraph(cumulativeGraph);
+                });
+            }
         }
     }
 
@@ -464,12 +470,8 @@
         switch (selectedVelocity) {
             case 0: title.innerHTML = "Dijkstra's algorithm <b>guarantees</b> the shortest path"; break;
             case 1: title.innerHTML = "Bidirectional search <b>guarantees</b> the shortest path"; break;
-<<<<<<< HEAD
             case 2: title.innerHTML = "DFS <b>does not guarantee</b> the shortest path"; break;
-=======
-            case 2: title.innerHTML = "DFS <b>does not guarantee</b>the shortest path"; break;
             case 3: title.innerHTML = "Prim's algorithm results in the <b>minimum spanning tree</b>"; break;
->>>>>>> e13a5d28459f6c4b4fea61161d801eac89bbeebb
             default: break;
         }
     }
