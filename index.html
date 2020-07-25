@@ -293,6 +293,7 @@
         This function resets the whole graph. Removes walls and so on. Clear Timeouts. Like refresh page.
     */
     function clearGraph() {
+        document.getElementById("selectAlgorithm").selectedIndex = 0;
         isShownPath = false;
         setAnimationIsExecuting(false);
         clearAllTimeouts();
@@ -490,7 +491,12 @@
                     this.graph.setEndNode(pos.row, pos.column);
                 }
                 break;
-            case 3: title.innerHTML = "Prim's algorithm results in the <b>minimum spanning tree</b>"; this.graph.unsetEndNode(); break;
+            case 3: 
+                title.innerHTML = "Prim's algorithm results in the <b>minimum spanning tree</b>";
+                this.graph.unsetEndNode();
+                this.graph.removeAllIntermidNodes();
+                this.graph.unvisitAllNodes();
+                break;
             default: break;
         }
 
@@ -498,11 +504,10 @@
     }
 
     function addIntermidNode() {
-        if (this.numberOfIntermidNodes >= 1) {
+        if (this.graph.getNumberOfIntermidNodes() >= 1) {
             alert("Only one intermid node is possible.");
             return;
         }
-        this.numberOfIntermidNodes = 1;
 
         var mostCentralNode = findFrePositionInCenter(this.graph);
         graph.setIntermindNode(mostCentralNode.row, mostCentralNode.column, graph.getIntermindNodes().length + 1);

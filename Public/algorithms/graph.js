@@ -63,6 +63,7 @@ class GridGraph {
     //Remove intermind point
     removeIntermidNode(row, column) {
         this.getNode(row, column).unmakeIntermidNode();
+        this.pathIsFound = false;
     }
 
     //Set intermind point
@@ -81,6 +82,13 @@ class GridGraph {
             }
         }
         return nodes;
+    }
+
+    removeAllIntermidNodes() {
+        var intermidNodes = this.getIntermindNodes();
+        for (var i = 0; i < intermidNodes.length; i++) {
+            this.removeIntermidNode(intermidNodes[i].row, intermidNodes[i].column);
+        }
     }
 
     getNumberOfIntermidNodes() {
@@ -109,7 +117,10 @@ class GridGraph {
     //Unset end node in grid graph
     unsetEndNode() {
         var currentEndNode = this.getEndNode();
-        if (currentEndNode != null) currentEndNode.unmakeEndNode();
+        if (currentEndNode != null) {
+            currentEndNode.unmakeEndNode();
+            this.pathIsFound = false;
+        }
     }
 
     // Get top neighbor for node at position (r, c)
@@ -267,6 +278,14 @@ class GridGraph {
             if (p[i].row == r && p[i].column == c) return true
         }
         return false;
+    }
+
+    unvisitAllNodes() {
+        for (var r = 0; r < this.numberOfRows; r++) {
+            for (var c = 0; c < this.numberOfColumns; c++) {
+                this.getNode(r, c).visited = false;
+            }
+        }
     }
 }
 
@@ -462,14 +481,14 @@ class BidirectionalGraph extends GridGraph {
         }
         return tmp;
     }
-    
+
 
     combineWithGraph(graph) {
         var newGraph = super.combineWithGraph(graph);
 
         var middle2 = this.middle2;
         newGraph.getNode(middle2.row, middle2.column).previousNode = newGraph.getNode(this.middle1.row, this.middle1.column);
-        while(middle2 != null && middle2.previousNode != null){
+        while (middle2 != null && middle2.previousNode != null) {
             newGraph.getNode(middle2.previousNode.row, middle2.previousNode.column).previousNode = newGraph.getNode(middle2.row, middle2.column);
             middle2 = middle2.previousNode;
         }
@@ -477,13 +496,13 @@ class BidirectionalGraph extends GridGraph {
         var secondPath = graph.path();
 
         newGraph.middle2 = newGraph.getNode(secondPath[1].row, secondPath[1].column);
-        for(var i = 1; i < secondPath.length - 1; i++) {
+        for (var i = 1; i < secondPath.length - 1; i++) {
             var p = secondPath[i];
             var p2 = secondPath[i + 1];
             newGraph.getNode(p.row, p.column).previousNode = newGraph.getNode(p2.row, p2.column);
         }
         newGraph.middle1 = newGraph.getNode(this.getEndNode().row, this.getEndNode().column);
-        
+
         return newGraph;
     }
 }
@@ -513,7 +532,7 @@ class PrimGraph extends GridGraph {
         }
         return tmp;
     }
-    path (){
+    path() {
         return [];
     }
 }

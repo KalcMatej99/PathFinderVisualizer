@@ -42,6 +42,8 @@ function deviceIsPhone() {
 }
 
 function findFrePositionInCenter(graph) {
+    var nRows = graph.numberOfRows;
+    var nColumns = graph.numberOfColumns;
     return this.findFrePositionInPosition(graph, parseInt(nRows/2, 10), parseInt(nColumns/2, 10));
 }
 
