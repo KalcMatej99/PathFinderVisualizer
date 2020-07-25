@@ -239,7 +239,9 @@ class GridGraph {
     }
 
     combineWithGraph(graph) {
-        var newGraph = this.clone(true);
+        debugger;
+        var newGraph = this.clone();
+        debugger;
 
         var endNodeOfSecondGraph = graph.getEndNode();
         newGraph.setEndNode(endNodeOfSecondGraph.row, endNodeOfSecondGraph.column);
@@ -327,14 +329,18 @@ class DijkstraGraph extends GridGraph {
     }
 }
 
-class DFSGraph extends DijkstraGraph {
-    pathAtt = [];               // pathAtt because we can't have an attribute and function with identical names
-    setPath(path) {
-        this.pathAtt = path;
-    }
-
+class DFSGraph extends GridGraph {
     path() {
-        return this.pathAtt;
+        var endNode = this.getEndNode();
+        var pathArray = [];
+        if (endNode == null) return null;
+        else {
+            while (endNode != null) {
+                pathArray.push(endNode);
+                endNode = endNode.previousNode;
+            }
+            return pathArray;
+        }
     }
 
     clone() {
@@ -344,9 +350,11 @@ class DFSGraph extends DijkstraGraph {
             for (var j = 0; j < this.numberOfColumns; j++) {
                 var visited = this.nodes[i][j].visited;
                 var wall = this.nodes[i][j].isWall;
+                var previous = this.nodes[i][j].previousNode;
                 var newDNode = new DFSNode(i, j, visited);
 
                 if (wall) newDNode.isWall = true;
+                if (previous != null) newDNode.setPreviousNode(previous);
                 if (this.nodes[i][j].isStartNode)
                     newDNode.makeStartNode();
                 if (this.nodes[i][j].isEndNode)
@@ -369,6 +377,15 @@ class DFSGraph extends DijkstraGraph {
 
         return newGraph;
     }
+
+    isPathFound() {
+        var endNode = this.getEndNode();
+        while (endNode != null && !endNode.isStartNode) {
+            endNode = endNode.previousNode;
+        }
+        return endNode != null && endNode.isStartNode;
+    }
+
 }
 
 class BidirectionalGraph extends GridGraph {
@@ -441,5 +458,30 @@ class BidirectionalGraph extends GridGraph {
             }
         }
         return tmp;
+    }
+
+    combineWithGraph(graph) {
+        var newGraph = super.combineWithGraph(graph);
+
+        var middle2 = this.middle2;
+        newGraph.getNode(middle2.row, middle2.column).previousNode = newGraph.getNode(this.middle1.row, this.middle1.column);
+        while(middle2 != null && middle2.previousNode != null){
+            newGraph.getNode(middle2.previousNode.row, middle2.previousNode.column).previousNode = newGraph.getNode(middle2.row, middle2.column);
+            middle2 = middle2.previousNode;
+        }
+
+        var secondPath = graph.path();
+
+        newGraph.middle2 = newGraph.getNode(secondPath[1].row, secondPath[1].column);
+        for(var i = 1; i < secondPath.length - 1; i++) {
+            var p = secondPath[i];
+            var p2 = secondPath[i + 1];
+            newGraph.getNode(p.row, p.column).previousNode = newGraph.getNode(p2.row, p2.column);
+        }
+        newGraph.middle1 = newGraph.getNode(this.getEndNode().row, this.getEndNode().column);
+        
+        debugger;
+
+        return newGraph;
     }
 }

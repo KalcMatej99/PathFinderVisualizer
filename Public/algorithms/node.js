@@ -121,14 +121,20 @@ class DFSNode extends GridNode {
     constructor(row, column, visited) {
         super(row, column);
         this.visited = visited;
+        this.previousNode = null;
     }
 
     isEqual(node){
-        return super.isEqual(node) && this.visited == node.visited;
+        if(this.previousNode == null || node.previousNode == null)
+            return super.isEqual(node) && this.visited == node.visited;
+        return super.isEqual(node) && this.visited == node.visited && this.previousNode.id == node.previousNode.id;
     }
 
     isVisited(){
         return this.visited;
+    }
+    setPreviousNode(previousNode){
+        this.previousNode = previousNode;
     }
 }
 

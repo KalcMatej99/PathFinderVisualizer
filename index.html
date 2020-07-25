@@ -417,7 +417,6 @@
 
             if (animate) {
                 displayMultipleStates(statesToDisplay, speedOfAnimation, function (_) {
-                    debugger;
                     drawPathInGraph(cumulativeGraph);
                 });
             } else
@@ -461,7 +460,7 @@
         switch (selectedVelocity) {
             case 0: title.innerHTML = "Dijkstra's algorithm <b>guarantees</b> the shortest path"; break;
             case 1: title.innerHTML = "Bidirectional search <b>guarantees</b> the shortest path"; break;
-            case 2: title.innerHTML = "DFS <b>does not guarantee</b>the shortest path"; break;
+            case 2: title.innerHTML = "DFS <b>does not guarantee</b> the shortest path"; break;
             default: break;
         }
     }
