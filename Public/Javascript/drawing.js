@@ -204,6 +204,8 @@ function makeWall(row, column) {
             var differences = findDifferenceBetweenStates(oldGraph, this.graph);
             drawDifferences(differences);
         }
+
+        document.getElementById("selectMaze").selectedIndex = 0;
     }
 }
 
@@ -228,6 +230,7 @@ function removeWall(row, column) {
                 drawDifferences(differences);
             }
         }
+        document.getElementById("selectMaze").selectedIndex = 0;
     }
 }
 

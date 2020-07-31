@@ -26,6 +26,7 @@ function dijkstra(graph) {
         }
     }
 
+    var isFoundPath = false;
     while (queue != null && queue.length > 0) {
 
         var cloneState = dgraph.clone();
@@ -36,9 +37,12 @@ function dijkstra(graph) {
             continue;
         }
 
-
         currNode.visited = true;
-        if (currNode.isEndNode) break;
+        if (currNode.isEndNode) {
+            isFoundPath = true;
+            break;
+        }
+
         var neighbors = dgraph.getNeighborsForNode(currNode.row, currNode.column)
 
         for (var i in neighbors) {
@@ -50,11 +54,11 @@ function dijkstra(graph) {
             }
         }
 
-        
+
     }
 
-    
-    dgraph.pathIsFound = true;
+
+    dgraph.pathIsFound = isFoundPath;
     var cloneState = dgraph.clone();
     stateList.push(cloneState);
 

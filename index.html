@@ -87,6 +87,14 @@
                     </select>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1" role="presentation">
+                    <select onchange="selectMazeChanged()" class="form-control nav-link px-0 px-lg-3 rounded"
+                        id="selectMaze"
+                        style="margin: auto; width:100%; height:100%; background-color: rgba(0,0,0,0); color: #ffffff;border-color: rgba(0,0,0,0);">
+                        <option value="0" selected="" style="color:black">No Maze</option>
+                        <option value="1" style="color:black">DFS Maze</option>
+                    </select>
+                </li>
+                <li class="nav-item mx-0 mx-lg-1" role="presentation">
                     <select onchange="selectVelocityChanged()" class="form-control nav-link px-0 px-lg-3 rounded"
                         id="selectVelocity"
                         style="margin: auto; width:100%; height:100%; background-color: rgba(0,0,0,0); color: #ffffff;border-color: rgba(0,0,0,0);">
@@ -247,6 +255,7 @@
     <script src="./Public/Javascript/constants.js"></script>
     <script src="./Public/Javascript/utility.js"></script>
     <script src="./Public/Javascript/drawing.js"></script>
+    <script src="./Public/mazes/DFSmaze.js"></script>
 </body>
 
 <script>
@@ -468,9 +477,9 @@
     function selectAlgorithmChanged() {
         var selectedVelocity = document.getElementById("selectAlgorithm").selectedIndex;
         var title = document.getElementById("title");
-        
+
         switch (selectedVelocity) {
-            case 0: 
+            case 0:
                 title.innerHTML = "Dijkstra's algorithm <b>guarantees</b> the shortest path";
                 if (this.graph.getEndNode() == null) {
                     var pos = findFrePositionInPosition(this.graph, parseInt(numberOfRows / 2, 10), parseInt(numberOfColumns / 2, 10) + 3);
@@ -484,14 +493,14 @@
                     this.graph.setEndNode(pos.row, pos.column);
                 }
                 break;
-            case 2: 
+            case 2:
                 title.innerHTML = "DFS <b>does not guarantee</b> the shortest path";
                 if (this.graph.getEndNode() == null) {
                     var pos = findFrePositionInPosition(this.graph, parseInt(numberOfRows / 2, 10), parseInt(numberOfColumns / 2, 10) + 3);
                     this.graph.setEndNode(pos.row, pos.column);
                 }
                 break;
-            case 3: 
+            case 3:
                 title.innerHTML = "Prim's algorithm results in the <b>minimum spanning tree</b>";
                 this.graph.unsetEndNode();
                 this.graph.removeAllIntermidNodes();
@@ -501,6 +510,32 @@
         }
 
         drawGraph(this.graph);
+    }
+
+    function selectMazeChanged() {
+        var selectedVelocity = document.getElementById("selectMaze").selectedIndex;
+
+        switch (selectedVelocity) {
+            case 0:
+                clearWalls();
+                break;
+            case 1:
+                var mazeHasPath = false;
+                this.graph.unvisitAllNodes();
+
+                while (!mazeHasPath) {
+                    clearWalls();
+                    var graph2 = generateDFSMaze(this.graph);
+                    var states = dijkstra(graph2);
+                    mazeHasPath = states[states.length - 1].pathIsFound;
+
+                }
+                break;
+            default: break;
+        }
+
+        if (isShownPath) executePathFindingAlgorithm(false);
+        else drawGraph(this.graph);
     }
 
     function addIntermidNode() {

@@ -80,7 +80,7 @@ function bidirectional(graph) {
         }
     }
 
-    bgraph.pathIsFound = true;
+    bgraph.pathIsFound = middle1 != null && middle2 != null;
     var cloneState = bgraph.clone();
     cloneState.setMiddle1(middle1);
     cloneState.setMiddle2(middle2);

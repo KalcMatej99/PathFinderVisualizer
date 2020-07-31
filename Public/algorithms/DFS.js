@@ -29,8 +29,8 @@ function DFS(graph) {
 
     //DFS: Go up until you can't or it is already visited, same for right, down and left. Repeat until endnode found.
     // if the node is a wall, we simply skip it
-    recursion(dfsgraph.getStartNode(), dfsgraph, [], []);
-    stateList[stateList.length - 1].pathIsFound = true;
+    var isFound = recursion(dfsgraph.getStartNode(), dfsgraph, [], []);
+    stateList[stateList.length - 1].pathIsFound = isFound;
     return stateList;
 };
 
