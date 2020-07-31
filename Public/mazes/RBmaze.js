@@ -1,0 +1,3 @@
+function generateRBMaze(graph) {
+    
+}

@@ -92,6 +92,7 @@
                         style="margin: auto; width:100%; height:100%; background-color: rgba(0,0,0,0); color: #ffffff;border-color: rgba(0,0,0,0);">
                         <option value="0" selected="" style="color:black">No Maze</option>
                         <option value="1" style="color:black">DFS Maze</option>
+                        <option value="2" style="color:black">Random Maze</option>
                     </select>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1" role="presentation">
@@ -256,6 +257,8 @@
     <script src="./Public/Javascript/utility.js"></script>
     <script src="./Public/Javascript/drawing.js"></script>
     <script src="./Public/mazes/DFSmaze.js"></script>
+    <script src="./Public/mazes/randommaze.js"></script>
+    <script src="./Public/mazes/RBmaze.js"></script>
 </body>
 
 <script>
@@ -354,7 +357,6 @@
 
                 var isPathDrawn = graph.isPathFound();
                 graph.setEndNode(nodeTo.row, nodeTo.column);
-                debugger;
 
                 if (isPathDrawn) executePathFindingAlgorithm(false);
                 else drawGraph(graph);
@@ -530,6 +532,18 @@
                     mazeHasPath = states[states.length - 1].pathIsFound;
 
                 }
+                break;
+            case 2:
+                var mazeHasPath = false;
+                this.graph.unvisitAllNodes();
+
+                while (!mazeHasPath) {
+                    clearWalls();
+                    var graph2 = generateRandomMaze(this.graph);
+                    var states = dijkstra(graph2);
+                    mazeHasPath = states[states.length - 1].pathIsFound;
+                }
+
                 break;
             default: break;
         }
